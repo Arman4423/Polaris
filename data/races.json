@@ -1,0 +1,108 @@
+{
+  "season": "SEZON 1",
+  "championship": "F1 2025",
+  "totalRounds": 4,
+  "standings": [
+    { "pos": 1, "driver": "Danielelelx", "team": "Racing Bulls", "teamColor": "#6692FF", "points": 25, "wins": 1, "podiums": 1 },
+    { "pos": 2, "driver": "_chwajolek33_", "team": "Alpine", "teamColor": "#0093CC", "points": 18, "wins": 0, "podiums": 1 },
+    { "pos": 3, "driver": "v_vMichal1V_V", "team": "McLaren", "teamColor": "#FF8000", "points": 15, "wins": 0, "podiums": 1 }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "type": "rekrutacja",
+      "title": "Rekrutacja do SEZON 2 otwarta!",
+      "date": "2026-06-10",
+      "body": "Zapisy na drugi sezon trwają. Wyślij zgłoszenie przez nasz serwer Discord przed 30 czerwca."
+    },
+    {
+      "id": 2,
+      "type": "ogłoszenie",
+      "title": "Regulamin SEZON 1 — aktualizacja §4",
+      "date": "2026-06-05",
+      "body": "Zaktualizowaliśmy zasady dotyczące incydentów na torze. Prosimy o zapoznanie się z nową wersją regulaminu."
+    }
+  ],
+  "races": [
+    {
+      "id": "bahrain",
+      "name": "Bahrain Grand Prix",
+      "shortName": "Bahrain GP",
+      "country": "Bahrain",
+      "flag": "🇧🇭",
+      "round": 1,
+      "date": "2026-06-08",
+      "track": "Bahrain International Circuit",
+      "turns": 15,
+      "totalLaps": 3,
+      "file": "bahrain.html",
+      "status": "completed",
+      "qualifying": [
+        { "pos": 1, "driver": "Danielelelx", "team": "Racing Bulls", "teamColor": "#6692FF", "time": "1:27.421", "gap": "—" },
+        { "pos": 2, "driver": "_chwajolek33_", "team": "Alpine", "teamColor": "#0093CC", "time": "1:27.698", "gap": "+0.277" },
+        { "pos": 3, "driver": "v_vMichal1V_V", "team": "McLaren", "teamColor": "#FF8000", "time": "1:28.102", "gap": "+0.681" }
+      ],
+      "raceResults": [
+        { "pos": 1, "driver": "Danielelelx", "team": "Racing Bulls", "teamColor": "#6692FF", "gap": "—", "laps": 3, "points": 25, "status": "Finished" },
+        { "pos": 2, "driver": "_chwajolek33_", "team": "Alpine", "teamColor": "#0093CC", "gap": "+3 Laps", "laps": 0, "points": 18, "status": "Finished" },
+        { "pos": 3, "driver": "v_vMichal1V_V", "team": "McLaren", "teamColor": "#FF8000", "gap": "+3 Laps", "laps": 0, "points": 15, "status": "Finished" }
+      ],
+      "fastestLap": {
+        "driver": "Danielelelx",
+        "team": "Racing Bulls",
+        "time": "1:29.341"
+      }
+    },
+    {
+      "id": "monza",
+      "name": "Italian Grand Prix",
+      "shortName": "Monza GP",
+      "country": "Italy",
+      "flag": "🇮🇹",
+      "round": 2,
+      "date": "2026-07-06",
+      "track": "Autodromo Nazionale Monza",
+      "turns": 11,
+      "totalLaps": 0,
+      "file": "monza.html",
+      "status": "upcoming",
+      "qualifying": [],
+      "raceResults": [],
+      "fastestLap": null
+    },
+    {
+      "id": "spa",
+      "name": "Belgian Grand Prix",
+      "shortName": "Spa GP",
+      "country": "Belgium",
+      "flag": "🇧🇪",
+      "round": 3,
+      "date": "2026-08-03",
+      "track": "Circuit de Spa-Francorchamps",
+      "turns": 19,
+      "totalLaps": 0,
+      "file": "spa.html",
+      "status": "upcoming",
+      "qualifying": [],
+      "raceResults": [],
+      "fastestLap": null
+    },
+    {
+      "id": "monaco",
+      "name": "Monaco Grand Prix",
+      "shortName": "Monaco GP",
+      "country": "Monaco",
+      "flag": "🇲🇨",
+      "round": 4,
+      "date": "2026-08-31",
+      "track": "Circuit de Monaco",
+      "turns": 19,
+      "totalLaps": 0,
+      "file": "monaco.html",
+      "status": "upcoming",
+      "qualifying": [],
+      "raceResults": [],
+      "fastestLap": null
+    }
+  ]
+}
