@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "formatVersion": 1,
+    "exportType": "Session",
+    "exportedAt": "2026-08-22T18:48:13.905Z",
+    "sourceApplication": "Polaris Panel Administracyjny",
+    "leagueName": "POLARIS RACING LEAGUE"
+  },
+  "season": {
+    "seasonName": "Season 1",
+    "championshipName": "F1 2026",
+    "isMulticlass": false
+  },
+  "event": {
+    "round": 4,
+    "eventDate": "2026-08-02",
+    "racesCount": 1,
+    "qualificationsCount": 0,
+    "track": {
+      "trackName": "Monaco",
+      "country": "Monaco",
+      "turnsCount": 19
+    }
+  },
+  "session": {
+    "sessionInfo": {
+      "sessionType": "Race",
+      "completedStatus": "Completed",
+      "sessionDate": "2026-08-02T20:00:00+02:00",
+      "totalLaps": 39,
+      "driversCount": 10
+    },
+    "drivers": [
+      {
+        "driverName": "Farti",
+        "driverInfo": {},
+        "position": 1,
+        "classificationPosition": 1,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "25",
+        "teamPoints": "25",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "WIL",
+          "fullName": "Williams Racing",
+          "abbreviation": "WIL",
+          "primaryColor": "#64C4FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "MR.KEBAB",
+        "driverInfo": {},
+        "position": 2,
+        "classificationPosition": 2,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "18",
+        "teamPoints": "18",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "CAD",
+          "fullName": "Cadillac Formula One Team",
+          "abbreviation": "CAD",
+          "primaryColor": "#001E5F"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "merix",
+        "driverInfo": {},
+        "position": 3,
+        "classificationPosition": 3,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "15",
+        "teamPoints": "15",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Kisniaa",
+        "driverInfo": {},
+        "position": 4,
+        "classificationPosition": 4,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "12",
+        "teamPoints": "12",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Zabor",
+        "driverInfo": {},
+        "position": 5,
+        "classificationPosition": 5,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "10",
+        "teamPoints": "10",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "AUD",
+          "fullName": "Audi F1 Team",
+          "abbreviation": "AUD",
+          "primaryColor": "#BB0A30"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Elvis.37",
+        "driverInfo": {},
+        "position": 6,
+        "classificationPosition": 6,
+        "status": "Finished",
+        "lapsCompleted": 39,
+        "driverPoints": "8",
+        "teamPoints": "8",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "VRB",
+          "fullName": "Visa Cash App Racing Bulls F1 Team",
+          "abbreviation": "VRB",
+          "primaryColor": "#6692FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Danielelex",
+        "driverInfo": {},
+        "position": 7,
+        "classificationPosition": 7,
+        "status": "DNF",
+        "lapsCompleted": 39,
+        "driverPoints": "6",
+        "teamPoints": "6",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Puchatek94",
+        "driverInfo": {},
+        "position": 8,
+        "classificationPosition": 8,
+        "status": "DNF",
+        "lapsCompleted": 39,
+        "driverPoints": "4",
+        "teamPoints": "4",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "quez",
+        "driverInfo": {},
+        "position": 9,
+        "classificationPosition": 9,
+        "status": "DNF",
+        "lapsCompleted": 39,
+        "driverPoints": "2",
+        "teamPoints": "2",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "CAD",
+          "fullName": "Cadillac Formula One Team",
+          "abbreviation": "CAD",
+          "primaryColor": "#001E5F"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "gf_wiktor",
+        "driverInfo": {},
+        "position": 10,
+        "classificationPosition": 10,
+        "status": "DNF",
+        "lapsCompleted": 39,
+        "driverPoints": "1",
+        "teamPoints": "1",
+        "gap": "",
+        "gapMs": null,
+        "team": {
+          "name": "WIL",
+          "fullName": "Williams Racing",
+          "abbreviation": "WIL",
+          "primaryColor": "#64C4FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      }
+    ]
+  }
+}
