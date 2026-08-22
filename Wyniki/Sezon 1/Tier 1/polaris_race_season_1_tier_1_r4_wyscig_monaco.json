@@ -2,7 +2,7 @@
   "metadata": {
     "formatVersion": 1,
     "exportType": "Session",
-    "exportedAt": "2026-08-22T18:48:13.905Z",
+    "exportedAt": "2026-08-22T18:50:38.386Z",
     "sourceApplication": "Polaris Panel Administracyjny",
     "leagueName": "POLARIS RACING LEAGUE"
   },
@@ -13,7 +13,7 @@
   },
   "event": {
     "round": 4,
-    "eventDate": "2026-08-02",
+    "eventDate": "2026-08-16",
     "racesCount": 1,
     "qualificationsCount": 0,
     "track": {
@@ -26,7 +26,7 @@
     "sessionInfo": {
       "sessionType": "Race",
       "completedStatus": "Completed",
-      "sessionDate": "2026-08-02T20:00:00+02:00",
+      "sessionDate": "2026-08-16T20:00:00+02:00",
       "totalLaps": 39,
       "driversCount": 10
     },
