@@ -2,7 +2,7 @@
   "metadata": {
     "formatVersion": 1,
     "exportType": "Session",
-    "exportedAt": "2026-08-22T18:50:38.386Z",
+    "exportedAt": "2026-08-22T20:45:00.000Z",
     "sourceApplication": "Polaris Panel Administracyjny",
     "leagueName": "POLARIS RACING LEAGUE"
   },
@@ -12,8 +12,8 @@
     "isMulticlass": false
   },
   "event": {
-    "round": 4,
-    "eventDate": "2026-08-16",
+    "round": 2,
+    "eventDate": "2026-08-02",
     "racesCount": 1,
     "qualificationsCount": 0,
     "track": {
@@ -26,7 +26,7 @@
     "sessionInfo": {
       "sessionType": "Race",
       "completedStatus": "Completed",
-      "sessionDate": "2026-08-16T20:00:00+02:00",
+      "sessionDate": "2026-08-02T20:00:00+02:00",
       "totalLaps": 39,
       "driversCount": 10
     },
@@ -40,13 +40,13 @@
         "lapsCompleted": 39,
         "driverPoints": "25",
         "teamPoints": "25",
-        "gap": "",
-        "gapMs": null,
+        "gap": "0",
+        "gapMs": 0,
         "team": {
           "name": "WIL",
           "fullName": "Williams Racing",
           "abbreviation": "WIL",
-          "primaryColor": "#64C4FF"
+          "primaryColor": "#FF64C4FF"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -62,15 +62,15 @@
         "classificationPosition": 2,
         "status": "Finished",
         "lapsCompleted": 39,
-        "driverPoints": "18",
-        "teamPoints": "18",
-        "gap": "",
-        "gapMs": null,
+        "driverPoints": "15",
+        "teamPoints": "15",
+        "gap": "+12.450",
+        "gapMs": 12450,
         "team": {
           "name": "CAD",
           "fullName": "Cadillac Formula One Team",
           "abbreviation": "CAD",
-          "primaryColor": "#001E5F"
+          "primaryColor": "#FF001E5F"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -86,15 +86,15 @@
         "classificationPosition": 3,
         "status": "Finished",
         "lapsCompleted": 39,
-        "driverPoints": "15",
-        "teamPoints": "15",
-        "gap": "",
-        "gapMs": null,
+        "driverPoints": "18",
+        "teamPoints": "18",
+        "gap": "+15.820",
+        "gapMs": 15820,
         "team": {
           "name": "AMR",
           "fullName": "Aston Martin Aramco F1 Team",
           "abbreviation": "AMR",
-          "primaryColor": "#229971"
+          "primaryColor": "#FF229971"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -112,13 +112,13 @@
         "lapsCompleted": 39,
         "driverPoints": "12",
         "teamPoints": "12",
-        "gap": "",
-        "gapMs": null,
+        "gap": "+28.340",
+        "gapMs": 28340,
         "team": {
           "name": "FER",
           "fullName": "Scuderia Ferrari",
           "abbreviation": "FER",
-          "primaryColor": "#E80020"
+          "primaryColor": "#FFE80020"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -136,13 +136,13 @@
         "lapsCompleted": 39,
         "driverPoints": "10",
         "teamPoints": "10",
-        "gap": "",
-        "gapMs": null,
+        "gap": "+41.120",
+        "gapMs": 41120,
         "team": {
           "name": "AUD",
           "fullName": "Audi F1 Team",
           "abbreviation": "AUD",
-          "primaryColor": "#BB0A30"
+          "primaryColor": "#FFBB0A30"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -160,13 +160,13 @@
         "lapsCompleted": 39,
         "driverPoints": "8",
         "teamPoints": "8",
-        "gap": "",
-        "gapMs": null,
+        "gap": "+55.670",
+        "gapMs": 55670,
         "team": {
           "name": "VRB",
           "fullName": "Visa Cash App Racing Bulls F1 Team",
           "abbreviation": "VRB",
-          "primaryColor": "#6692FF"
+          "primaryColor": "#FF6692FF"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -181,16 +181,16 @@
         "position": 7,
         "classificationPosition": 7,
         "status": "DNF",
-        "lapsCompleted": 39,
+        "lapsCompleted": 24,
         "driverPoints": "6",
         "teamPoints": "6",
-        "gap": "",
+        "gap": "DNF",
         "gapMs": null,
         "team": {
           "name": "AMR",
           "fullName": "Aston Martin Aramco F1 Team",
           "abbreviation": "AMR",
-          "primaryColor": "#229971"
+          "primaryColor": "#FF229971"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -205,16 +205,16 @@
         "position": 8,
         "classificationPosition": 8,
         "status": "DNF",
-        "lapsCompleted": 39,
+        "lapsCompleted": 18,
         "driverPoints": "4",
         "teamPoints": "4",
-        "gap": "",
+        "gap": "DNF",
         "gapMs": null,
         "team": {
           "name": "FER",
           "fullName": "Scuderia Ferrari",
           "abbreviation": "FER",
-          "primaryColor": "#E80020"
+          "primaryColor": "#FFE80020"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -229,16 +229,16 @@
         "position": 9,
         "classificationPosition": 9,
         "status": "DNF",
-        "lapsCompleted": 39,
+        "lapsCompleted": 12,
         "driverPoints": "2",
         "teamPoints": "2",
-        "gap": "",
+        "gap": "DNF",
         "gapMs": null,
         "team": {
           "name": "CAD",
           "fullName": "Cadillac Formula One Team",
           "abbreviation": "CAD",
-          "primaryColor": "#001E5F"
+          "primaryColor": "#FF001E5F"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
@@ -253,16 +253,16 @@
         "position": 10,
         "classificationPosition": 10,
         "status": "DNF",
-        "lapsCompleted": 39,
+        "lapsCompleted": 7,
         "driverPoints": "1",
         "teamPoints": "1",
-        "gap": "",
+        "gap": "DNF",
         "gapMs": null,
         "team": {
           "name": "WIL",
           "fullName": "Williams Racing",
           "abbreviation": "WIL",
-          "primaryColor": "#64C4FF"
+          "primaryColor": "#FF64C4FF"
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
