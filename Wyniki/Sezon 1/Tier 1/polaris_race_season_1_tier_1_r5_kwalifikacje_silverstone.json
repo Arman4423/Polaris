@@ -2,7 +2,7 @@
   "metadata": {
     "formatVersion": 1,
     "exportType": "Session",
-    "exportedAt": "2026-08-25T18:06:19.373Z",
+    "exportedAt": "2026-08-25T19:08:33.896Z",
     "sourceApplication": "Polaris Panel Administracyjny",
     "leagueName": "POLARIS RACING LEAGUE"
   },
@@ -12,7 +12,7 @@
     "isMulticlass": false
   },
   "event": {
-    "round": 4,
+    "round": 5,
     "eventDate": "2026-07-24",
     "racesCount": 1,
     "qualificationsCount": 0,
