@@ -2,7 +2,7 @@
   "metadata": {
     "formatVersion": 1,
     "exportType": "Session",
-    "exportedAt": "2026-08-25T19:08:21.661Z",
+    "exportedAt": "2026-08-27T09:08:36.987Z",
     "sourceApplication": "Polaris Panel Administracyjny",
     "leagueName": "POLARIS RACING LEAGUE"
   },
@@ -30,6 +30,16 @@
       "totalLaps": 26,
       "driversCount": 16
     },
+    "fastestLap": {
+      "driverName": "flajekk",
+      "lapTime": "1:30.107",
+      "lapNumber": 12,
+      "tyreCompound": "Hard"
+    },
+    "driverOfTheDay": {
+      "driver": "merix",
+      "reason": "Niesamowity comeback na P1"
+    },
     "drivers": [
       {
         "driverName": "MR.KEBAB",
@@ -53,7 +63,23 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.786",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 8
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          }
+        ]
       },
       {
         "driverName": "merix",
@@ -77,7 +103,19 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.678",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 9
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 17
+          }
+        ]
       },
       {
         "driverName": "Danielelex",
@@ -101,7 +139,23 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:31.157",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 3
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          }
+        ]
       },
       {
         "driverName": "Farti",
@@ -125,7 +179,27 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.234",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 3
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 5
+          }
+        ]
       },
       {
         "driverName": "pat",
@@ -149,7 +223,19 @@
         "penaltyRemovedSeconds": 3,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.554",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 10
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 16
+          }
+        ]
       },
       {
         "driverName": "quez",
@@ -173,7 +259,23 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:31.277",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 10
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 4
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          }
+        ]
       },
       {
         "driverName": "Elvis.37",
@@ -197,7 +299,27 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.710",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 14
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 2
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 1
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 9
+          }
+        ]
       },
       {
         "driverName": "Zabor",
@@ -221,7 +343,19 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:31.885",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 10
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 16
+          }
+        ]
       },
       {
         "driverName": "Kisniaa",
@@ -245,7 +379,23 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:32.763",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 8
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 6
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 12
+          }
+        ]
       },
       {
         "driverName": "Puchatek94",
@@ -269,7 +419,23 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:33.653",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 9
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 10
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 7
+          }
+        ]
       },
       {
         "driverName": "Ojaqatek",
@@ -293,7 +459,19 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:33.474",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 15
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 11
+          }
+        ]
       },
       {
         "driverName": "gf_wiktor",
@@ -317,7 +495,27 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:38.008",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 6
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 1
+          }
+        ]
       },
       {
         "driverName": "Nejfi",
@@ -341,7 +539,19 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:32.079",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 15
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 6
+          }
+        ]
       },
       {
         "driverName": "flajekk",
@@ -365,7 +575,27 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:30.107",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 9
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 6
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 4
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 1
+          }
+        ]
       },
       {
         "driverName": "Raptorek",
@@ -389,7 +619,27 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:32.978",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 3
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 1
+          }
+        ]
       },
       {
         "driverName": "Stanley",
@@ -413,7 +663,19 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:33.307",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 8
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 6
+          }
+        ]
       }
     ]
   }

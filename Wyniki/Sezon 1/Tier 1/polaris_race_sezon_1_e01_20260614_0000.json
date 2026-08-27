@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "formatVersion": 1,
+    "exportType": "Session",
+    "exportedAt": "2026-06-13T22:00:07Z",
+    "sourceApplication": "Racing League Tools",
+    "leagueName": "POLARIS RACING LEAGUE"
+  },
+  "season": {
+    "seasonName": "SEZON 1",
+    "championshipName": "F1 2025",
+    "totalRounds": 4,
+    "completedRounds": 1,
+    "isMulticlass": false
+  },
+  "event": {
+    "round": 1,
+    "eventDate": "2026-06-08",
+    "racesCount": 1,
+    "qualificationsCount": 1,
+    "track": {
+      "trackName": "Bahrain",
+      "country": "Bahrain",
+      "turnsCount": 15
+    }
+  },
+  "session": {
+    "sessionInfo": {
+      "sessionId": "a19cab4e-8721-4e3e-aedd-b25770226d3d",
+      "sessionType": "Race",
+      "raceType": "Main",
+      "sessionPosition": 1,
+      "sessionCaption": "Race",
+      "completedStatus": "Completed",
+      "sessionDate": "2026-06-08T20:30:00+02:00",
+      "totalLaps": 3,
+      "driversCount": 3
+    },
+    "raceDetails": {
+      "raceType": "Main",
+      "isMajorRace": true
+    },
+    "drivers": [
+      {
+        "driverName": "Danielelelx",
+        "driverInfo": {
+          "nationality": "Poland",
+          "platform": "PcSteam"
+        },
+        "position": 1,
+        "classificationPosition": 1,
+        "status": "Finished",
+        "lapsCompleted": 3,
+        "driverPoints": "25",
+        "teamPoints": "25",
+        "totalTime": "0.021",
+        "totalTimeMs": 21,
+        "gap": "0",
+        "gapMs": 0,
+        "team": {
+          "name": "Racing Bulls",
+          "uniqueId": "racing.bulls.2025",
+          "fullName": "Visa Cash App RB F1 Team",
+          "abbreviation": "VRB",
+          "primaryColor": "#FF6692FF",
+          "secondaryColor": "#FFFFFFFF",
+          "country": "Italy"
+        }
+      },
+      {
+        "driverName": "_chwajolek33_",
+        "driverInfo": {
+          "nationality": "Poland",
+          "platform": "PcSteam"
+        },
+        "position": 2,
+        "classificationPosition": 2,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "18",
+        "teamPoints": "18",
+        "totalTime": "0.043",
+        "totalTimeMs": 43,
+        "gap": "+3 Laps",
+        "gapMs": 3000000000,
+        "interval": "+0.022",
+        "intervalMs": 22,
+        "team": {
+          "name": "Alpine",
+          "uniqueId": "alpine.2025",
+          "fullName": "BWT Alpine F1 Team",
+          "abbreviation": "ALP",
+          "primaryColor": "#FF0093CC",
+          "secondaryColor": "#FFFF87BC",
+          "country": "France"
+        }
+      },
+      {
+        "driverName": "v_vMichal1V_V",
+        "driverInfo": {
+          "nationality": "Poland",
+          "realName": "Micha\u0142",
+          "platform": "Pc"
+        },
+        "position": 3,
+        "classificationPosition": 3,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "15",
+        "teamPoints": "15",
+        "totalTime": "0.243",
+        "totalTimeMs": 243,
+        "gap": "+3 Laps",
+        "gapMs": 3000000000,
+        "interval": "+0.200",
+        "intervalMs": 200,
+        "team": {
+          "name": "McLaren",
+          "uniqueId": "mclaren.2025",
+          "fullName": "McLaren Formula 1 Team",
+          "abbreviation": "MCL",
+          "primaryColor": "#FFFF8000",
+          "secondaryColor": "#FF333333",
+          "country": "United Kingdom"
+        }
+      }
+    ]
+  }
+}

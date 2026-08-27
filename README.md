@@ -16,18 +16,14 @@ Wyniki są wczytywane **automatycznie** z folderu `Wyniki/`.
 Wyniki/
   Sezon 1/
     Tier 1/
-      manifest.json          ← lista plików JSON w tym Tierze
       wynik_bahrain.json
       wynik_monza.json
     Tier 2/
-      manifest.json
       ...
     Tier 3/
-      manifest.json
       ...
   Sezon 2/
     Tier 1/
-      manifest.json
       wynik_singapur.json
     Tier 2/
       ...
@@ -37,27 +33,32 @@ Wyniki/
 
 ### Kroki
 
-1. Wyeksportuj wynik wyścigu z **Racing League Tools** jako plik `.json` (Session export)
-2. Wrzuć plik do odpowiedniego folderu Tieru, np. `Wyniki/Sezon 1/Tier 1/`
-3. Dodaj nazwę pliku do `manifest.json` w tym folderze Tieru:
+1. Wyeksportuj wynik wyścigu z **Racing League Tools** jako plik `.json` (Session export) — albo skorzystaj z panelu administracyjnego, który to samo generuje z CSV/ręcznego wpisu.
+2. Wrzuć plik do odpowiedniego folderu Tieru, np. `Wyniki/Sezon 1/Tier 1/`, przez GitHub → "Add file" → "Upload files".
+3. Gotowe — **nie trzeba nic dopisywać do żadnego manifestu**. Strona sama sprawdza przez API GitHuba, jakie pliki `.json` są w folderze, i wczytuje je wszystkie automatycznie.
 
-```json
-{
-  "season": "Sezon 1",
-  "tier": "Tier 1",
-  "files": [
-    "wynik_bahrain.json",
-    "wynik_monza.json"
-  ]
-}
+### Jak to działa (i co, jeśli coś nie zadziała)
+
+Strona wykrywa Wasze repozytorium z adresu URL, pod którym jest hostowana (typowy adres GitHub Pages: `https://twojnick.github.io/nazwa-repo/`), i pyta GitHub o listę plików w folderze. To działa automatycznie, bez żadnej konfiguracji, o ile strona jest hostowana na `*.github.io`.
+
+Jeśli z jakiegoś powodu to zapytanie się nie uda — np. przekroczony publiczny limit zapytań do API GitHuba (60/godzinę na odwiedzającego), strona działa lokalnie na Twoim komputerze, albo macie własną domenę zamiast `github.io` — strona **automatycznie** wraca do starego, zapasowego sposobu: pliku `manifest.json` w folderze, z listą nazw plików. Możesz go spokojnie zostawić w folderach (nie przeszkadza), a panel administracyjny nadal potrafi go wygenerować, jeśli wolisz mieć to jako dodatkowe zabezpieczenie.
+
+Jeśli macie własną domenę (nie `*.github.io`) i chcecie, żeby auto-wykrywanie i tak działało, otwórz `js/app.js`, znajdź linijkę:
+
+```js
+const GITHUB_REPO_OVERRIDE = null;
 ```
 
-4. Gotowe! Strona automatycznie pobierze dane i wyświetli wyniki w odpowiednim Tierze.
+i zmień na:
+
+```js
+const GITHUB_REPO_OVERRIDE = { owner: 'twoj-nick-na-githubie', repo: 'nazwa-repozytorium' };
+```
 
 ### Nowy sezon
 
-Aby dodać Sezon 3, stwórz folder `Wyniki/Sezon 3/` z podfolderami `Tier 1/`, `Tier 2/`, `Tier 3/`
-(każdy z własnym `manifest.json`), a następnie dodaj sezon w `js/app.js` w sekcji `SEASONS_CONFIG`:
+Aby dodać Sezon 3, stwórz folder `Wyniki/Sezon 3/` z podfolderami `Tier 1/`, `Tier 2/`, `Tier 3/`,
+a następnie dodaj sezon w `js/app.js` w sekcji `SEASONS_CONFIG`:
 
 ```js
 const SEASONS_CONFIG = [
@@ -71,18 +72,17 @@ Tiery (`Tier 1/2/3`) są wspólne dla wszystkich sezonów i nie trzeba ich osobn
 
 ## Kalendarz
 
-Działa dokładnie tak samo jak Wyniki, tylko w folderze `Kalendarz/`:
+Działa dokładnie tak samo jak Wyniki (też bez manifestu — patrz wyżej), tylko w folderze `Kalendarz/`:
 
 ```
 Kalendarz/
   Sezon 1/
     Tier 1/
-      manifest.json
       kalendarz_sezon1.json
     Tier 2/
-      manifest.json
+      ...
     Tier 3/
-      manifest.json
+      ...
 ```
 
 ### Dodawanie sprintu do wydarzenia
@@ -141,10 +141,10 @@ Dane w `HallOfFame/hall_of_fame.json`:
 
 ```json
 {
-  "clipOfMonth": { "url": "https://...", "title": "...", "driver": "...", "month": "Lipiec 2026", "description": "..." },
-  "bestManeuverAllTime": { "url": "https://...", "title": "...", "driver": "...", "description": "..." },
+  "clipOfMonth": { "url": "https://...", "title": "...", "driver": "...", "month": "Lipiec 2026", "category": "Najlepsze wyprzedzanie", "description": "..." },
+  "bestManeuverAllTime": { "url": "https://...", "title": "...", "driver": "...", "category": "Wypadek", "description": "..." },
   "featured": [
-    { "url": "https://...", "title": "...", "driver": "...", "description": "..." }
+    { "url": "https://...", "title": "...", "driver": "...", "category": "Pole Position", "description": "..." }
   ]
 }
 ```
@@ -152,6 +152,7 @@ Dane w `HallOfFame/hall_of_fame.json`:
 - Linki do YouTube (youtube.com / youtu.be) pokazują się jako osadzony odtwarzacz.
 - Linki z innych miejsc (Medal.tv, Streamable, Twitter/X itd.) pokazują się jako karta z przyciskiem "Obejrzyj" prowadzącym do klipu.
 - Puste pole (`null` albo brak wpisów w `featured`) pokazuje "Brak jeszcze..." zamiast się wywalać.
+- Pole `category` jest opcjonalne (np. "Najlepsze wyprzedzanie", "Wypadek", "Pole Position") — jeśli go nie podasz, po prostu się nie pokaże.
 
 Najłatwiej edytować ten plik przez panel administracyjny (zakładka "🎬 Hall of Fame") — patrz niżej.
 
@@ -210,3 +211,35 @@ Na stronie przy kierowcy z jakąkolwiek karą pojawia się plakietka: czerwona "
 ### Format Racing League Tools i pole gapMs
 
 Do przeliczania kolejności strona potrzebuje surowej straty do lidera w milisekundach (`gapMs`). Jeśli importujesz plik z Racing League Tools, to pole już tam jest. Jeśli wpisujesz wynik ręcznie albo importujesz CSV z gry, panel **sam** wylicza `gapMs` z pola "Strata" (np. z tekstu "+2.500" zrobi 2500 ms) w momencie generowania pliku — nie musisz nic dodatkowo wypełniać.
+
+## Aktualne składy drużyn
+
+Plik `Sklady/Tier X/sklad.json` mówi stronie, którzy kierowcy **aktualnie** jeżdżą dla której drużyny w danym Tierze — i jakimi numerami bolidów:
+
+```json
+{
+  "teams": [
+    { "team": "Ferrari", "drivers": [{ "name": "Kierowca A", "number": 16 }, { "name": "Kierowca B", "number": 55 }] },
+    { "team": "McLaren", "drivers": [{ "name": "Kierowca C", "number": 4 }] }
+  ]
+}
+```
+
+Do jednej drużyny można dopisać dowolną liczbę kierowców (nie tylko dwóch) — przydaje się to przy zmianach w trakcie sezonu: wystarczy usunąć wpis kierowcy z jednej drużyny i dodać go (lub przenieść) do drugiej w panelu administracyjnym. Stary format (`"drivers": ["Kierowca A", "Kierowca B"]`, same nazwy bez numerów) nadal działa — panel administracyjny i strona automatycznie podnoszą go do nowego kształtu, traktując brakujący numer jako pusty.
+
+To wpływa **wyłącznie** na to, jacy kierowcy (i z jakim numerem) wyświetlają się przy drużynie w Klasyfikacji Konstruktorskiej oraz przy nazwiskach kierowców na całej stronie — nie ma żadnego wpływu na liczenie punktów. Punkty konstruktorów zawsze liczą się historycznie: jeśli kierowca X zdobył 10 punktów dla drużyny XX w rundzie 1, te punkty zostają przy XX na zawsze, nawet jeśli w rundzie 2 kierowca X przechodzi do drużyny YY (punkty z rundy 2 pójdą już do YY). Punkty w Klasyfikacji Kierowców są zawsze przypisane do kierowcy i sumują się niezależnie od tego, dla ilu drużyn jeździł w sezonie.
+
+Jeśli nie wgrasz jeszcze pliku `sklad.json` dla danego Tieru, strona pokaże zamiast tego wszystkich kierowców, którzy kiedykolwiek zdobyli punkty dla danej drużyny (stare zachowanie) — więc nic się nie zepsuje, dopóki nie zaczniesz zarządzać składami przez panel.
+
+Nazwę drużyny w pliku możesz wpisać w dowolnym wariancie (np. "Red Bull" albo "Oracle Red Bull Racing") — strona sama dopasuje ją do właściwego zespołu, tak samo jak w wynikach.
+
+## Strategia opon i najszybsze okrążenie
+
+Jeśli importujesz plik z Racing League Tools, strona automatycznie pokazuje:
+- **Strategię opon** każdego kierowcy jako sekwencję kolorowych plakietek ze zmieszaniem (np. 🟡8→⚪7→🟡11 = Medium 8 okrążeń → Hard 7 okrążeń → Medium 11 okrążeń)
+- **Najszybsze okrążenie** każdego kierowcy (czas + rodzaj opony)
+- **Najszybsze okrążenie całej sesji** jako wyróżniony "chip" nad tabelą wyników
+
+Te dane pochodzą wprost z pól `stints` i `fastestLapTime`/`fastestLapTyreCompound` w eksporcie z Racing League Tools — nic nie trzeba dodatkowo wypełniać. Panel administracyjny **zachowuje te dane bez zmian** nawet jeśli edytujesz wynik i dodajesz kary — nie ma osobnego edytora do ręcznego poprawiania strategii opon (to precyzyjne dane telemetryczne z gry, nie coś co się ręcznie przepisuje).
+
+Jeśli wynik pochodzi z CSV albo został wpisany ręcznie, kolumny "Opony" i "Najsz. okr." po prostu się nie pokażą — strona nie ma tych danych znikąd wziąć.
