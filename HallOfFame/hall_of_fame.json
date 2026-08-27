@@ -1,5 +1,14 @@
 {
   "clipOfMonth": null,
   "bestManeuverAllTime": null,
-  "featured": []
+  "featured": [
+    {
+      "type": "file",
+      "url": "HallOfFame/Puchatek defence roku.mp4",
+      "thumbnailUrl": "",
+      "title": "Obrona Roku",
+      "driver": "Puchatek94",
+      "description": ""
+    }
+  ]
 }
