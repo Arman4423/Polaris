@@ -1773,8 +1773,10 @@ function extractYouTubeId(url) {
 }
 
 /** Best available thumbnail for a clip: YouTube's own thumbnail, an admin-provided
- *  thumbnailUrl for other platforms, or null (renders a plain placeholder instead). */
+ *  thumbnailUrl (for other platforms, or as a poster for a self-hosted video file),
+ *  or null (renders a plain placeholder instead). */
 function clipThumbnail(clip) {
+  if (clip.type === 'file') return clip.thumbnailUrl || null;
   const ytId = extractYouTubeId(clip.url);
   if (ytId) return `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
   return clip.thumbnailUrl || null;
@@ -1793,6 +1795,13 @@ function clipHostMeta(url) {
   try { return { slug: 'link', label: new URL(url).hostname.replace('www.', '') }; } catch { return { slug: 'link', label: 'Link' }; }
 }
 function clipHostLabel(url) { return clipHostMeta(url).label; }
+/** clip.url is a real URL for type "link" but a repo-relative file path for
+ *  type "file" (new URL() on a relative path would throw / misparse) — this
+ *  is the one host-label lookup every render path should go through. */
+function clipHostMetaFor(clip) {
+  if (clip.type === 'file') return { slug: 'video', label: 'Wideo' };
+  return clipHostMeta(clip.url);
+}
 
 /** "Hełm + kierowca" na kartach Hall of Fame — podmienia ikonę hełmu na awatar
  *  drużynowy, jeśli kierowca jest w aktualnym składzie; w przeciwnym razie
@@ -1805,23 +1814,27 @@ function clipDriverCredit(driverName, driverIndex) {
   return `<span class="hof-clip-driver">${img}${driverName}</span>`;
 }
 
-/** Renders one clip as either a YouTube embed or a clean "watch" card, depending on the link.
- *  Used for Clip miesiąca / Najlepszy manewr (large, played inline), the per-race best-maneuver
- *  embed on wynik-wydarzenia.html, and the clip detail page.
+/** Renders one clip as a self-hosted <video>, a YouTube embed, or a clean "watch"
+ *  card, depending on its type/link. Used for Clip miesiąca / Najlepszy manewr
+ *  (large, played inline), the per-race best-maneuver embed on wynik-wydarzenia.html,
+ *  and the clip detail page.
  *  opts.ribbon = { label, tone: 'gold'|'red' } — corner tag identifying a spotlight slot.
  *  opts.hideInfo = true — omit the built-in title/meta/description block (the detail page
  *  renders its own richer header instead — see initHallOfFameClip()). */
 function renderClip(clip, size, opts) {
   if (!clip || !clip.url) return '';
   opts = opts || {};
-  const ytId = extractYouTubeId(clip.url);
+  const isFile = clip.type === 'file';
+  const ytId = isFile ? null : extractYouTubeId(clip.url);
   const sizeClass = size === 'large' ? 'hof-clip-large' : 'hof-clip-card';
   const ribbonHtml = opts.ribbon
     ? `<span class="hof-ribbon hof-ribbon-${opts.ribbon.tone || 'red'}">${opts.ribbon.label}</span>`
     : '';
-  const hostMeta = clipHostMeta(clip.url);
+  const hostMeta = clipHostMetaFor(clip);
 
-  const media = ytId
+  const media = isFile
+    ? `<div class="hof-embed-wrap">${ribbonHtml}<video controls preload="metadata"${clip.thumbnailUrl ? ` poster="${clip.thumbnailUrl}"` : ''}><source src="${clip.url}">Twoja przeglądarka nie obsługuje odtwarzania wideo. <a href="${clip.url}">Pobierz plik</a>.</video></div>`
+    : ytId
     ? `<div class="hof-embed-wrap">${ribbonHtml}<iframe src="https://www.youtube.com/embed/${ytId}" title="${clip.title || 'Clip'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`
     : `<a class="hof-watch-card" href="${clip.url}" target="_blank" rel="noopener">
          ${ribbonHtml}
@@ -1850,7 +1863,7 @@ function renderClip(clip, size, opts) {
 function renderFeaturedCard(clip, index, driverIndex) {
   if (!clip || !clip.url) return '';
   const thumb = clipThumbnail(clip);
-  const hostMeta = clipHostMeta(clip.url);
+  const hostMeta = clipHostMetaFor(clip);
   const media = thumb
     ? `<div class="hof-thumb-wrap"><img src="${thumb}" alt="" loading="lazy" onerror="this.parentElement.classList.add('hof-thumb-fallback')"><span class="hof-play-overlay">${icon('play')}</span></div>`
     : `<div class="hof-thumb-wrap hof-thumb-fallback"><span class="hof-watch-pattern" aria-hidden="true"></span><span class="hof-play-overlay">${icon('play')}</span><span class="hof-thumb-host hof-watch-host-${hostMeta.slug}">${hostMeta.label}</span></div>`;
@@ -1946,7 +1959,7 @@ async function initHallOfFameClip() {
   }
 
   document.title = `${clip.title || 'Clip'} — Hall of Fame — Polaris Racing League`;
-  const hostMeta = clipHostMeta(clip.url);
+  const hostMeta = clipHostMetaFor(clip);
 
   const head = `
     <div class="hof-detail-head reveal">

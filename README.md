@@ -141,16 +141,16 @@ Dane w `HallOfFame/hall_of_fame.json`:
 
 ```json
 {
-  "clipOfMonth": { "url": "https://...", "title": "...", "driver": "...", "month": "Lipiec 2026", "category": "Najlepsze wyprzedzanie", "description": "..." },
-  "bestManeuverAllTime": { "url": "https://...", "title": "...", "driver": "...", "category": "Wypadek", "description": "..." },
+  "clipOfMonth": { "type": "link", "url": "https://...", "title": "...", "driver": "...", "month": "Lipiec 2026", "category": "Najlepsze wyprzedzanie", "description": "..." },
+  "bestManeuverAllTime": { "type": "file", "url": "HallOfFame/clips/najlepszy-manewr.mp4", "thumbnailUrl": "HallOfFame/clips/najlepszy-manewr-thumb.jpg", "title": "...", "driver": "...", "category": "Wypadek", "description": "..." },
   "featured": [
-    { "url": "https://...", "title": "...", "driver": "...", "category": "Pole Position", "description": "..." }
+    { "type": "link", "url": "https://...", "title": "...", "driver": "...", "category": "Pole Position", "description": "..." }
   ]
 }
 ```
 
-- Linki do YouTube (youtube.com / youtu.be) pokazują się jako osadzony odtwarzacz.
-- Linki z innych miejsc (Medal.tv, Streamable, Twitter/X itd.) pokazują się jako karta z przyciskiem "Obejrzyj" prowadzącym do klipu.
+- `type: "link"` (domyślne, jeśli pole pominięte — stare pliki bez tego pola dalej działają) — `url` to zwykły link zewnętrzny. Linki do YouTube (youtube.com / youtu.be) pokazują się jako osadzony odtwarzacz. Linki z innych miejsc (Medal.tv, Streamable, Twitter/X itd.) pokazują się jako karta z przyciskiem "Obejrzyj" prowadzącym do klipu.
+- `type: "file"` — `url` to ścieżka do pliku wideo wgranego samodzielnie do repozytorium (np. `HallOfFame/clips/nazwa.mp4`), odtwarzanego wprost na stronie natywnym odtwarzaczem wideo (bez wychodzenia na zewnętrzną stronę). Sam plik trzeba wgrać do `HallOfFame/clips/` przez GitHub web UI (drag-drop działa do ok. 25 MB; większe pliki wymagają wgrania przez Git) — panel administracyjny generuje tylko JSON z odwołaniem do niego, nie hostuje samego wideo. Opcjonalne `thumbnailUrl` daje miniaturkę/okładkę (link zewnętrzny albo też plik w repo) — bez niego karta pokazuje sam przycisk odtwarzania.
 - Puste pole (`null` albo brak wpisów w `featured`) pokazuje "Brak jeszcze..." zamiast się wywalać.
 - Pole `category` jest opcjonalne (np. "Najlepsze wyprzedzanie", "Wypadek", "Pole Position") — jeśli go nie podasz, po prostu się nie pokaże.
 
