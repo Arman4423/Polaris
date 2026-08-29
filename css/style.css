@@ -131,6 +131,36 @@ nav {
   transition: background 0.2s !important, transform 0.2s !important, box-shadow 0.2s !important;
 }
 .nav-cta:hover { background: var(--red-dark) !important; transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(225,6,0,0.6), 0 6px 18px rgba(225,6,0,0.35); }
+
+/* ─── LANGUAGE SWITCH ────────────────────────────── */
+/* Injected by initLanguageSwitcher() (app.js) into the desktop nav (own <li>
+   right before the Discord CTA) and the mobile menu, on every page. */
+.lang-switch-item { display: flex; align-items: center; margin-left: 6px; }
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px;
+}
+.lang-switch-btn {
+  border: none;
+  background: transparent;
+  color: var(--gray-light);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.lang-switch-btn:hover { color: var(--white); }
+.lang-switch-btn.active { background: var(--red); color: var(--white); }
+.mobile-menu .lang-switch { margin: 0.75rem auto 0.25rem; width: fit-content; }
 .hamburger {
   display: none; flex-direction: column; gap: 5px;
   cursor: pointer; margin-left: auto; padding: 4px;
@@ -432,58 +462,104 @@ table.results td {
 table.results td.right { text-align: center; }
 table.results td.center { text-align: center; }
 
-/* ─── DRIVER HOVER POPOVER ────────────────────────── */
-.driver-popover {
-  position: fixed;
-  z-index: 500;
-  width: 300px;
-  background: var(--surface2);
-  border: 1px solid var(--border-red);
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.5), 0 0 0 1px rgba(225,6,0,.08);
-  padding: 1.1rem 1.25rem;
-  opacity: 0;
-  transform: translateY(4px) scale(.98);
-  pointer-events: none;
-  transition: opacity .15s ease, transform .15s ease;
+/* ─── DRIVER CLICK DETAILS (wysuwane szczegóły) ─────
+   Each driver cell/pill embeds its OWN detail panel, collapsed by default
+   via a grid-rows 0fr→1fr trick (animates to the exact content height —
+   no guessed max-height) and revealed by CLICK (toggles .dd-open — see
+   initDriverDetailToggle() in js/app.js) or :focus-within (keyboard, Tab)
+   of the wrapping .dd. Deliberately NOT on :hover — brushing across a
+   table shouldn't pop rows open. In-flow (not position:absolute) on
+   purpose: nothing clips it (.table-wrap/.standings-wrap have no fixed
+   height) and rows below simply get pushed down instead of overlapped. */
+.dd { position: relative; }
+.dd-trigger { cursor: pointer; }
+.dd-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .25s ease;
+  white-space: normal; /* table.results/table.standings force nowrap on td — undo it for the panel */
 }
-.driver-popover.visible { opacity: 1; transform: translateY(0) scale(1); }
+.dd:focus-within .dd-panel, .dd.dd-open .dd-panel { grid-template-rows: 1fr; }
+.dd-panel-inner { overflow: hidden; min-height: 0; }
+.dd-panel-content { padding: 14px 2px 4px; border-top: 1px solid var(--border); margin-top: 10px; max-width: 300px; }
 
-.driver-popover-head { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; }
-.driver-popover-avatar-wrap { width: 44px; height: 44px; flex-shrink: 0; }
-.driver-popover-avatar { width: 100%; height: 100%; object-fit: contain; object-position: bottom; }
-.driver-popover-dot { width: 4px; height: 34px; border-radius: 2px; flex-shrink: 0; }
-.driver-popover-name { font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: -.2px; }
-.driver-popover-number { font-size: 13px; margin-right: 8px; vertical-align: 2px; }
-.driver-popover-team { font-size: 11.5px; color: var(--gray-light); margin-top: 2px; }
+.dd-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.dd-stats-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.dd-stats-grid + .dd-chip-row, .dd-chip-row + .dd-stats-grid { margin-top: 10px; }
+.dd-stat { display: flex; flex-direction: column; gap: 4px; }
+.dd-stat-label { font-size: 9px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--gray); }
+.dd-stat-val { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--white); }
+.dd-stat-val.small { font-size: 13px; }
+.dd-stat-pos { width: 28px; height: 28px; font-size: 14px; }
 
-.driver-popover-stats {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
-  padding-bottom: 1rem; margin-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+/* Pionowa lista "etykieta ... wartość" — jedna statystyka na wiersz, żeby
+   dłuższe polskie etykiety ("Najlepszy wynik", "Śr. pozycja") nie musiały
+   ściskać się w wąskiej siatce 2×2. */
+.dd-detail-rows {
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 6px;
 }
-.driver-popover-stat { display: flex; flex-direction: column; gap: 4px; }
-.driver-popover-stat-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); }
-.driver-popover-stat-val { font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--white); }
-.driver-popover-stat-val.small { font-size: 14px; }
-.driver-popover-pos { width: 32px; height: 32px; font-size: 15px; }
+.dd-detail-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
+.dd-detail-row-label { color: var(--gray-light); display: inline-flex; align-items: center; gap: 5px; }
+.dd-detail-row-label .icon { width: 1.1em; height: 1.1em; margin-right: 0; }
+.dd-detail-row-val { font-family: var(--font-mono); font-weight: 700; color: var(--white); }
 
-.driver-popover-fastest {
+.dd-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.dd-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--gray-light);
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px 9px;
+}
+.dd-chip .icon { width: 1.1em; height: 1.1em; margin-right: 0; }
+
+.dd-fastest {
   display: flex; align-items: center; gap: 10px;
   background: rgba(225,6,0,.1); border: 1px solid rgba(225,6,0,.3);
-  border-radius: 8px; padding: .6rem .75rem;
+  border-radius: 8px; padding: .5rem .65rem;
+  margin-top: 10px;
 }
-.driver-popover-fastest .icon { width: 1.2em; height: 1.2em; margin-right: 0; }
-.driver-popover-fastest-info { display: flex; flex-direction: column; flex: 1; gap: 2px; }
-.driver-popover-fastest-label { font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-light); }
-.driver-popover-fastest-time { font-family: var(--font-mono); font-size: 17px; font-weight: 700; color: var(--white); }
+.dd-fastest .icon { width: 1.1em; height: 1.1em; margin-right: 0; }
+.dd-fastest-info { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+.dd-fastest-label { font-size: 9px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: var(--gray-light); }
+.dd-fastest-time { font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--white); }
 
-.driver-popover-penalty {
-  display: flex; align-items: center; gap: 6px;
-  margin-top: .75rem;
-  font-size: 11.5px; color: var(--gray-light);
+/* Pełny opis każdej kary — jeden kolorowy blok na rodzaj kary, ten sam
+   kod kolorów co plakietki .penalty-badge/-removed/-pos w zwiniętym wierszu
+   (css/style.css:545-567), więc oba stany czyta się jako to samo. */
+.dd-penalty-block {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 10px; border-radius: 8px; margin-top: 8px;
+  font-size: 12px; line-height: 1.4;
 }
-.driver-popover-penalty .icon { color: var(--gold); margin-right: 0; }
+.dd-penalty-block .icon { width: 1.1em; height: 1.1em; margin-right: 0; flex-shrink: 0; margin-top: 1px; }
+.dd-penalty-block-title { font-weight: 700; display: block; }
+.dd-penalty-block-reason { font-weight: 400; opacity: .85; }
+.dd-penalty-block-time    { background: rgba(225,6,0,.1);    border: 1px solid rgba(225,6,0,.3);    color: var(--red); }
+.dd-penalty-block-removed { background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3); color: var(--success); }
+.dd-penalty-block-pos     { background: rgba(244,196,48,.1); border: 1px solid rgba(244,196,48,.3); color: var(--gold); }
+
+/* Kolumna "Kierowca"/"Kierowcy" musi mieć stałą min. szerokość — zwinięty
+   .dd-panel ma wysokość 0, ale nadal realną szerokość, więc bez tego
+   auto-layout tabeli i tak by ją poszerzył na stałe, nawet bez najechania. */
+table.results th:nth-child(2), table.results td:nth-child(2) { min-width: 250px; }
+table.standings-drivers th:nth-child(2) { min-width: 250px; }
+table.standings-constructors th:nth-child(3) { min-width: 270px; }
+
+/* Chipy kierowców w kolumnie "Kierowcy" klasyfikacji konstruktorskiej —
+   zastępują dawną płaską listę rozdzielaną przecinkami. */
+.driver-pill-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.driver-pill-trigger {
+  display: inline-flex; align-items: center;
+  font-size: 12px; color: var(--gray-light);
+  background: var(--surface3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px 10px;
+  transition: border-color .15s, color .15s;
+}
+.dd:focus-within .driver-pill-trigger, .dd.dd-open .driver-pill-trigger {
+  border-color: rgba(225,6,0,.4); color: var(--white);
+}
+.driver-pill-trigger .driver-number { margin-right: 6px; }
 .pos-badge, .standing-pos {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 4px;
@@ -502,6 +578,12 @@ table.results td.center { text-align: center; }
 .driver-cell-avatar {
   width: 28px; height: 28px; object-fit: contain; object-position: bottom;
   margin-right: 8px; flex-shrink: 0;
+  transition: width .25s ease, height .25s ease;
+}
+/* Powiększa się razem z otwarciem szczegółów — te same triggery co .dd-panel
+   (klik/.dd-open i klawiatura/:focus-within, celowo NIE :hover). */
+.dd.dd-open .driver-cell-avatar, .dd:focus-within .driver-cell-avatar {
+  width: 64px; height: 64px;
 }
 /* Celowo NIE jak .pos-badge/.standing-pos (te pokazują POZYCJĘ w wyścigu,
    złoto/srebro/brąz) — mały, stonowany prostokąt, żeby nie pomylić numeru
@@ -659,6 +741,146 @@ table.standings td.right { text-align: center; }
 .social-card-youtube:hover { border-color: rgba(255,0,0,.35); }
 .social-card-tiktok .social-card-icon { background: rgba(255,255,255,.08); color: var(--white); }
 .social-card-tiktok:hover { border-color: rgba(255,255,255,.25); }
+
+/* ─── PARTNERSTWA ─────────────────────────────────── */
+.partners-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.partner-card {
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1.75rem 1.25rem;
+  transition: border-color .2s, transform .2s;
+}
+a.partner-card:hover { border-color: rgba(255,255,255,0.16); transform: translateY(-3px); }
+/* Same corner-checker texture as .page-hero::after — a touch of texture on
+   hover instead of a flat surface. */
+.partner-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0; width: 90px; height: 90px;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%),
+    linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 0%, black 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse 100% 100% at 100% 0%, black 0%, transparent 70%);
+  opacity: 0; transition: opacity .2s;
+  pointer-events: none;
+}
+a.partner-card:hover::after { opacity: 1; }
+.partner-logo-wrap { width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+.partner-logo { max-width: 100%; max-height: 100%; object-fit: contain; }
+.partner-logo-wrap.partner-logo-fallback { border-radius: 50%; background: var(--surface2); }
+.partner-logo-fallback-text {
+  width: 72px; height: 72px; border-radius: 50%; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--red);
+}
+.partner-name { font-family: var(--font-display); font-size: 16px; font-weight: 800; }
+.partner-tier {
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--red);
+}
+.partner-desc { font-size: 12.5px; color: var(--gray-light); line-height: 1.5; }
+.partner-link { font-size: 12px; font-weight: 600; color: var(--red); margin-top: 4px; }
+
+/* Rozmiar sterowany priorytetem ustawionym w panelu administracyjnym
+   (Wysoki/Średni/Niski) — priorytet sam w sobie nigdzie nie jest pokazywany
+   jako tekst, tylko przez te dwie klasy (renderPartners(), js/app.js).
+   Średni = brak klasy = dzisiejszy rozmiar bazowy. */
+.partner-card-high {
+  grid-column: span 2;
+  padding: 2.5rem 2rem;
+  gap: 12px;
+  border-color: rgba(244,196,48,0.3);
+}
+.partner-card-high .partner-logo-wrap,
+.partner-card-high .partner-logo-wrap.partner-logo-fallback,
+.partner-card-high .partner-logo-fallback-text { width: 104px; height: 104px; }
+.partner-card-high .partner-logo-fallback-text { font-size: 36px; }
+.partner-card-high .partner-name { font-size: 22px; }
+.partner-card-high .partner-desc { font-size: 13.5px; max-width: 440px; }
+@media (max-width: 640px) { .partner-card-high { grid-column: span 1; } }
+
+.partner-card-low {
+  padding: 1.15rem 1rem;
+  gap: 5px;
+}
+.partner-card-low .partner-logo-wrap,
+.partner-card-low .partner-logo-wrap.partner-logo-fallback,
+.partner-card-low .partner-logo-fallback-text { width: 52px; height: 52px; }
+.partner-card-low .partner-logo-fallback-text { font-size: 18px; }
+.partner-card-low .partner-name { font-size: 13px; }
+.partner-card-low .partner-desc {
+  font-size: 11px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── LOGO WALL ──────────────────────────────────── */
+/* Injected by initLogoWall() (app.js) just above <footer> on every page —
+   team + partner logos, repeated 8× so the looping translateX(-50%)
+   animation always has enough track width to stay seamless even on
+   ultrawide screens; JS sets the actual animation-duration from the
+   measured track width so the scroll speed (px/s) stays constant. */
+.logo-wall {
+  overflow: hidden;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 6%, black 94%, transparent);
+}
+.logo-wall-track {
+  display: flex; align-items: center; gap: 3rem;
+  width: max-content;
+  animation: logoScroll 40s linear infinite;
+}
+.logo-wall-track img {
+  height: 28px; flex-shrink: 0;
+  opacity: .5; filter: grayscale(1);
+  transition: opacity .2s, filter .2s;
+}
+.logo-wall-track img:hover { opacity: 1; filter: none; }
+@keyframes logoScroll { to { transform: translateX(-50%); } }
+
+/* ─── NEXT ROUND STRIP ───────────────────────────── */
+/* Injected by initNextRoundStrip() (app.js) on every page — a quiet,
+   persistent reminder of when the next round is, since that info was
+   previously only visible on Kalendarz/Wyniki. */
+.next-round-strip {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.next-round-strip-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.7rem clamp(1rem, 5vw, 2.5rem);
+  font-size: 12.5px;
+  font-family: var(--font-mono);
+  color: var(--gray-light);
+  text-decoration: none;
+  transition: color .2s;
+}
+.next-round-strip-inner:hover { color: var(--white); }
+.next-round-strip-flag { display: inline-flex; align-items: center; }
+.next-round-strip-flag .track-flag-img { width: 20px; }
+.next-round-strip-inner strong { color: var(--white); font-family: var(--font-display); font-weight: 800; letter-spacing: -0.2px; }
+.next-round-strip-date { color: var(--gray); }
+.next-round-strip-days {
+  color: var(--red);
+  background: rgba(225,6,0,0.12);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 600;
+}
 
 /* ─── FOOTER ─────────────────────────────────────── */
 footer {
@@ -858,6 +1080,72 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   border-bottom-color: transparent;
 }
 .page-hero.has-track-bg::before { content: none; }
+
+/* Rotating background carousel (assets/hero-photos/, see initHeroPhotoCarousel()
+   in app.js) for pages with no single natural photo of their own. The dark
+   fade + red glow live on a static ::before ABOVE the photo layers, since the
+   photo itself has to be two separate, independently-animatable elements
+   (for the cross-fade) rather than one background-image property. */
+.hero-carousel-layer {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  opacity: 0; transition: opacity 1.2s ease;
+}
+.hero-carousel-layer.visible { opacity: 1; }
+.page-hero.hero-carousel {
+  background-color: var(--black); border-bottom-color: transparent;
+}
+.page-hero.hero-carousel::before {
+  content: ''; position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(10,11,13,.6) 0%, rgba(10,11,13,.92) 75%, var(--black) 100%),
+    radial-gradient(ellipse 70% 100% at 50% 100%, rgba(225,6,0,0.12) 0%, transparent 70%);
+}
+.page-hero.hero-carousel .page-hero-inner { position: relative; z-index: 2; }
+
+/* Giant, barely-visible per-page icon watermark — same trick as
+   .hof-hero::after (the HOF star), generalized to 5 pages, each with its own
+   matching icon (SVGs duplicated from the ICONS registry in app.js as inline
+   data-URIs, since a CSS background-image can't reference a JS string).
+   Automatically steps aside once assets/hero-photos/ has real photos —
+   .hero-carousel adds .has-track-bg, and that combination turns this off. */
+.page-hero.has-icon-watermark::after {
+  content: '';
+  position: absolute; top: 50%; right: clamp(-30px, 3vw, 60px);
+  width: clamp(220px, 32vw, 440px); height: clamp(220px, 32vw, 440px);
+  transform: translateY(-50%);
+  background-size: contain; background-repeat: no-repeat;
+  opacity: 0.07; pointer-events: none;
+}
+.page-hero.has-icon-watermark.has-track-bg::after { content: none; }
+.icon-watermark-helmet::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 15a8 8 0 0 1 16 0'/%3E%3Cpath d='M3 15h18v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2z'/%3E%3Cline x1='12' y1='7' x2='12' y2='10'/%3E%3C/svg%3E");
+}
+.icon-watermark-flag::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5f4f1'%3E%3Crect x='4' y='2' width='2' height='20'/%3E%3Crect x='6' y='3' width='3' height='3'/%3E%3Crect x='12' y='3' width='3' height='3'/%3E%3Crect x='9' y='6' width='3' height='3'/%3E%3Crect x='15' y='6' width='3' height='3'/%3E%3Crect x='6' y='9' width='3' height='3'/%3E%3Crect x='12' y='9' width='3' height='3'/%3E%3C/svg%3E");
+}
+.icon-watermark-crown::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f4c430'%3E%3Cpath d='M3 18h18l1-9-5.5 3.5L12 5.5 7.5 12.5 2 9l1 9z'/%3E%3Crect x='3' y='19' width='18' height='2' rx='1'/%3E%3C/svg%3E");
+}
+.icon-watermark-news::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e10600' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='16' rx='2'/%3E%3Cline x1='7' y1='9' x2='17' y2='9'/%3E%3Cline x1='7' y1='13' x2='17' y2='13'/%3E%3Cline x1='7' y1='17' x2='13' y2='17'/%3E%3C/svg%3E");
+}
+.icon-watermark-partners::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='18' height='13' rx='2'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cline x1='3' y1='13' x2='21' y2='13'/%3E%3C/svg%3E");
+}
+
+/* Subtle ambient red glow behind the first content block under the hero on
+   a couple of pages — same radial-gradient recipe as .page-hero::before,
+   reused rather than inventing a new one. */
+#standings-summary, #constructors-summary, #partners-grid { position: relative; }
+#standings-summary::before, #constructors-summary::before, #partners-grid::before {
+  content: '';
+  position: absolute; z-index: -1;
+  top: -2rem; left: 15%; right: 15%; height: 5rem;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(225,6,0,0.08) 0%, transparent 75%);
+  pointer-events: none;
+}
+
 .page-hero-inner { max-width: 1100px; margin: 0 auto; position: relative; text-align: center; }
 .page-hero-title {
   font-family: var(--font-display);
@@ -968,6 +1256,36 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 .cal-card:hover { transform: translateY(-3px); border-color: var(--red); box-shadow: 0 14px 30px rgba(0,0,0,0.3); }
 .cal-card.completed { opacity: 0.62; }
 .cal-card.cancelled { opacity: 0.4; }
+/* Cienki pasek na górze karty — złoty dla weekendu ze sprintem, żeby typ
+   weekendu było widać zanim jeszcze przeczyta się szczegóły. */
+.cal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: transparent;
+  z-index: 2;
+}
+.cal-card.has-sprint::before { background: linear-gradient(90deg, var(--gold), rgba(244,196,48,0.25)); }
+/* Duża, wyraźna plakietka numeru rundy na miniaturce — widać "który to
+   wyścig" bez czytania. Renderowana tylko gdy jest zdjęcie toru (inaczej
+   nakładałaby się na flagę w nagłówku karty) — bez zdjęcia numer rundy
+   zostaje w .cal-round tak jak wcześniej. */
+.cal-round-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(10,11,13,0.78);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--white);
+  z-index: 2;
+}
 .cal-card-top {
   display: flex;
   align-items: center;
@@ -976,6 +1294,7 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   border-bottom: 1px solid var(--border);
 }
 .cal-flag { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.cal-card-title { flex: 1; min-width: 0; }
 .cal-round {
   font-size: 10px;
   font-weight: 700;
@@ -998,8 +1317,6 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   gap: 8px;
   padding: 12px 16px;
 }
-.cal-body-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.cal-date { font-size: 12px; color: var(--gray-light); font-family: var(--font-mono); }
 .cal-status {
   font-size: 10px;
   font-weight: 700;
@@ -1008,23 +1325,50 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   padding: 3px 8px;
   border-radius: 4px;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .cal-status.done { background: rgba(0,200,100,0.12); color: #00c864; }
 .cal-status.upcoming { background: rgba(225,6,0,0.12); color: var(--red); }
 .cal-status.cancelled { background: rgba(120,120,120,0.12); color: var(--gray); }
 .cal-status.live { background: rgba(225,6,0,0.18); color: var(--red); animation: livePulseText 1.6s ease-in-out infinite; }
-.cal-sprint-row { padding-top: 8px; border-top: 1px dashed var(--border); }
-.cal-sprint-badge {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1px;
+/* Wiersze sesji — osobne, wyraźnie oznaczone ikoną+kolorem zamiast dawnego
+   cienkiego przerywanego podziału. Wyścig = czerwony akcent, Sprint = złoty. */
+.cal-session-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--surface2);
+}
+.cal-session-row .icon { width: 15px; height: 15px; flex-shrink: 0; }
+.cal-session-race .icon { color: var(--red); }
+.cal-session-sprint .icon { color: var(--gold); }
+.cal-session-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: var(--gold);
-  background: rgba(244,196,48,0.12);
-  padding: 3px 8px;
-  border-radius: 4px;
+  color: var(--gray-light);
+}
+.cal-session-time {
+  margin-left: auto;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--white);
   white-space: nowrap;
 }
+.cal-briefing {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 2px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--gray-light);
+}
+.cal-briefing .icon { width: 13px; height: 13px; color: var(--gray); }
+.cal-briefing strong { color: var(--white); font-weight: 700; }
 .cal-next-badge {
   position: absolute;
   top: 10px; right: 10px;
@@ -1130,6 +1474,77 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 
 /* ─── WDC PAGE ───────────────────────────────────── */
+/* "Na żywo" stan walki o tytuł w trwającym sezonie — czerwony akcent (nie
+   złoty jak .wdc-hero), żeby wyraźnie odróżnić się od potwierdzonej,
+   historycznej karty mistrza poniżej. */
+.wdc-live-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 5vw, 2.5rem) 0;
+}
+.wdc-live {
+  background: linear-gradient(135deg, #1a0000 0%, var(--surface) 100%);
+  border: 1px solid rgba(225,6,0,0.35);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+.wdc-live-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.wdc-live-body {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.wdc-live-avatar {
+  width: 56px; height: 56px;
+  object-fit: contain; object-position: bottom;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+  flex-shrink: 0;
+}
+.wdc-live-info { flex: 1; min-width: 160px; }
+.wdc-live-driver {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  color: var(--white);
+}
+.wdc-live-team { margin-top: 4px; }
+.wdc-live-stats { display: flex; gap: clamp(1rem, 4vw, 1.75rem); flex-wrap: wrap; }
+.wdc-live-stat { text-align: right; }
+.wdc-live-stat-num {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  color: var(--white);
+}
+.wdc-live-stat-num.accent { color: var(--red); }
+.wdc-live-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.wdc-live-note {
+  font-size: 12px;
+  color: var(--gray-light);
+  font-family: var(--font-mono);
+}
+.wdc-live-note strong { color: var(--white); font-family: var(--font-body); }
+
 .wdc-hero-wrap {
   max-width: 1100px;
   margin: 0 auto;
@@ -1225,6 +1640,7 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 
 .wdc-card {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -1233,6 +1649,22 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   box-shadow: 0 8px 22px rgba(0,0,0,0.2);
 }
 .wdc-card:hover { border-color: rgba(225,6,0,0.4); box-shadow: 0 12px 26px rgba(0,0,0,0.26); }
+/* Same corner-checker texture as .page-hero::after — a touch of texture on
+   hover instead of a flat surface. */
+.wdc-card::after {
+  content: '';
+  position: absolute; top: 0; right: 0; width: 90px; height: 90px;
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%),
+    linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+  -webkit-mask-image: radial-gradient(ellipse 100% 100% at 100% 0%, black 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse 100% 100% at 100% 0%, black 0%, transparent 70%);
+  opacity: 0; transition: opacity .2s;
+  pointer-events: none;
+}
+.wdc-card:hover::after { opacity: 1; }
 .wdc-card-latest {
   border-color: rgba(255, 200, 0, 0.35);
   background: linear-gradient(135deg, #1a1200 0%, var(--surface) 60%);
@@ -1536,18 +1968,18 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 .hof-play-overlay .icon { width: 16px; height: 16px; }
 
 /* ─── STAGGERED ENTRANCE ANIMATIONS ──────────────── */
-.news-card, .hof-clip-card, .wdc-card, .cal-card {
+.news-card, .hof-clip-card, .wdc-card, .cal-card, .partner-card {
   animation: fadeUp 0.5s ease both;
 }
-.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1)  { animation-delay: .02s; }
-.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2)  { animation-delay: .08s; }
-.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3)  { animation-delay: .14s; }
-.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4)  { animation-delay: .20s; }
-.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5)  { animation-delay: .26s; }
-.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6)  { animation-delay: .32s; }
-.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7)  { animation-delay: .38s; }
-.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8)  { animation-delay: .44s; }
-.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9) { animation-delay: .5s; }
+.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1),  .partners-grid > *:nth-child(1)  { animation-delay: .02s; }
+.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2),  .partners-grid > *:nth-child(2)  { animation-delay: .08s; }
+.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3),  .partners-grid > *:nth-child(3)  { animation-delay: .14s; }
+.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4),  .partners-grid > *:nth-child(4)  { animation-delay: .20s; }
+.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5),  .partners-grid > *:nth-child(5)  { animation-delay: .26s; }
+.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6),  .partners-grid > *:nth-child(6)  { animation-delay: .32s; }
+.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7),  .partners-grid > *:nth-child(7)  { animation-delay: .38s; }
+.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8),  .partners-grid > *:nth-child(8)  { animation-delay: .44s; }
+.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9), .partners-grid > *:nth-child(n+9) { animation-delay: .5s; }
 
 table.results tbody tr, table.standings tbody tr {
   animation: fadeUp 0.35s ease both;

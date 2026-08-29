@@ -1,0 +1,13 @@
+{
+  "partners": [
+    {
+      "id": 1,
+      "name": "Instant Gaming",
+      "logo": "https://i.imgur.com/HUobyok.png",
+      "url": "https://www.instant-gaming.com/?igr=polarisracing",
+      "tier": "Partner Główny",
+      "description": "Zniżka do -80% na wybrane gry simracingowe przy zakupie z naszego linku",
+      "priority": "wysoki"
+    }
+  ]
+}

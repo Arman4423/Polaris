@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Klasyfikacja Kierowców — Polaris Racing League</title>
+  <title data-i18n="title.klasyfikacja">Klasyfikacja Kierowców — Polaris Racing League</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20100%20100%27%3E%3Cpolygon%20points=%2750,3%2061,38%2098,38%2068,60%2079,95%2050,73%2021,95%2032,60%202,38%2039,38%27%20fill=%27%23e10600%27/%3E%3C/svg%3E" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,35 +16,37 @@
     <span class="nav-brand-text" style="display:none"><span class="brand-mark">✦</span>POLARIS<span> RACING</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="index.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><polyline points="9 21 9 13 15 13 15 21"></polyline></svg></span>Strona główna</a></li>
-    <li><a href="wyniki.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="2" width="2" height="20"></rect><rect x="6" y="3" width="3" height="3"></rect><rect x="12" y="3" width="3" height="3"></rect><rect x="9" y="6" width="3" height="3"></rect><rect x="15" y="6" width="3" height="3"></rect><rect x="6" y="9" width="3" height="3"></rect><rect x="12" y="9" width="3" height="3"></rect></svg></span>Wyniki</a></li>
-    <li><a href="klasyfikacja.html" class="active"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 5 10"></path><path d="M16 3l3 7"></path><circle cx="12" cy="15" r="6"></circle></svg></span>Klasyfikacja Kierowców</a></li>
-    <li><a href="konstruktorzy.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 0 1 16 0"></path><path d="M3 15h18v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2z"></path><line x1="12" y1="7" x2="12" y2="10"></line></svg></span>Klasyfikacja Konstruktorska</a></li>
+    <li><a href="index.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><polyline points="9 21 9 13 15 13 15 21"></polyline></svg></span><span data-i18n="nav.home">Strona główna</span></a></li>
+    <li><a href="wyniki.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="2" width="2" height="20"></rect><rect x="6" y="3" width="3" height="3"></rect><rect x="12" y="3" width="3" height="3"></rect><rect x="9" y="6" width="3" height="3"></rect><rect x="15" y="6" width="3" height="3"></rect><rect x="6" y="9" width="3" height="3"></rect><rect x="12" y="9" width="3" height="3"></rect></svg></span><span data-i18n="nav.results">Wyniki</span></a></li>
+    <li><a href="klasyfikacja.html" class="active"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 5 10"></path><path d="M16 3l3 7"></path><circle cx="12" cy="15" r="6"></circle></svg></span><span data-i18n="nav.driverStandings">Klasyfikacja Kierowców</span></a></li>
+    <li><a href="konstruktorzy.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 0 1 16 0"></path><path d="M3 15h18v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2z"></path><line x1="12" y1="7" x2="12" y2="10"></line></svg></span><span data-i18n="nav.constructorStandings">Klasyfikacja Konstruktorska</span></a></li>
     <li><a href="wdc.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18l1-9-5.5 3.5L12 5.5 7.5 12.5 2 9l1 9z"></path><rect x="3" y="19" width="18" height="2" rx="1"></rect></svg></span>WDC</a></li>
-    <li><a href="kalendarz.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>Kalendarz</a></li>
+    <li><a href="kalendarz.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span data-i18n="nav.calendar">Kalendarz</span></a></li>
     <li><a href="hall-of-fame.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.7-4.9 4.5 1.3 6.5-5.9-3.3-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.7z"></path></svg></span>Hall of Fame</a></li>
-    <li><a href="aktualnosci.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="13" x2="17" y2="13"></line><line x1="7" y1="17" x2="13" y2="17"></line></svg></span>Aktualności</a></li>
+    <li><a href="aktualnosci.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="13" x2="17" y2="13"></line><line x1="7" y1="17" x2="13" y2="17"></line></svg></span><span data-i18n="nav.news">Aktualności</span></a></li>
+    <li><a href="partnerstwa.html"><span class="icon nav-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="3" y1="13" x2="21" y2="13"></line></svg></span><span data-i18n="nav.partners">Partnerstwa</span></a></li>
     <li><a href="https://discord.gg/ZwvXkqyvb7" target="_blank" class="nav-cta">Discord</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="index.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><polyline points="9 21 9 13 15 13 15 21"></polyline></svg></span>Strona główna</a>
-  <a href="wyniki.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="2" width="2" height="20"></rect><rect x="6" y="3" width="3" height="3"></rect><rect x="12" y="3" width="3" height="3"></rect><rect x="9" y="6" width="3" height="3"></rect><rect x="15" y="6" width="3" height="3"></rect><rect x="6" y="9" width="3" height="3"></rect><rect x="12" y="9" width="3" height="3"></rect></svg></span>Wyniki</a>
-  <a href="klasyfikacja.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 5 10"></path><path d="M16 3l3 7"></path><circle cx="12" cy="15" r="6"></circle></svg></span>Klasyfikacja Kierowców</a>
-  <a href="konstruktorzy.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 0 1 16 0"></path><path d="M3 15h18v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2z"></path><line x1="12" y1="7" x2="12" y2="10"></line></svg></span>Klasyfikacja Konstruktorska</a>
+  <a href="index.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><polyline points="9 21 9 13 15 13 15 21"></polyline></svg></span><span data-i18n="nav.home">Strona główna</span></a>
+  <a href="wyniki.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="2" width="2" height="20"></rect><rect x="6" y="3" width="3" height="3"></rect><rect x="12" y="3" width="3" height="3"></rect><rect x="9" y="6" width="3" height="3"></rect><rect x="15" y="6" width="3" height="3"></rect><rect x="6" y="9" width="3" height="3"></rect><rect x="12" y="9" width="3" height="3"></rect></svg></span><span data-i18n="nav.results">Wyniki</span></a>
+  <a href="klasyfikacja.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 5 10"></path><path d="M16 3l3 7"></path><circle cx="12" cy="15" r="6"></circle></svg></span><span data-i18n="nav.driverStandings">Klasyfikacja Kierowców</span></a>
+  <a href="konstruktorzy.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15a8 8 0 0 1 16 0"></path><path d="M3 15h18v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2z"></path><line x1="12" y1="7" x2="12" y2="10"></line></svg></span><span data-i18n="nav.constructorStandings">Klasyfikacja Konstruktorska</span></a>
   <a href="wdc.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18l1-9-5.5 3.5L12 5.5 7.5 12.5 2 9l1 9z"></path><rect x="3" y="19" width="18" height="2" rx="1"></rect></svg></span>WDC</a>
-  <a href="kalendarz.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>Kalendarz</a>
+  <a href="kalendarz.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><line x1="16" y1="3" x2="16" y2="7"></line><line x1="8" y1="3" x2="8" y2="7"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span data-i18n="nav.calendar">Kalendarz</span></a>
   <a href="hall-of-fame.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 6 6.6.7-4.9 4.5 1.3 6.5-5.9-3.3-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.7z"></path></svg></span>Hall of Fame</a>
-  <a href="aktualnosci.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="13" x2="17" y2="13"></line><line x1="7" y1="17" x2="13" y2="17"></line></svg></span>Aktualności</a>
+  <a href="aktualnosci.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="13" x2="17" y2="13"></line><line x1="7" y1="17" x2="13" y2="17"></line></svg></span><span data-i18n="nav.news">Aktualności</span></a>
+  <a href="partnerstwa.html"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="3" y1="13" x2="21" y2="13"></line></svg></span><span data-i18n="nav.partners">Partnerstwa</span></a>
   <a href="https://discord.gg/ZwvXkqyvb7" target="_blank">Discord ↗</a>
 </div>
 <main>
-  <div class="page-hero">
+  <div class="page-hero has-icon-watermark icon-watermark-helmet" id="klasyfikacja-hero">
     <div class="page-hero-inner">
       <span class="hero-eyebrow">Polaris Racing League · Sezon 1</span>
-      <h1 class="page-hero-title">KLASYFIKACJA KIEROWCÓW</h1>
-      <p class="page-hero-sub">Rywalizacja, Pasja, Motorsport</p>
+      <h1 class="page-hero-title" data-i18n="hero.klasyfikacja.title">KLASYFIKACJA KIEROWCÓW</h1>
+      <p class="page-hero-sub" data-i18n="footer.motto">Rywalizacja, Pasja, Motorsport</p>
     </div>
   </div>
   <div class="season-tabs-wrap">
@@ -67,8 +69,8 @@
     <div class="footer-brand">
       <img src="assets/logo-polaris.png" alt="" class="footer-logo" onerror="this.style.display='none'"/>
     </div>
-    <div class="footer-motto">Rywalizacja, Pasja, Motorsport</div>
-    <div class="footer-copy">© 2026 Polaris Racing League. Wszelkie prawa zastrzeżone.</div>
+    <div class="footer-motto" data-i18n="footer.motto">Rywalizacja, Pasja, Motorsport</div>
+    <div class="footer-copy" data-i18n="footer.copyright">© 2026 Polaris Racing League. Wszelkie prawa zastrzeżone.</div>
   </div>
   <div class="footer-links">
     <a href="https://discord.gg/ZwvXkqyvb7" target="_blank" class="footer-link">
