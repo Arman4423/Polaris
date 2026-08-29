@@ -6,7 +6,8 @@
       "logo": "https://i.imgur.com/HUobyok.png",
       "url": "https://www.instant-gaming.com/?igr=polarisracing",
       "tier": "Partner Główny",
-      "description": "Zniżka do -80% na wybrane gry simracingowe przy zakupie z naszego linku",
+      "description_pl": "Zniżka do -80% na wybrane gry simracingowe przy zakupie z naszego linku",
+      "description_en": "Up to 80% off selected sim racing games when purchased through our link.",
       "priority": "wysoki"
     }
   ]
