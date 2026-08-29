@@ -106,6 +106,17 @@ const I18N = {
     'hof.videoUnsupported': 'Twoja przeglądarka nie obsługuje odtwarzania wideo. ', 'hof.video': 'Wideo',
     'strip.nextRound': 'Następna runda',
     'back.results': '← Wszystkie wyniki', 'back.hof': '← Wróć do Hall of Fame',
+    'season.label': 'Sezon',
+    'hero.klasyfikacja.eyebrow': 'Polaris Racing League · Sezon 1',
+    'hero.konstruktorzy.eyebrow': 'Polaris Racing League · Sezon 1',
+    'home.season1Label': 'Sezon 1',
+    'nav.ranking': 'Ranking', 'title.ranking': 'Ranking — Polaris Racing League', 'hero.ranking.title': 'RANKING',
+    'ranking.wins': 'Najwięcej zwycięstw', 'ranking.poles': 'Najwięcej Pole Position',
+    'ranking.podiums': 'Najwięcej podiów', 'ranking.dotd': 'Najwięcej Kierowca Dnia',
+    'ranking.fastestLaps': 'Najwięcej najszybszych okrążeń', 'ranking.avgPosition': 'Najwyższa średnia pozycja',
+    'ranking.finishes': 'Najwięcej ukończonych wyścigów', 'ranking.winStreak': 'Najdłuższa seria zwycięstw',
+    'ranking.podiumStreak': 'Najdłuższa seria podiów', 'ranking.poleStreak': 'Najdłuższa seria Pole Position',
+    'ranking.minStartsNote': 'Min. 5 startów w sezonie',
     'home.stat.drivers': 'Kierowców', 'home.stat.rounds': 'Rundy', 'home.stat.game': 'Gra',
     'home.cta.results': 'Zobacz wyniki', 'home.cta.calendar': 'Kalendarz sezonu',
     'home.lastRace.label': 'Ostatni wyścig', 'home.lastRace.title': 'Wyniki GP',
@@ -181,6 +192,17 @@ const I18N = {
     'hof.videoUnsupported': 'Your browser does not support video playback. ', 'hof.video': 'Video',
     'strip.nextRound': 'Next round',
     'back.results': '← All results', 'back.hof': '← Back to Hall of Fame',
+    'season.label': 'Season',
+    'hero.klasyfikacja.eyebrow': 'Polaris Racing League · Season 1',
+    'hero.konstruktorzy.eyebrow': 'Polaris Racing League · Season 1',
+    'home.season1Label': 'Season 1',
+    'nav.ranking': 'Ranking', 'title.ranking': 'Ranking — Polaris Racing League', 'hero.ranking.title': 'RANKING',
+    'ranking.wins': 'Most wins', 'ranking.poles': 'Most pole positions',
+    'ranking.podiums': 'Most podiums', 'ranking.dotd': 'Most Driver of the Day',
+    'ranking.fastestLaps': 'Most fastest laps', 'ranking.avgPosition': 'Best average position',
+    'ranking.finishes': 'Most race finishes', 'ranking.winStreak': 'Longest win streak',
+    'ranking.podiumStreak': 'Longest podium streak', 'ranking.poleStreak': 'Longest pole position streak',
+    'ranking.minStartsNote': 'Min. 5 starts this season',
     'home.stat.drivers': 'Drivers', 'home.stat.rounds': 'Rounds', 'home.stat.game': 'Game',
     'home.cta.results': 'View results', 'home.cta.calendar': 'Season calendar',
     'home.lastRace.label': 'Last race', 'home.lastRace.title': 'GP Results',
@@ -207,6 +229,21 @@ function setLang(lang) {
 function t(key) {
   const lang = getLang();
   return I18N[lang]?.[key] ?? I18N.pl[key] ?? key;
+}
+/** Sezony przechowywane jako sama liczba ("1"/"2"/"3" — SEASONS_CONFIG.name,
+ *  mistrzowie.json champions[].season). Jedyne miejsce doklejające słowo
+ *  "Sezon"/"Season" przy wyświetlaniu. */
+function seasonLabel(n) {
+  return `${t('season.label')} ${n}`;
+}
+/** Dwujęzyczna treść z panelu (Partnerstwa, Aktualności, powód Kierowcy
+ *  Dnia) — pole o bazowej nazwie `base` zapisane jako `base_pl`/`base_en`.
+ *  Kolejność: dokładny język → wersja polska → stare pojedyncze pole sprzed
+ *  tej zmiany (np. istniejący Partnerstwa/partnerstwa.json ma dziś tylko
+ *  `description`, bez _pl/_en) → ''. */
+function biText(obj, base) {
+  if (!obj) return '';
+  return obj[base + '_' + getLang()] || obj[base + '_pl'] || obj[base] || '';
 }
 /** parseRLT() bakes the DISPLAY word 'Ukończony' straight into d.status at
  *  load time (used both for showing "Finished" and, elsewhere, for DNF-
@@ -285,6 +322,7 @@ const ICONS = {
   home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"></path><polyline points="9 21 9 13 15 13 15 21"></polyline></svg>`,
   news: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="9" x2="17" y2="9"></line><line x1="7" y1="13" x2="17" y2="13"></line><line x1="7" y1="17" x2="13" y2="17"></line></svg>`,
   partners: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="3" y1="13" x2="21" y2="13"></line></svg>`,
+  ranking: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="14"></line><line x1="12" y1="20" x2="12" y2="9"></line><line x1="18" y1="20" x2="18" y2="4"></line></svg>`,
 };
 function icon(name, extraClass) {
   return `<span class="icon${extraClass ? ' ' + extraClass : ''}" aria-hidden="true">${ICONS[name] || ''}</span>`;
@@ -348,34 +386,59 @@ function posBadge(p) {
   return `<span class="pos-badge ${posRankClass(p)}">${p}</span>`;
 }
 
+/** Nazwa kraju → kod ISO (flagcdn.com). Zasila zarówno flagi torów
+ *  (trackFlag(), kraj gospodarza GP) jak i flagi narodowości kierowców
+ *  (nationalityFlag(), kraj kierowcy z sklad.json) — jeden wspólny słownik,
+ *  rozszerzony o kraje spoza kalendarza GP, które realnie pojawiają się jako
+ *  narodowości kierowców w polskiej lidze sim-racingowej. */
+const COUNTRY_CODES = {
+  'Bahrain': 'bh', 'bahrain': 'bh',
+  'Italy': 'it', 'italy': 'it',
+  'Belgium': 'be', 'belgium': 'be',
+  'Monaco': 'mc', 'monaco': 'mc',
+  'Spain': 'es', 'spain': 'es',
+  'Great Britain': 'gb', 'United Kingdom': 'gb',
+  'Hungary': 'hu', 'hungary': 'hu',
+  'Netherlands': 'nl', 'netherlands': 'nl',
+  'Singapore': 'sg', 'singapore': 'sg',
+  'Japan': 'jp', 'japan': 'jp',
+  'USA': 'us', 'United States': 'us',
+  'Mexico': 'mx', 'mexico': 'mx',
+  'Brazil': 'br', 'brazil': 'br',
+  'Abu Dhabi': 'ae', 'United Arab Emirates': 'ae',
+  'Australia': 'au', 'australia': 'au',
+  'Canada': 'ca', 'canada': 'ca',
+  'Austria': 'at', 'austria': 'at',
+  'Azerbaijan': 'az', 'azerbaijan': 'az',
+  'Saudi Arabia': 'sa',
+  'China': 'cn',
+  'Qatar': 'qa',
+  'Poland': 'pl',
+  // Kraje spoza kalendarza GP, przydatne jako narodowości kierowców:
+  'Germany': 'de', 'France': 'fr', 'Portugal': 'pt', 'Czechia': 'cz',
+  'Czech Republic': 'cz', 'Slovakia': 'sk', 'Ukraine': 'ua', 'Lithuania': 'lt',
+  'Latvia': 'lv', 'Estonia': 'ee', 'Romania': 'ro', 'Sweden': 'se',
+  'Norway': 'no', 'Denmark': 'dk', 'Finland': 'fi', 'Switzerland': 'ch',
+  'Ireland': 'ie', 'Russia': 'ru', 'Turkey': 'tr', 'Greece': 'gr',
+  'Croatia': 'hr', 'Serbia': 'rs', 'Slovenia': 'si', 'Bulgaria': 'bg',
+  'Iceland': 'is', 'Luxembourg': 'lu', 'New Zealand': 'nz', 'South Africa': 'za',
+  'India': 'in', 'South Korea': 'kr', 'Indonesia': 'id', 'Argentina': 'ar',
+  'Chile': 'cl', 'Colombia': 'co', 'Israel': 'il', 'Egypt': 'eg', 'Morocco': 'ma',
+};
+
 function trackFlag(country) {
-  const codes = {
-    'Bahrain': 'bh', 'bahrain': 'bh',
-    'Italy': 'it', 'italy': 'it',
-    'Belgium': 'be', 'belgium': 'be',
-    'Monaco': 'mc', 'monaco': 'mc',
-    'Spain': 'es', 'spain': 'es',
-    'Great Britain': 'gb', 'United Kingdom': 'gb',
-    'Hungary': 'hu', 'hungary': 'hu',
-    'Netherlands': 'nl', 'netherlands': 'nl',
-    'Singapore': 'sg', 'singapore': 'sg',
-    'Japan': 'jp', 'japan': 'jp',
-    'USA': 'us', 'United States': 'us',
-    'Mexico': 'mx', 'mexico': 'mx',
-    'Brazil': 'br', 'brazil': 'br',
-    'Abu Dhabi': 'ae', 'United Arab Emirates': 'ae',
-    'Australia': 'au', 'australia': 'au',
-    'Canada': 'ca', 'canada': 'ca',
-    'Austria': 'at', 'austria': 'at',
-    'Azerbaijan': 'az', 'azerbaijan': 'az',
-    'Saudi Arabia': 'sa',
-    'China': 'cn',
-    'Qatar': 'qa',
-    'Poland': 'pl',
-  };
-  const code = codes[country];
+  const code = COUNTRY_CODES[country];
   if (!code) return icon('flag', 'icon-flag-fallback');
   return '<img src="https://flagcdn.com/w40/' + code + '.png" alt="' + country + '" class="track-flag-img" onerror="flagImgFallback(this)">';
+}
+
+/** Flaga narodowości kierowcy (kraj z sklad.json), ten sam wzorzec co
+ *  trackFlag() — te same kody, ten sam CDN, ten sam fallback na ikonę SVG. */
+function nationalityFlag(country) {
+  if (!country) return '';
+  const code = COUNTRY_CODES[country];
+  if (!code) return icon('flag', 'icon-flag-fallback driver-flag-fallback');
+  return '<img src="https://flagcdn.com/w40/' + code + '.png" alt="' + country + '" class="driver-flag-img" onerror="flagImgFallback(this)">';
 }
 
 /** onerror handler for the <img> in trackFlag() — swaps a broken flag image
@@ -392,18 +455,23 @@ function flagImgFallback(imgEl) {
    Jeśli nie ma manifestu, używa wbudowanej listy plików.
    ───────────────────────────────────────────────── */
 
-// Seasons config — add more seasons here as needed
+// Seasons config — add more seasons here as needed. `name` is just the bare
+// season NUMBER (used as the object key / lookup value everywhere in the
+// code and, since Część 2, in the admin panel's own "Sezon" field too) —
+// deliberately decoupled from `folder`, which keeps the existing "Sezon N"
+// physical folder naming on disk/GitHub. Display text is built from `name`
+// via seasonLabel(), never shown raw.
 const SEASONS_CONFIG = [
-  { name: 'Sezon 1', folder: 'Wyniki/Sezon 1' },
-  { name: 'Sezon 2', folder: 'Wyniki/Sezon 2' },
-  { name: 'Sezon 3', folder: 'Wyniki/Sezon 3' },
+  { name: '1', folder: 'Wyniki/Sezon 1' },
+  { name: '2', folder: 'Wyniki/Sezon 2' },
+  { name: '3', folder: 'Wyniki/Sezon 3' },
 ];
 
 // Calendar seasons config — mirror of SEASONS_CONFIG
 const CALENDAR_SEASONS_CONFIG = [
-  { name: 'Sezon 1', folder: 'Kalendarz/Sezon 1' },
-  { name: 'Sezon 2', folder: 'Kalendarz/Sezon 2' },
-  { name: 'Sezon 3', folder: 'Kalendarz/Sezon 3' },
+  { name: '1', folder: 'Kalendarz/Sezon 1' },
+  { name: '2', folder: 'Kalendarz/Sezon 2' },
+  { name: '3', folder: 'Kalendarz/Sezon 3' },
 ];
 
 // Tiers — every season folder is now split into Tier 1 / Tier 2 / Tier 3 subfolders
@@ -413,9 +481,9 @@ const DEFAULT_TIER = 'Tier 1';
 // Known files per season+tier (fallback if no manifest) — auto-populated from what we discover
 // In production: add a manifest.json to each Tier folder listing the .json files
 const KNOWN_FILES = {
-  'Sezon 1': { 'Tier 1': ['polaris_race_sezon_1_e01_20260614_0000.json'], 'Tier 2': [], 'Tier 3': [] },
-  'Sezon 2': { 'Tier 1': [], 'Tier 2': [], 'Tier 3': [] },
-  'Sezon 3': { 'Tier 1': [], 'Tier 2': [], 'Tier 3': [] },
+  '1': { 'Tier 1': ['polaris_race_sezon_1_e01_20260614_0000.json'], 'Tier 2': [], 'Tier 3': [] },
+  '2': { 'Tier 1': [], 'Tier 2': [], 'Tier 3': [] },
+  '3': { 'Tier 1': [], 'Tier 2': [], 'Tier 3': [] },
 };
 
 async function tryFetch(url) {
@@ -604,7 +672,12 @@ function parseRLT(json, seasonName) {
 
   return {
     id: `${seasonName}-round${ev.round}-${sessionType}`,
-    season: json.season?.seasonName || seasonName,
+    // Zawsze parametr `seasonName` (poprawnie wyznaczony przez SEASONS_CONFIG
+    // w loadRacesFor()), NIGDY wolnotekstowe pole z samego pliku JSON — to
+    // pole potrafiło się różnić plik od pliku ("Sezon 1"/"SEZON 1"/"Season 1"),
+    // co psuło dopasowanie do kluczy allSeasons (np. link "Pełne wyniki →"
+    // ze strony głównej prowadził donikąd, gdy się nie zgadzało).
+    season: seasonName,
     round: ev.round || 1,
     sessionType,
     name: `${track.trackName || country} Grand Prix`,
@@ -626,13 +699,20 @@ function parseRLT(json, seasonName) {
     } : null,
     driverOfTheDay: sess.driverOfTheDay?.driver ? {
       driver: sess.driverOfTheDay.driver,
-      reason: sess.driverOfTheDay.reason || '',
+      reason: sess.driverOfTheDay.reason || '', // stare, jednojęzyczne pole — fallback w biText()
+      reason_pl: sess.driverOfTheDay.reason_pl || '',
+      reason_en: sess.driverOfTheDay.reason_en || '',
     } : null,
     bestManeuver: sess.bestManeuver?.url ? {
       url: sess.bestManeuver.url,
       title: sess.bestManeuver.title || '',
       driver: sess.bestManeuver.driver || '',
       description: sess.bestManeuver.description || '',
+      // Ścieżka względna repo (bez http/https) = plik własny, ta sama
+      // konwencja co klipy Hall of Fame — pozwala autoThumbnailClips()
+      // wygenerować miniaturkę automatycznie, tak samo jak tam.
+      type: /^https?:\/\//i.test(sess.bestManeuver.url) ? undefined : 'file',
+      thumbnailUrl: sess.bestManeuver.thumbnailUrl || null,
     } : null,
     _raw: json,
   };
@@ -737,20 +817,21 @@ function computeDriverStandings(races, roster) {
 
 /* Compute constructor standings from races — same points-scoring-sessions filter as drivers. */
 /** Akceptuje stary format sklad.json (drivers: [string]) albo nowy
- *  (drivers: [{name, number}]) i zwraca ujednoliconą tablicę {name, number} —
- *  number to liczba albo null. */
+ *  (drivers: [{name, number, country}]) i zwraca ujednoliconą tablicę
+ *  {name, number, country} — number to liczba albo null, country to string
+ *  albo '' (pusty = brak flagi, nie błąd — kraj to pole opcjonalne). */
 function normalizeSkladDrivers(rawDrivers) {
   if (!Array.isArray(rawDrivers)) return [];
   return rawDrivers.map(d => {
     if (typeof d === 'string') {
       const name = d.trim();
-      return name ? { name, number: null } : null;
+      return name ? { name, number: null, country: '' } : null;
     }
     if (d && typeof d === 'object' && typeof d.name === 'string') {
       const name = d.name.trim();
       if (!name) return null;
       const n = parseInt(d.number, 10);
-      return { name, number: isNaN(n) ? null : n };
+      return { name, number: isNaN(n) ? null : n, country: (d.country || '').trim() };
     }
     return null;
   }).filter(Boolean);
@@ -772,7 +853,7 @@ async function loadSklad(tier) {
     const canonical = getTeamMeta(t.team).full;
     const drivers = normalizeSkladDrivers(t.drivers);
     rosterMap[canonical] = drivers.map(d => d.name);
-    drivers.forEach(d => { driverIndex[d.name] = { team: canonical, number: d.number }; });
+    drivers.forEach(d => { driverIndex[d.name] = { team: canonical, number: d.number, country: d.country }; });
   });
   return { rosterMap, driverIndex };
 }
@@ -826,6 +907,7 @@ function computeConstructorStandings(races, roster) {
 function renderDriverCell(d, leadingBadges, driverIndex, detail) {
   const avatar = driverAvatar(d.teamFull || d.team);
   const num = driverIndex?.[d.driver]?.number ?? null;
+  const country = driverIndex?.[d.driver]?.country || '';
   const nameDisplay = d.realName
     ? `<span class="driver-name">${d.driver}</span><span class="driver-realname">${d.realName}</span>`
     : `<span class="driver-name">${d.driver}</span>`;
@@ -845,6 +927,7 @@ function renderDriverCell(d, leadingBadges, driverIndex, detail) {
     ${leadingBadges || ''}
     ${avatar ? `<img class="driver-cell-avatar" src="${avatar}" alt="" loading="lazy" onerror="this.remove()">` : `<span class="team-dot" style="background:${hexColor(d.teamColor)}"></span>`}
     ${num !== null ? `<span class="driver-number">${num}</span>` : ''}
+    ${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}
     <div>${nameDisplay}</div>
     ${badges.join('')}
   </div>`;
@@ -950,7 +1033,7 @@ function renderSeasonTabs(seasons, activeSeasonName, onSelect) {
   const names = Object.keys(seasons);
   if (names.length === 0) return;
   el.innerHTML = names.map(name =>
-    `<button class="season-tab ${name === activeSeasonName ? 'active' : ''}" data-season="${name}">${name}</button>`
+    `<button class="season-tab ${name === activeSeasonName ? 'active' : ''}" data-season="${name}">${seasonLabel(name)}</button>`
   ).join('');
   el.querySelectorAll('.season-tab').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1061,7 +1144,7 @@ function renderLastRaceCard(r, driverIndex) {
               <span class="podium-pos ${posClass[i]}">${posEmoji[i]}</span>
               ${driverAvatar(d.teamFull || d.team) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team)}" alt="" onerror="this.style.display='none'">` : ''}
               <div>
-                <div class="podium-driver">${driverIndex?.[d.driver]?.number !== null && driverIndex?.[d.driver]?.number !== undefined ? `<span class="driver-number">${driverIndex[d.driver].number}</span>` : ''}${d.driver}</div>
+                <div class="podium-driver">${driverIndex?.[d.driver]?.number !== null && driverIndex?.[d.driver]?.number !== undefined ? `<span class="driver-number">${driverIndex[d.driver].number}</span>` : ''}${driverIndex?.[d.driver]?.country ? `<span class="driver-flag">${nationalityFlag(driverIndex[d.driver].country)}</span>` : ''}${d.driver}</div>
                 <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
               </div>
               <span class="podium-pts">${d.points} ${t('ptsSuffix')}</span>
@@ -1112,15 +1195,15 @@ function renderNews(news) {
     <div class="news-grid">
       <div class="news-card news-card-featured">
         <div class="news-type">${first.type}</div>
-        <div class="news-title">${first.title}</div>
-        <div class="news-body">${first.body}</div>
+        <div class="news-title">${biText(first, 'title')}</div>
+        <div class="news-body">${biText(first, 'body')}</div>
         <div class="news-date">${fmtDate(first.date)}</div>
       </div>
       ${rest.map(n => `
         <div class="news-card">
           <div class="news-type">${n.type}</div>
-          <div class="news-title">${n.title}</div>
-          <div class="news-body">${n.body}</div>
+          <div class="news-title">${biText(n, 'title')}</div>
+          <div class="news-body">${biText(n, 'body')}</div>
           <div class="news-date">${fmtDate(n.date)}</div>
         </div>
       `).join('')}
@@ -1188,7 +1271,7 @@ function renderPartners(partners, containerId) {
       <div class="partner-logo-wrap">${logo}</div>
       <div class="partner-name">${p.name}</div>
       ${p.tier ? `<span class="partner-tier">${p.tier}</span>` : ''}
-      ${p.description ? `<p class="partner-desc">${p.description}</p>` : ''}
+      ${biText(p, 'description') ? `<p class="partner-desc">${biText(p, 'description')}</p>` : ''}
       ${p.url ? `<span class="partner-link">${t('cta.visitSite')}</span>` : ''}
     `;
   };
@@ -1263,24 +1346,33 @@ function trackImageSlug(trackName) {
     .replace(/^-+|-+$/g, '');
 }
 
-/** Sets a track photo as the page-hero background if assets/tracks/{slug}.jpg
- *  exists — checked by actually trying to load it, so a missing file just
- *  silently leaves the existing plain hero look untouched. */
+/** Zdjęcie konkretnego toru w tle — TĄ SAMĄ techniką co initHeroPhotoCarousel()
+ *  (WDC/Klasyfikacja/Konstruktorzy/itd.): osobny .hero-carousel-layer div ze
+ *  zdjęciem (własne background-size:cover) POD statycznym przyciemnieniem
+ *  .page-hero.hero-carousel::before (zwykły gradient, bez background-size).
+ *  Poprzednia wersja kodowała gradient+blask+zdjęcie jako JEDEN złożony
+ *  background-image, wszystkie warstwy z background-size:cover — "cover" na
+ *  warstwie gradientu (który nie ma naturalnego rozmiaru) to niepewna
+ *  operacja i potrafiła zostawiać widoczną "kreskę" na niektórych zdjęciach;
+ *  ten sposób (osobny element na zdjęcie, gradient bez sizingu) jest dokładnie
+ *  tym, czego już bezproblemowo używa WDC i inne strony z karuzelą.
+ *  Bezpieczne przy powtórnych wywołaniach (initWyniki()/initKalendarz()
+ *  odświeżają się co 60s) — reużywa tę samą warstwę zamiast tworzyć nową. */
 function applyTrackBackground(heroEl, trackName) {
   const slug = trackImageSlug(trackName);
   if (!slug || !heroEl) return;
   const url = `assets/tracks/${slug}.jpg`;
   const test = new Image();
   test.onload = () => {
-    // Set as one inline background-image (gradients + photo together) rather
-    // than via a CSS custom property — a relative url() inside a custom
-    // property is resolved against the STYLESHEET's location (css/), not the
-    // page, so it would silently 404 and never show anything.
-    heroEl.style.backgroundImage =
-      `linear-gradient(180deg, rgba(10,11,13,.6) 0%, rgba(10,11,13,.92) 75%, var(--black) 100%), ` +
-      `radial-gradient(ellipse 70% 100% at 50% 100%, rgba(225,6,0,0.12) 0%, transparent 70%), ` +
-      `url("${url}")`;
-    heroEl.classList.add('has-track-bg');
+    let layer = heroEl.querySelector('.hero-carousel-layer');
+    if (!layer) {
+      layer = document.createElement('div');
+      layer.className = 'hero-carousel-layer visible';
+      heroEl.prepend(layer);
+    }
+    layer.style.backgroundImage = `url("${url}")`;
+    layer.style.backgroundPosition = 'center 40%'; // faworyzuje górną część zdjęcia toru, jak dawniej
+    heroEl.classList.add('has-track-bg', 'hero-carousel');
   };
   test.src = url;
 }
@@ -1389,7 +1481,7 @@ async function initWynikWydarzenia() {
   const dateStr = roundInfo?.date || sessions[0]?.date || '';
 
   titleEl.innerHTML = `${flag ? flag + ' ' : ''}${trackName} Grand Prix`;
-  subEl.textContent = `${t('round')} ${round} · ${season} · ${tier}` + (dateStr ? ` · ${fmtDate(dateStr)}` : '');
+  subEl.textContent = `${t('round')} ${round} · ${seasonLabel(season)} · ${tier}` + (dateStr ? ` · ${fmtDate(dateStr)}` : '');
   document.title = `${trackName} — ${t('nav.results')} — Polaris Racing League`;
   applyTrackBackground(document.getElementById('event-hero'), trackName);
 
@@ -1399,6 +1491,11 @@ async function initWynikWydarzenia() {
     observeReveal();
     return;
   }
+
+  // Ten sam automatyczny system miniaturek co Hall of Fame (getVideoThumbnail/
+  // autoThumbnailClips) — tu zastosowany do klipu "Najlepszy manewr" osadzonego
+  // bezpośrednio przy wyniku wyścigu, nie tylko do klipów w Hall of Fame.
+  await autoThumbnailClips(sessions.map(s => s.bestManeuver).filter(Boolean));
 
   const byType = {};
   sessions.forEach(s => { byType[s.sessionType] = s; });
@@ -1498,6 +1595,7 @@ function computeDriverSeasonStats(races) {
     result[name] = {
       points: s.points, wins: s.wins, podiums: s.podiums, poles: s.poles,
       starts: s.starts, dnfs: s.dnfs, fastestLaps: s.fastestLaps, driverOfTheDay: s.driverOfTheDay,
+      finishes: fp.length, // ukończone wyścigi (bez DNF/DSQ) — Ranking, kategoria 7
       bestFinish: fp.length ? Math.min(...fp) : null,
       avgFinish: fp.length ? Math.round((fp.reduce((a, b) => a + b, 0) / fp.length) * 10) / 10 : null,
     };
@@ -1508,7 +1606,29 @@ function computeDriverSeasonStats(races) {
 /** Neutral stats for a rostered driver who hasn't appeared in any result
  *  yet this season — keeps renderSeasonDetail() from choking on undefined. */
 function emptySeasonStats() {
-  return { points: 0, wins: 0, podiums: 0, poles: 0, starts: 0, dnfs: 0, fastestLaps: 0, driverOfTheDay: 0, bestFinish: null, avgFinish: null };
+  return { points: 0, wins: 0, podiums: 0, poles: 0, starts: 0, dnfs: 0, fastestLaps: 0, driverOfTheDay: 0, finishes: 0, bestFinish: null, avgFinish: null };
+}
+
+/** Najdłuższa seria pod rząd spełniająca `test(raceResultEntry)` dla każdego
+ *  kierowcy, licząc tylko sesje typu `sessionType` (Race dla zwycięstw/
+ *  podiów, Qualifying dla pole position), w kolejności rund. Runda, w
+ *  której danego kierowcy w ogóle nie ma w wynikach tej sesji, PRZERYWA
+ *  jego serię — tak samo jak start bez sukcesu. Runda, dla której w ogóle
+ *  nie ma jeszcze przesłanego pliku danej sesji, jest po prostu pominięta w
+ *  iteracji (brak danych, nie "wszyscy przegrali tę rundę"). Używane przez
+ *  stronę Ranking (kategorie: najdłuższa seria zwycięstw/podiów/pole). */
+function computeStreaks(races, sessionType, test) {
+  const relevant = races.filter(r => r.sessionType === sessionType).sort((a, b) => a.round - b.round);
+  const everyone = new Set(relevant.flatMap(r => r.raceResults.map(d => d.driver)));
+  const current = {}, best = {};
+  relevant.forEach(race => {
+    const hits = new Set(race.raceResults.filter(test).map(d => d.driver));
+    everyone.forEach(name => {
+      current[name] = hits.has(name) ? (current[name] || 0) + 1 : 0;
+      best[name] = Math.max(best[name] || 0, current[name]);
+    });
+  });
+  return best; // { [kierowca]: najdłuższa seria }
 }
 
 /** One colored block per penalty TYPE actually present on this result — same
@@ -1589,9 +1709,10 @@ function renderDriverDetailContent(kind, data) {
  *  of what "season stats" means everywhere on the site. */
 function renderDriverPill(name, driverIndex, seasonStats) {
   const num = driverIndex?.[name]?.number ?? null;
+  const country = driverIndex?.[name]?.country || '';
   const stats = seasonStats?.[name] || emptySeasonStats();
   return `<div class="dd driver-pill" tabindex="0">
-    <div class="dd-trigger driver-pill-trigger">${num !== null ? `<span class="driver-number">${num}</span>` : ''}${name}</div>
+    <div class="dd-trigger driver-pill-trigger">${num !== null ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${name}</div>
     <div class="dd-panel"><div class="dd-panel-inner"><div class="dd-panel-content">${renderDriverDetailContent('season', stats)}</div></div></div>
   </div>`;
 }
@@ -1713,7 +1834,7 @@ function renderSessionResults(session, driverIndex) {
       <span class="race-chip"><span class="icon icon-flag">${session.flag}</span>${session.track}</span>
       ${session.turns ? `<span class="race-chip">${icon('turns','icon-lg')}${session.turns} ${t('turns')}</span>` : ''}
       ${session.fastestLap ? `<span class="race-chip race-chip-fastest">${icon('bolt','icon-red icon-lg')}${t('fastestLapPrefix')}${fastestLapAvatar ? `<img class="chip-avatar" src="${fastestLapAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${session.fastestLap.driver}</strong> — ${session.fastestLap.time} ${tyrePill(session.fastestLap.tyre)}</span>` : ''}
-      ${dotdDriver ? `<span class="race-chip race-chip-dotd" title="${escHtml(session.driverOfTheDay.reason)}">${icon('star','icon-gold icon-lg')}${t('dotdPrefix')}${dotdAvatar ? `<img class="chip-avatar" src="${dotdAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${dotdDriver}</strong></span>` : ''}
+      ${dotdDriver ? `<span class="race-chip race-chip-dotd" title="${escHtml(biText(session.driverOfTheDay, 'reason'))}">${icon('star','icon-gold icon-lg')}${t('dotdPrefix')}${dotdAvatar ? `<img class="chip-avatar" src="${dotdAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${dotdDriver}</strong></span>` : ''}
     </div>
     ${top3.length ? `
       <div class="podium-row podium-row-event reveal">
@@ -1721,12 +1842,13 @@ function renderSessionResults(session, driverIndex) {
           const rank = d.pos;
           const isFirst = rank === 1;
           const num = driverIndex?.[d.driver]?.number;
+          const country = driverIndex?.[d.driver]?.country;
           return `
           <div class="podium-item ${isFirst ? 'podium-item-first' : ''}">
             <span class="podium-pos ${posClass[rank - 1] || ''}">${rank}</span>
             ${driverAvatar(d.teamFull || d.team) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team)}" alt="" onerror="this.style.display='none'">` : ''}
             <div>
-              <div class="podium-driver">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${d.driver}</div>
+              <div class="podium-driver">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${d.driver}</div>
               <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
             </div>
             <span class="podium-pts">${d.points} ${t('ptsSuffix')}</span>
@@ -1754,7 +1876,7 @@ function renderSessionResults(session, driverIndex) {
             const isDotd = d.driver === dotdDriver;
             const isFastest = !!(session.fastestLap && d.driver === session.fastestLap.driver);
             const leadingBadges = [
-              isDotd ? `<span class="dotd-badge icon-gold" title="${t('dotdTitle')}${session.driverOfTheDay.reason ? ': ' + escHtml(session.driverOfTheDay.reason) : ''}">${icon('star')}</span>` : '',
+              isDotd ? `<span class="dotd-badge icon-gold" title="${t('dotdTitle')}${biText(session.driverOfTheDay, 'reason') ? ': ' + escHtml(biText(session.driverOfTheDay, 'reason')) : ''}">${icon('star')}</span>` : '',
               isFastest ? `<span class="fastest-badge icon-red" title="${t('fastestLapSessionTitle')}${session.fastestLap.time}">${icon('bolt')}</span>` : '',
             ].join('');
             const rowClass = [isDotd ? 'row-dotd' : '', isFastest ? 'row-fastest' : ''].filter(Boolean).join(' ');
@@ -1829,6 +1951,142 @@ async function initKlasyfikacja() {
     const seasonStats = computeDriverSeasonStats(races);
     renderStandingsSummary(standings, 'standings-summary');
     renderStandingsTable(standings, 'standings-full', driverIndex, seasonStats);
+  };
+
+  renderSeasonTabs(allSeasons, activeSeason, (name) => {
+    activeSeason = name;
+    rerender();
+  });
+  renderTierTabs(activeTier, (tier) => {
+    activeTier = tier;
+    rerender();
+  });
+
+  rerender();
+}
+
+/* ─── RANKING PAGE ───────────────────────────────── */
+/** Jeden wiersz — miejsce, mały awatar drużynowy, numer+flaga (ten sam
+ *  driverIndex co wszędzie indziej), imię, wartość kategorii. Celowo nie
+ *  reużywa pełnego renderDriverCell() — tu nie ma kar/rozwijanych
+ *  szczegółów, tylko prosty ranking. `tag` — 'li' w rozwiniętej liście
+ *  miejsc 2+ (wewnątrz <ol>), 'div' dla wiersza lidera w nagłówku wiersza. */
+function renderRankingRow(pos, name, value, driverIndex, tag) {
+  tag = tag || 'li';
+  const entry = driverIndex?.[name];
+  const avatar = entry ? driverAvatar(entry.team) : null;
+  const num = entry?.number;
+  const country = entry?.country;
+  return `
+    <${tag} class="ranking-row">
+      <span class="ranking-row-pos">${pos}</span>
+      ${avatar ? `<img class="ranking-row-avatar" src="${avatar}" alt="" onerror="this.remove()">` : ''}
+      <span class="ranking-row-name">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${name}</span>
+      <span class="ranking-row-value">${value}</span>
+    </${tag}>`;
+}
+
+/** Jeden wiersz kategorii — domyślnie pokazuje TYLKO lidera; kliknięcie
+ *  rozwija miejsca 2-5. Reużywa w 100% istniejący mechanizm .dd/.dd-trigger/
+ *  .dd-panel (te same klasy co rozwijane szczegóły kierowcy w tabelach —
+ *  initDriverDetailToggle() w js/app.js już globalnie obsługuje kliknięcie,
+ *  zero nowej logiki JS do przełączania tutaj). Bez lidera (pusta kategoria)
+ *  albo z dokładnie jednym wpisem (nic do rozwinięcia) wiersz nie jest
+ *  klikalny — nie ma .dd/strzałki. */
+function renderRankingItem(titleKey, iconName, entries, driverIndex, note) {
+  const head = `
+    <span class="ranking-item-icon">${icon(iconName)}</span>
+    <div class="ranking-item-title-wrap">
+      <span class="ranking-item-title">${t(titleKey)}</span>
+      ${note ? `<span class="ranking-item-note">${note}</span>` : ''}
+    </div>`;
+
+  if (!entries.length) {
+    return `<div class="ranking-item reveal">${head}<span class="ranking-item-empty">${t('empty.generic')}</span></div>`;
+  }
+
+  const [leader, ...rest] = entries;
+  const leaderRow = renderRankingRow(1, leader.driver, leader.value, driverIndex, 'div');
+  const others = rest.slice(0, 4);
+  const expandable = others.length > 0;
+
+  const trigger = `
+    <div class="${expandable ? 'dd-trigger' : ''} ranking-item-trigger">
+      ${head}
+      ${leaderRow}
+      ${expandable ? `<span class="ranking-item-chevron">${icon('chevronDown')}</span>` : ''}
+    </div>`;
+
+  if (!expandable) return `<div class="ranking-item reveal">${trigger}</div>`;
+
+  return `
+    <div class="dd ranking-item reveal" tabindex="0">
+      ${trigger}
+      <div class="dd-panel"><div class="dd-panel-inner"><div class="dd-panel-content ranking-item-panel-content">
+        <ol class="ranking-card-list">${others.map((e, i) => renderRankingRow(i + 2, e.driver, e.value, driverIndex)).join('')}</ol>
+      </div></div></div>
+    </div>`;
+}
+
+/** Buduje wszystkie 10 wierszy Rankingu z już policzonych statystyk sezonu
+ *  (computeDriverSeasonStats) i serii (computeStreaks). Kategoria "Najwyższa
+ *  średnia pozycja" ma próg min. 5 startów w sezonie (ustalone z
+ *  użytkownikiem) i sortuje rosnąco (mniejsza wartość = lepsza pozycja). */
+function renderRankingGrid(stats, winStreaks, podiumStreaks, poleStreaks, driverIndex) {
+  const names = Object.keys(stats);
+  const byField = (field) => names
+    .map(name => ({ driver: name, value: stats[name][field] }))
+    .filter(e => e.value > 0)
+    .sort((a, b) => b.value - a.value);
+  const avgPosEntries = names
+    .map(name => ({ driver: name, value: stats[name].avgFinish, starts: stats[name].starts }))
+    .filter(e => e.value !== null && e.starts >= 5)
+    .sort((a, b) => a.value - b.value)
+    .map(e => ({ driver: e.driver, value: e.value.toFixed(1) }));
+  const streakEntries = (streaks) => Object.entries(streaks)
+    .map(([driver, value]) => ({ driver, value }))
+    .filter(e => e.value > 0)
+    .sort((a, b) => b.value - a.value);
+
+  const items = [
+    renderRankingItem('ranking.wins', 'trophy', byField('wins'), driverIndex),
+    renderRankingItem('ranking.poles', 'bolt', byField('poles'), driverIndex),
+    renderRankingItem('ranking.podiums', 'medal', byField('podiums'), driverIndex),
+    renderRankingItem('ranking.dotd', 'star', byField('driverOfTheDay'), driverIndex),
+    renderRankingItem('ranking.fastestLaps', 'bolt', byField('fastestLaps'), driverIndex),
+    renderRankingItem('ranking.avgPosition', 'flag', avgPosEntries, driverIndex, t('ranking.minStartsNote')),
+    renderRankingItem('ranking.finishes', 'laps', byField('finishes'), driverIndex),
+    renderRankingItem('ranking.winStreak', 'trophy', streakEntries(winStreaks), driverIndex),
+    renderRankingItem('ranking.podiumStreak', 'medal', streakEntries(podiumStreaks), driverIndex),
+    renderRankingItem('ranking.poleStreak', 'bolt', streakEntries(poleStreaks), driverIndex),
+  ];
+  return `<div class="ranking-list">${items.join('')}</div>`;
+}
+
+async function initRanking() {
+  initHeroPhotoCarousel(document.getElementById('ranking-hero'));
+  const el = document.getElementById('ranking-list');
+  if (!el) return;
+  const allSeasons = await loadAllRaces();
+  const seasonNames = Object.keys(allSeasons);
+
+  if (!seasonNames.length) {
+    el.innerHTML = `<p style="color:var(--gray);padding:2rem 0">${t('empty.short')}</p>`;
+    return;
+  }
+
+  let activeSeason = seasonNames[seasonNames.length - 1];
+  let activeTier = DEFAULT_TIER;
+
+  const rerender = async () => {
+    const { driverIndex } = await loadSklad(activeTier);
+    const races = racesForTier(allSeasons, activeSeason, activeTier);
+    const stats = computeDriverSeasonStats(races);
+    const winStreaks = computeStreaks(races, 'Race', d => d.pos === 1);
+    const podiumStreaks = computeStreaks(races, 'Race', d => d.pos <= 3);
+    const poleStreaks = computeStreaks(races, 'Qualifying', d => d.pos === 1);
+    el.innerHTML = renderRankingGrid(stats, winStreaks, podiumStreaks, poleStreaks, driverIndex);
+    observeReveal();
   };
 
   renderSeasonTabs(allSeasons, activeSeason, (name) => {
@@ -2247,7 +2505,7 @@ function renderCurrentLeaderStatus(standings, season) {
   return `
     <div class="wdc-live-wrap">
       <div class="wdc-live reveal">
-        <div class="wdc-live-badge"><span class="live-dot"></span>${t('wdc.titleFight')} — ${season}</div>
+        <div class="wdc-live-badge"><span class="live-dot"></span>${t('wdc.titleFight')} — ${seasonLabel(season)}</div>
         <div class="wdc-live-body">
           ${avatar ? `<img class="wdc-live-avatar" src="${avatar}" alt="" onerror="this.remove()">` : ''}
           <div class="wdc-live-info">
@@ -2274,7 +2532,7 @@ function renderWDCHero(c) {
       </div>
       <div class="wdc-hero-label">${t('wdc.currentChampion')}</div>
       <div class="wdc-hero-driver">${c.driver}</div>
-      <div class="wdc-hero-season">${c.season} · ${renderTeamBadge(c.team)}</div>
+      <div class="wdc-hero-season">${seasonLabel(c.season)} · ${renderTeamBadge(c.team)}</div>
       <div class="wdc-hero-stats">
         <div class="wdc-hero-stat">
           <div class="wdc-hero-stat-num" data-count="${c.points}">0</div>
@@ -2308,7 +2566,7 @@ function renderWDCCard(c, i) {
           ${avatar ? `<span class="wdc-card-avatar-badge icon-gold">${icon(isLatest ? 'crown' : 'trophy')}</span>` : ''}
         </div>
         <div>
-          <div class="wdc-card-season">${c.season}</div>
+          <div class="wdc-card-season">${seasonLabel(c.season)}</div>
           <div class="wdc-card-driver">${c.driver}</div>
           <div class="wdc-card-team">${renderTeamBadge(c.team)}</div>
         </div>
@@ -2458,7 +2716,8 @@ function clipDriverCredit(driverName, driverIndex) {
   const entry = driverIndex?.[driverName];
   const avatar = entry ? driverAvatar(entry.team) : null;
   const img = avatar ? `<img class="chip-avatar" src="${avatar}" alt="" onerror="this.remove()">` : icon('helmet');
-  return `<span class="hof-clip-driver">${img}${driverName}</span>`;
+  const flag = entry?.country ? `<span class="driver-flag">${nationalityFlag(entry.country)}</span>` : '';
+  return `<span class="hof-clip-driver">${img}${flag}${driverName}</span>`;
 }
 
 /** Renders one clip as a self-hosted <video>, a YouTube embed, or a clean "watch"
@@ -2535,19 +2794,27 @@ function renderFeaturedCard(clip, index, driverIndex) {
  *  graceful-degrade pattern as applyTrackBackground(). No-ops whenever there's no clip yet, or
  *  its thumbnail 404s — so an empty HallOfFame/hall_of_fame.json never looks broken (the
  *  CSS-only star watermark in .hof-hero::after stays visible instead). */
+/** Zwraca Promise<boolean> — true, jeśli faktycznie ustawiono zdjęcie w tle
+ *  (miniatura klipu miesiąca/najlepszego manewru istnieje i się wczytała).
+ *  initHallOfFame() czeka na wynik, żeby wiedzieć, czy trzeba sięgnąć po
+ *  zapasową karuzelę zdjęć (initHeroPhotoCarousel()) zamiast tego. */
 function applyHofHeroBackground(heroEl, clip) {
-  if (!heroEl || !clip) return;
+  if (!heroEl || !clip) return Promise.resolve(false);
   const url = clipThumbnail(clip);
-  if (!url) return;
-  const test = new Image();
-  test.onload = () => {
-    heroEl.style.backgroundImage =
-      `linear-gradient(180deg, rgba(10,11,13,.78) 0%, rgba(10,11,13,.93) 55%, var(--black) 100%), ` +
-      `radial-gradient(ellipse 70% 90% at 50% 100%, rgba(225,6,0,0.16) 0%, transparent 70%), ` +
-      `url("${url}")`;
-    heroEl.classList.add('has-track-bg');
-  };
-  test.src = url;
+  if (!url) return Promise.resolve(false);
+  return new Promise((resolve) => {
+    const test = new Image();
+    test.onload = () => {
+      heroEl.style.backgroundImage =
+        `linear-gradient(180deg, rgba(10,11,13,.78) 0%, rgba(10,11,13,.93) 55%, var(--black) 100%), ` +
+        `radial-gradient(ellipse 70% 90% at 50% 100%, rgba(225,6,0,0.16) 0%, transparent 70%), ` +
+        `url("${url}")`;
+      heroEl.classList.add('has-track-bg');
+      resolve(true);
+    };
+    test.onerror = () => resolve(false);
+    test.src = url;
+  });
 }
 
 async function initHallOfFame() {
@@ -2555,7 +2822,12 @@ async function initHallOfFame() {
   if (data) {
     await autoThumbnailClips([data.clipOfMonth, data.bestManeuverAllTime, ...(data.featured || [])].filter(Boolean));
   }
-  applyHofHeroBackground(document.getElementById('hof-hero'), data && (data.clipOfMonth || data.bestManeuverAllTime));
+  const hofHeroEl = document.getElementById('hof-hero');
+  const gotClipPhoto = await applyHofHeroBackground(hofHeroEl, data && (data.clipOfMonth || data.bestManeuverAllTime));
+  // Brak miniatury klipu miesiąca/najlepszego manewru (albo nie wczytała się)
+  // — sięgamy po tę samą karuzelę zdjęć w tle co inne podstrony bez
+  // naturalnego zdjęcia, zamiast zostawiać sam znak wodny.
+  if (!gotClipPhoto) initHeroPhotoCarousel(hofHeroEl);
 
   const monthHost = document.getElementById('hof-clip-of-month');
   const maneuverHost = document.getElementById('hof-best-maneuver');

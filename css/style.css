@@ -597,6 +597,11 @@ table.standings-constructors th:nth-child(3) { min-width: 270px; }
 }
 .driver-name { font-weight: 600; font-size: 13px; }
 .driver-realname { display: block; font-size: 11px; color: var(--gray); }
+/* Flaga narodowości kierowcy (Sklady/{Tier}/sklad.json → country) — obok
+   .driver-number wszędzie, gdzie ten się pokazuje. */
+.driver-flag { display: inline-flex; align-items: center; margin-right: 8px; flex-shrink: 0; }
+.driver-flag-img { width: 18px; height: auto; border-radius: 2px; display: block; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+.driver-flag-fallback { width: 1.1em; height: 0.85em; color: var(--gray); }
 .penalty-badge {
   margin-left: 10px;
   font-family: var(--font-mono);
@@ -1017,8 +1022,8 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 /* ─── HERO LOGO ──────────────────────────────────── */
 .hero-logo-wrap { margin: 1rem 0; }
 .hero-logo {
-  max-height: 160px;
-  max-width: 420px;
+  max-height: 210px;
+  max-width: 540px;
   width: 100%;
   object-fit: contain;
   display: block;
@@ -1080,6 +1085,13 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   border-bottom-color: transparent;
 }
 .page-hero.has-track-bg::before { content: none; }
+/* Kratka w rogu (.page-hero::after) ma sens tylko na płaskim tle — gdy
+   wczyta się prawdziwe zdjęcie toru, zostawiona bez wyłączenia dawała
+   widoczną ukośną "kreskę"/teksturę w rogu zdjęcia na Wynikach i Kalendarzu
+   (jedyne dwie strony bez .has-icon-watermark/.hof-hero, więc bez własnej,
+   bardziej szczegółowej reguły wyłączającej ją). Jedna wspólna reguła
+   pokrywa to na każdej stronie naraz. */
+.page-hero.has-track-bg::after { content: none; }
 
 /* Rotating background carousel (assets/hero-photos/, see initHeroPhotoCarousel()
    in app.js) for pages with no single natural photo of their own. The dark
@@ -1132,6 +1144,9 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .icon-watermark-partners::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='7' width='18' height='13' rx='2'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/%3E%3Cline x1='3' y1='13' x2='21' y2='13'/%3E%3C/svg%3E");
+}
+.icon-watermark-ranking::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3Cline x1='12' y1='20' x2='12' y2='9'/%3E%3Cline x1='18' y1='20' x2='18' y2='4'/%3E%3C/svg%3E");
 }
 
 /* Subtle ambient red glow behind the first content block under the hero on
@@ -1749,6 +1764,101 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   color: var(--gray);
 }
 
+/* ─── RANKING PAGE ───────────────────────────────── */
+/* Pionowa lista 10 wierszy kategorii — każdy domyślnie pokazuje tylko
+   lidera, kliknięcie rozwija miejsca 2-5. Reużywa w 100% .dd/.dd-trigger/
+   .dd-panel (css powyżej, "DRIVER CLICK DETAILS") — te same klasy co
+   rozwijane szczegóły kierowcy w tabelach, więc initDriverDetailToggle()
+   już obsługuje kliknięcie bez żadnej nowej logiki JS. */
+.ranking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 2.5rem) 3rem;
+}
+.ranking-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.ranking-item:hover { border-color: rgba(225,6,0,0.35); }
+.ranking-item-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+}
+div.ranking-item-trigger { cursor: default; } /* niekliknięte wiersze (bez .dd-trigger) — bez kursora "pointer" */
+.ranking-item-icon {
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; flex-shrink: 0;
+  color: var(--red);
+}
+.ranking-item-icon .icon { width: 17px; height: 17px; }
+.ranking-item-title-wrap {
+  display: flex; flex-direction: column; gap: 2px;
+  flex: 0 0 auto;
+  width: clamp(130px, 19vw, 210px);
+}
+.ranking-item-title {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: -0.1px;
+  color: var(--white);
+  line-height: 1.25;
+}
+.ranking-item-note {
+  font-size: 9.5px;
+  color: var(--gray);
+  font-family: var(--font-mono);
+}
+.ranking-item-empty { margin-left: auto; color: var(--gray); font-size: 12px; }
+.ranking-item-chevron {
+  display: flex; flex-shrink: 0;
+  color: var(--gray);
+  transition: transform 0.25s ease;
+}
+.ranking-item-chevron .icon { width: 14px; height: 14px; }
+.dd.dd-open .ranking-item-chevron, .dd:focus-within .ranking-item-chevron { transform: rotate(180deg); }
+.ranking-item-panel-content {
+  max-width: none; /* nadpisuje domyślne 300px z .dd-panel-content (dostrojone do wąskiej komórki tabeli) */
+  padding: 10px 18px 14px;
+}
+.ranking-card-list { list-style: none; }
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+}
+.ranking-row-pos {
+  display: flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; flex-shrink: 0;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--gray);
+}
+/* Wiersz lidera renderuje się wyłącznie wewnątrz .ranking-item-trigger (patrz
+   renderRankingItem() w app.js) — złoty numer "1" tylko tam, nie w rozwiniętej
+   liście miejsc 2+. */
+.ranking-item-trigger .ranking-row { flex: 1; min-width: 0; padding: 0; }
+.ranking-item-trigger .ranking-row-pos { color: var(--gold); }
+.ranking-row-avatar { width: 24px; height: 24px; object-fit: contain; object-position: bottom; flex-shrink: 0; }
+.ranking-row-name {
+  flex: 1; min-width: 0;
+  font-size: 12.5px; font-weight: 600; color: var(--white);
+  display: flex; align-items: center;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ranking-row-value {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+  color: var(--red); flex-shrink: 0;
+}
+
 /* ─── HALL OF FAME — CUSTOM HERO ──────────────────── */
 .hof-hero {
   min-height: 42vh;
@@ -1774,6 +1884,11 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .hof-hero.has-track-bg::after { content: none; }
 .hof-hero.has-track-bg {
+  /* Ten sam brakujący fallback, który dawał podpikselową szparę gdzie
+     indziej (patrz .page-hero.has-track-bg) — tu też trzeba dopasować
+     background-color do ciemnego końca gradientu, inaczej dziedziczy
+     jaśniejsze var(--surface) z bazowego .page-hero. */
+  background-color: var(--black);
   background-size: cover, cover, 180%;
   background-position: center, center, center 35%;
 }
@@ -1971,15 +2086,15 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 .news-card, .hof-clip-card, .wdc-card, .cal-card, .partner-card {
   animation: fadeUp 0.5s ease both;
 }
-.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1),  .partners-grid > *:nth-child(1)  { animation-delay: .02s; }
-.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2),  .partners-grid > *:nth-child(2)  { animation-delay: .08s; }
-.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3),  .partners-grid > *:nth-child(3)  { animation-delay: .14s; }
-.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4),  .partners-grid > *:nth-child(4)  { animation-delay: .20s; }
-.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5),  .partners-grid > *:nth-child(5)  { animation-delay: .26s; }
-.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6),  .partners-grid > *:nth-child(6)  { animation-delay: .32s; }
-.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7),  .partners-grid > *:nth-child(7)  { animation-delay: .38s; }
-.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8),  .partners-grid > *:nth-child(8)  { animation-delay: .44s; }
-.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9), .partners-grid > *:nth-child(n+9) { animation-delay: .5s; }
+.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1),  .partners-grid > *:nth-child(1),  .ranking-list > *:nth-child(1)  { animation-delay: .02s; }
+.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2),  .partners-grid > *:nth-child(2),  .ranking-list > *:nth-child(2)  { animation-delay: .08s; }
+.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3),  .partners-grid > *:nth-child(3),  .ranking-list > *:nth-child(3)  { animation-delay: .14s; }
+.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4),  .partners-grid > *:nth-child(4),  .ranking-list > *:nth-child(4)  { animation-delay: .20s; }
+.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5),  .partners-grid > *:nth-child(5),  .ranking-list > *:nth-child(5)  { animation-delay: .26s; }
+.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6),  .partners-grid > *:nth-child(6),  .ranking-list > *:nth-child(6)  { animation-delay: .32s; }
+.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7),  .partners-grid > *:nth-child(7),  .ranking-list > *:nth-child(7)  { animation-delay: .38s; }
+.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8),  .partners-grid > *:nth-child(8),  .ranking-list > *:nth-child(8)  { animation-delay: .44s; }
+.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9), .partners-grid > *:nth-child(n+9), .ranking-list > *:nth-child(n+9) { animation-delay: .5s; }
 
 table.results tbody tr, table.standings tbody tr {
   animation: fadeUp 0.35s ease both;
