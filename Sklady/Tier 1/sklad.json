@@ -3,68 +3,136 @@
     {
       "team": "Ferrari",
       "drivers": [
-        "Kisniaa",
-        "pat"
+        {
+          "name": "Kisniaa",
+          "number": 22,
+          "country": "Poland"
+        },
+        {
+          "name": "pat",
+          "number": 23,
+          "country": "Poland"
+        }
       ]
     },
     {
       "team": "Aston Martin",
       "drivers": [
-        "Zabor",
-        "merix"
+        {
+          "name": "Zabor",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "merix",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Red Bull",
       "drivers": [
-        "Danielelex",
-        "quez"
+        {
+          "name": "Danielelex",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "quez",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Racing Bulls (VCARB)",
       "drivers": [
-        "Elvis.37",
-        "Raptorek"
+        {
+          "name": "Elvis.37",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "Raptorek",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Alpine",
       "drivers": [
-        "WLADZIUPORO",
-        "SZALIK"
+        {
+          "name": "WLADZIUPORO",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "SZALIK",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Williams",
       "drivers": [
-        "xParker"
+        {
+          "name": "xParker",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Cadillac",
       "drivers": [
-        "MR.KEBAB",
-        "Stanley"
+        {
+          "name": "MR.KEBAB",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "Stanley",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Audi",
       "drivers": [
-        "KAL1O161",
-        "Ojaqatek"
+        {
+          "name": "KAL1O161",
+          "number": null,
+          "country": ""
+        },
+        {
+          "name": "Ojaqatek",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Haas",
       "drivers": [
-        "Domszu"
+        {
+          "name": "Domszu",
+          "number": null,
+          "country": ""
+        }
       ]
     },
     {
       "team": "Mercedes",
       "drivers": [
-        "flajekk"
+        {
+          "name": "flajekk",
+          "number": null,
+          "country": ""
+        }
       ]
     }
   ]
