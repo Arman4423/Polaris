@@ -6,7 +6,9 @@
         {
           "name": "drikub7s_",
           "number": null,
-          "country": ""
+          "country": "",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1500598171146125433/7c46bc7b0093d1d6622eb9bce82eb968.webp",
+          "nickDiscord": "drikub7s_"
         }
       ]
     },
@@ -16,12 +18,16 @@
         {
           "name": "balan123456_63693",
           "number": null,
-          "country": ""
+          "country": "",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1190609152276430978/9fa617323de42b03eb5c4ca8b3cb7e90.webp",
+          "nickDiscord": "balan123456_63693"
         },
         {
           "name": "lemix_777",
           "number": null,
-          "country": ""
+          "country": "",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1306283017316077659/945b4bbfa6dd9a8da0d771bd22af48ba.webp",
+          "nickDiscord": "lemix_777"
         }
       ]
     }
