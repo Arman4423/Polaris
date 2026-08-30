@@ -1,4 +1,17 @@
 {
-  "entries": [],
+  "entries": [
+    {
+      "id": 1,
+      "season": "1",
+      "tier": 1,
+      "driverName": "Discord 1194645679155458150",
+      "points": 5,
+      "reason": "Kierowca prowadząc restart nagle zmniejszył prędkość oraz miał nieregularne tępo cała ta sytuacja doprowadziła że wiele zawodników uszkodziło bolidy oraz dostali nie słuszne kary. (clip: d)",
+      "kind": "kara_wyscigowa",
+      "numer": 35,
+      "issuedAt": 1788127228071,
+      "cancelled": false
+    }
+  ],
   "activeRestrictions": []
 }
