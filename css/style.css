@@ -1001,6 +1001,15 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
   footer { flex-direction: column; align-items: flex-start; }
   .cal-featured-card { grid-template-columns: 1fr; }
   .cal-featured-photo { min-height: 160px; }
+  .results-row { flex-wrap: wrap; gap: 6px 14px; }
+  .results-row-round { order: 1; flex: 0 0 auto; }
+  .results-row-track { order: 2; flex: 1 1 100%; }
+  .results-row-winner { order: 3; flex: 1 1 auto; }
+  .results-row-fastest { order: 4; min-width: 0; }
+  .results-row-chevron { order: 5; }
+  .next-round-teaser { grid-template-columns: 1fr; }
+  .next-round-teaser-photo { min-height: 140px; }
+  .constructor-leader-gap { margin-left: 0; flex-basis: 100%; }
 }
 
 /* ─── SCROLL FADE-IN ─────────────────────────────── */
@@ -1147,6 +1156,15 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .icon-watermark-ranking::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3Cline x1='12' y1='20' x2='12' y2='9'/%3E%3Cline x1='18' y1='20' x2='18' y2='4'/%3E%3C/svg%3E");
+}
+.icon-watermark-lineup::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='5' cy='6' r='2'/%3E%3Ccircle cx='12' cy='6' r='2'/%3E%3Ccircle cx='19' cy='6' r='2'/%3E%3Ccircle cx='5' cy='14' r='2'/%3E%3Ccircle cx='12' cy='14' r='2'/%3E%3Ccircle cx='19' cy='14' r='2'/%3E%3Cline x1='5' y1='20' x2='19' y2='20'/%3E%3C/svg%3E");
+}
+.icon-watermark-clipy::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='6' width='18' height='14' rx='2'/%3E%3Cpath d='M3 6l3-3h4l-2 3'/%3E%3Cpath d='M11 6l3-3h4l-2 3'/%3E%3Cpolygon points='10.5 11 10.5 16 15 13.5' fill='%23f5f4f1' stroke='none'/%3E%3C/svg%3E");
+}
+.icon-watermark-punktykarne::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f5f4f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 2 20h20L12 3z'/%3E%3Cline x1='12' y1='10' x2='12' y2='14'/%3E%3Cline x1='12' y1='17' x2='12' y2='17.01'/%3E%3C/svg%3E");
 }
 
 /* Subtle ambient red glow behind the first content block under the hero on
@@ -1859,6 +1877,266 @@ div.ranking-item-trigger { cursor: default; } /* niekliknięte wiersze (bez .dd-
   color: var(--red); flex-shrink: 0;
 }
 
+/* ─── WYNIKI RESULTS LIST ────────────────────────── */
+/* Lista wierszy zamiast siatki kart (.calendar-grid/.cal-card) — to główny
+   wizualny odróżnik strony Wyniki od Kalendarza. Mieści się wewnątrz zwykłego
+   <section>, który już ma max-width:1100px + padding (patrz `section` u góry
+   pliku), więc sama lista nie potrzebuje własnych marginesów bocznych. */
+.results-list { display: flex; flex-direction: column; gap: 0.6rem; }
+.results-item {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.results-item:hover { border-color: rgba(225,6,0,0.35); }
+.results-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 18px;
+}
+div.results-row { cursor: default; } /* niekliknięty wiersz-fallback bez wyniku (rzadkie) — bez kursora "pointer" */
+.results-row-round {
+  flex: 0 0 64px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px;
+}
+.results-row-track {
+  flex: 1.3; min-width: 0;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  color: var(--white);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.results-row-winner {
+  flex: 1.1; min-width: 0;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--gray-light);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.results-row-avatar { width: 26px; height: 26px; object-fit: contain; object-position: bottom; flex-shrink: 0; }
+.results-row-fastest {
+  flex: 0 0 auto; min-width: 110px;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11.5px; color: var(--gray); font-family: var(--font-mono);
+}
+.results-row-fastest .icon { width: 12px; height: 12px; }
+.results-row-chevron {
+  flex: 0 0 auto; display: flex;
+  color: var(--gray);
+  transition: transform 0.25s ease;
+}
+.results-row-chevron .icon { width: 14px; height: 14px; }
+.dd.dd-open .results-row-chevron, .dd:focus-within .results-row-chevron { transform: rotate(180deg); }
+.results-row-panel-content { max-width: none; padding: 14px 18px 18px; }
+
+/* --- Punkty karne (dodano 2026-08-30) --- */
+.pk-row { display: flex; align-items: center; gap: 14px; padding: 12px 18px; }
+.pk-row-driver {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.pk-row-points {
+  flex: 0 0 auto; min-width: 70px; text-align: right;
+  font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--red);
+}
+.pk-row-chevron { flex: 0 0 auto; display: flex; color: var(--gray); transition: transform 0.25s ease; }
+.dd.dd-open .pk-row-chevron, .dd:focus-within .pk-row-chevron { transform: rotate(180deg); }
+.pk-row-panel-content { max-width: none; padding: 14px 18px 18px; }
+.pk-entry { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.pk-entry:last-child { border-bottom: none; }
+.pk-entry-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.pk-entry-reason { color: var(--gray-light); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 420px; }
+.pk-entry-meta { font-size: 10.5px; color: var(--gray); font-family: var(--font-mono); }
+.pk-entry-points { font-family: var(--font-mono); font-weight: 700; color: var(--red); flex-shrink: 0; }
+.pk-entry.cancelled { opacity: 0.5; text-decoration: line-through; }
+.pk-section-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); margin: 2.4rem 0 0.8rem; }
+.pk-restrictions { display: flex; flex-direction: column; gap: 0.6rem; }
+.pk-restriction-item {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.pk-restriction-badge {
+  flex: 0 0 auto; padding: 3px 10px; border-radius: 20px; font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  background: rgba(225,6,0,0.15); color: var(--red); border: 1px solid rgba(225,6,0,0.35);
+}
+.pk-restriction-driver { font-family: var(--font-display); font-weight: 700; color: var(--white); }
+.pk-restriction-rounds { font-size: 12px; color: var(--gray-light); flex: 1; min-width: 200px; }
+.pk-restriction-reason { font-size: 11.5px; color: var(--gray); width: 100%; }
+
+/* Lider Pucharu Konstruktorów — jeden slim pasek, świadomie mniejszy niż
+   pełny .stats-strip (ten sam co dla kierowców obok), żeby nie dublować
+   mostWins/mostPodiums drugi raz w tym samym miejscu. */
+.constructor-leader-chip {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 18px;
+  font-size: 12.5px; color: var(--gray-light);
+  max-width: 1100px; margin: 0 auto 1.5rem;
+}
+.constructor-leader-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gray); }
+.constructor-leader-team { color: var(--white); font-weight: 700; }
+.constructor-leader-points { font-family: var(--font-mono); font-weight: 700; color: var(--white); }
+.constructor-leader-gap { color: var(--gray); margin-left: auto; }
+
+/* Strzałka trendu lidera klasyfikacji kierowców, względem poprzedniej rundy. */
+.leader-trend {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--gray-light);
+  max-width: 1100px; margin: -0.75rem auto 1.5rem;
+}
+.leader-trend-arrow { font-size: 13px; }
+.leader-trend-up .leader-trend-arrow { color: var(--success); }
+.leader-trend-down .leader-trend-arrow { color: var(--red); }
+.leader-trend-new .leader-trend-arrow { color: var(--gold); }
+
+/* Pasek najlepszych akcji sezonu — węższe karty niż .hof-grid, ten sam
+   .hof-thumb-wrap/.hof-play-overlay wewnątrz (reużyte 1:1). */
+.highlights-strip {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.9rem; margin-bottom: 2rem;
+}
+.highlight-card {
+  display: block; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.highlight-card:hover { border-color: rgba(225,6,0,.4); transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0,0,0,.3); }
+.highlight-card-info { padding: 10px 12px; }
+.highlight-card-round { display: block; font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--red); }
+.highlight-card-track { display: block; font-size: 13px; font-weight: 700; color: var(--white); margin-top: 2px; }
+
+/* Zapowiedź następnej rundy — mniejsza, samodzielna karta na dole Wyników,
+   linkująca do Kalendarza (nie do wynik-wydarzenia.html — runda jeszcze się
+   nie odbyła). */
+.next-round-teaser {
+  display: grid; grid-template-columns: 200px 1fr;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-bottom: 2rem;
+}
+.next-round-teaser:hover { border-color: var(--red); box-shadow: 0 14px 30px rgba(0,0,0,.25); }
+.next-round-teaser-photo { position: relative; min-height: 120px; }
+.next-round-teaser-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.next-round-teaser-info { padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.next-round-teaser-eyebrow {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--red);
+}
+.next-round-teaser-title { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--white); }
+.next-round-teaser-meta { font-size: 12px; color: var(--gray-light); font-family: var(--font-mono); }
+.next-round-teaser-countdown { font-size: 11px; color: var(--gray); }
+
+/* ─── CLIPY PAGE ─────────────────────────────────── */
+.clip-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem; max-width: 1300px; margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 2.5rem) 3rem;
+}
+.clip-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px; position: relative;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.clip-card:hover { border-color: rgba(225,6,0,.35); box-shadow: 0 12px 28px rgba(0,0,0,.25); }
+.clip-card-promoted { border-color: rgba(244,196,48,.4); }
+.clip-card-promoted-badge {
+  position: absolute; top: 12px; right: 12px;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  color: var(--gold);
+}
+.clip-card-promoted-badge .icon { width: 12px; height: 12px; }
+.clip-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.clip-card-author { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); }
+.clip-card-hearts { font-size: 12.5px; color: var(--gray-light); flex-shrink: 0; }
+.clip-card-caption { font-size: 13px; color: var(--gray-light); line-height: 1.4; }
+.clip-watch { padding: 1.5rem 1rem; gap: .5rem; border-radius: 8px; }
+.clip-watch .hof-watch-icon { width: 42px; height: 42px; }
+.clip-watch .hof-watch-icon .icon { width: 18px; height: 18px; }
+.clip-watch .hof-watch-label { font-size: 11px; }
+.clip-comments-dd { border-top: 1px solid var(--border); margin-top: 2px; }
+.clip-comments-trigger {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; cursor: pointer;
+  font-size: 11.5px; color: var(--gray); font-family: var(--font-mono);
+}
+.clip-comments-chevron { display: flex; transition: transform .25s ease; }
+.clip-comments-chevron .icon { width: 12px; height: 12px; }
+.dd.dd-open .clip-comments-chevron, .dd:focus-within .clip-comments-chevron { transform: rotate(180deg); }
+.clip-comments-panel-content { max-width: none; padding: 8px 2px 2px; border-top: none; margin-top: 0; }
+.clip-comment { padding: 6px 0; border-top: 1px solid var(--border); font-size: 12px; }
+.clip-comment:first-child { border-top: none; }
+.clip-comment-author { color: var(--gray-light); font-weight: 700; margin-right: 6px; }
+.clip-comment-text { color: var(--gray); }
+
+/* ─── LINEUP PAGE ────────────────────────────────── */
+/* Karta per drużyna (nie per kierowca) — sklad.json jest z natury
+   pogrupowany drużynami, i to jedyny poziom, na którym mamy realny obrazek
+   (zdjęcie bolidu, assets/cars/) do pokazania — kierowcy dostają tylko
+   numer+flagę+imię, bez osobnych zdjęć (na tej stronie nigdy ich nie ma,
+   patrz driverAvatar()). --team-color ustawiane inline z getTeamMeta().color. */
+.lineup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 2.5rem) 3rem;
+}
+.lineup-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 18px;
+  min-height: 168px;
+  transition: border-color .2s, box-shadow .2s;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+}
+/* Delikatny odcień barwy drużyny zamiast płaskiego koloru — spójne ze
+   stonowanym, ciemnym stylem reszty strony. */
+.lineup-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--team-color) 0%, transparent 60%);
+  opacity: 0.14;
+  pointer-events: none;
+}
+.lineup-card:hover { border-color: var(--team-color); box-shadow: 0 12px 28px rgba(0,0,0,0.3); }
+.lineup-card-car {
+  position: absolute;
+  right: -6px; bottom: 8px;
+  width: 60%;
+  max-width: 230px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.5));
+  pointer-events: none;
+}
+.lineup-card-head {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+}
+.lineup-card-logo { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+.lineup-card-team {
+  font-family: var(--font-display);
+  font-size: 14.5px; font-weight: 800;
+  letter-spacing: -0.1px;
+  color: var(--white);
+}
+.lineup-card-drivers {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 8px;
+  max-width: 65%; /* nie wchodzi na zdjęcie bolidu po prawej */
+}
+.lineup-driver { display: flex; align-items: center; }
+.lineup-driver-name { font-size: 13px; font-weight: 600; color: var(--gray-light); }
+
 /* ─── HALL OF FAME — CUSTOM HERO ──────────────────── */
 .hof-hero {
   min-height: 42vh;
@@ -2083,18 +2361,18 @@ div.ranking-item-trigger { cursor: default; } /* niekliknięte wiersze (bez .dd-
 .hof-play-overlay .icon { width: 16px; height: 16px; }
 
 /* ─── STAGGERED ENTRANCE ANIMATIONS ──────────────── */
-.news-card, .hof-clip-card, .wdc-card, .cal-card, .partner-card {
+.news-card, .hof-clip-card, .wdc-card, .cal-card, .partner-card, .highlight-card, .clip-card {
   animation: fadeUp 0.5s ease both;
 }
-.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1),  .partners-grid > *:nth-child(1),  .ranking-list > *:nth-child(1)  { animation-delay: .02s; }
-.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2),  .partners-grid > *:nth-child(2),  .ranking-list > *:nth-child(2)  { animation-delay: .08s; }
-.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3),  .partners-grid > *:nth-child(3),  .ranking-list > *:nth-child(3)  { animation-delay: .14s; }
-.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4),  .partners-grid > *:nth-child(4),  .ranking-list > *:nth-child(4)  { animation-delay: .20s; }
-.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5),  .partners-grid > *:nth-child(5),  .ranking-list > *:nth-child(5)  { animation-delay: .26s; }
-.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6),  .partners-grid > *:nth-child(6),  .ranking-list > *:nth-child(6)  { animation-delay: .32s; }
-.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7),  .partners-grid > *:nth-child(7),  .ranking-list > *:nth-child(7)  { animation-delay: .38s; }
-.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8),  .partners-grid > *:nth-child(8),  .ranking-list > *:nth-child(8)  { animation-delay: .44s; }
-.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9), .partners-grid > *:nth-child(n+9), .ranking-list > *:nth-child(n+9) { animation-delay: .5s; }
+.news-grid > *:nth-child(1),  .hof-grid > *:nth-child(1),  .wdc-grid > *:nth-child(1),  .calendar-grid > *:nth-child(1),  .partners-grid > *:nth-child(1),  .ranking-list > *:nth-child(1),  .lineup-grid > *:nth-child(1),  .results-list > *:nth-child(1),  .highlights-strip > *:nth-child(1), .clip-grid > *:nth-child(1)  { animation-delay: .02s; }
+.news-grid > *:nth-child(2),  .hof-grid > *:nth-child(2),  .wdc-grid > *:nth-child(2),  .calendar-grid > *:nth-child(2),  .partners-grid > *:nth-child(2),  .ranking-list > *:nth-child(2),  .lineup-grid > *:nth-child(2),  .results-list > *:nth-child(2),  .highlights-strip > *:nth-child(2), .clip-grid > *:nth-child(2)  { animation-delay: .08s; }
+.news-grid > *:nth-child(3),  .hof-grid > *:nth-child(3),  .wdc-grid > *:nth-child(3),  .calendar-grid > *:nth-child(3),  .partners-grid > *:nth-child(3),  .ranking-list > *:nth-child(3),  .lineup-grid > *:nth-child(3),  .results-list > *:nth-child(3),  .highlights-strip > *:nth-child(3), .clip-grid > *:nth-child(3)  { animation-delay: .14s; }
+.news-grid > *:nth-child(4),  .hof-grid > *:nth-child(4),  .wdc-grid > *:nth-child(4),  .calendar-grid > *:nth-child(4),  .partners-grid > *:nth-child(4),  .ranking-list > *:nth-child(4),  .lineup-grid > *:nth-child(4),  .results-list > *:nth-child(4),  .highlights-strip > *:nth-child(4), .clip-grid > *:nth-child(4)  { animation-delay: .20s; }
+.news-grid > *:nth-child(5),  .hof-grid > *:nth-child(5),  .wdc-grid > *:nth-child(5),  .calendar-grid > *:nth-child(5),  .partners-grid > *:nth-child(5),  .ranking-list > *:nth-child(5),  .lineup-grid > *:nth-child(5),  .results-list > *:nth-child(5),  .highlights-strip > *:nth-child(5), .clip-grid > *:nth-child(5)  { animation-delay: .26s; }
+.news-grid > *:nth-child(6),  .hof-grid > *:nth-child(6),  .wdc-grid > *:nth-child(6),  .calendar-grid > *:nth-child(6),  .partners-grid > *:nth-child(6),  .ranking-list > *:nth-child(6),  .lineup-grid > *:nth-child(6),  .results-list > *:nth-child(6),  .highlights-strip > *:nth-child(6), .clip-grid > *:nth-child(6)  { animation-delay: .32s; }
+.news-grid > *:nth-child(7),  .hof-grid > *:nth-child(7),  .wdc-grid > *:nth-child(7),  .calendar-grid > *:nth-child(7),  .partners-grid > *:nth-child(7),  .ranking-list > *:nth-child(7),  .lineup-grid > *:nth-child(7),  .results-list > *:nth-child(7),  .highlights-strip > *:nth-child(7), .clip-grid > *:nth-child(7)  { animation-delay: .38s; }
+.news-grid > *:nth-child(8),  .hof-grid > *:nth-child(8),  .wdc-grid > *:nth-child(8),  .calendar-grid > *:nth-child(8),  .partners-grid > *:nth-child(8),  .ranking-list > *:nth-child(8),  .lineup-grid > *:nth-child(8),  .results-list > *:nth-child(8),  .highlights-strip > *:nth-child(8), .clip-grid > *:nth-child(8)  { animation-delay: .44s; }
+.news-grid > *:nth-child(n+9), .hof-grid > *:nth-child(n+9), .wdc-grid > *:nth-child(n+9), .calendar-grid > *:nth-child(n+9), .partners-grid > *:nth-child(n+9), .ranking-list > *:nth-child(n+9), .lineup-grid > *:nth-child(n+9), .results-list > *:nth-child(n+9), .highlights-strip > *:nth-child(n+9), .clip-grid > *:nth-child(n+9) { animation-delay: .5s; }
 
 table.results tbody tr, table.standings tbody tr {
   animation: fadeUp 0.35s ease both;
