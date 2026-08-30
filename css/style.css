@@ -597,6 +597,7 @@ table.standings-constructors th:nth-child(3) { min-width: 270px; }
 }
 .driver-name { font-weight: 600; font-size: 13px; }
 .driver-realname { display: block; font-size: 11px; color: var(--gray); }
+.driver-discord-nick { display: block; font-size: 10.5px; color: var(--gray); opacity: 0.75; }
 /* Flaga narodowości kierowcy (Sklady/{Tier}/sklad.json → country) — obok
    .driver-number wszędzie, gdzie ten się pokazuje. */
 .driver-flag { display: inline-flex; align-items: center; margin-right: 8px; flex-shrink: 0; }

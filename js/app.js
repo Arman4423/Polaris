@@ -399,9 +399,12 @@ function getTeamMeta(nameOrFull) {
   return { full: s || t('unknownTeam'), logo: null, avatar: null, car: null, color: null };
 }
 
-/** Team-branded driver avatar (generic helmet+kit figure per team, not per named driver). */
-function driverAvatar(teamNameOrFull) {
-  return getTeamMeta(teamNameOrFull).avatar;
+/** Driver avatar - prawdziwy avatar Discorda kierowcy (avatarUrl z driverIndex, wypychany przez
+ *  bota), a gdy go jeszcze nie ma (kierowca bez konta/roli w Discordzie), spada na generyczną
+ *  maskotkę drużynową jak dawniej. Drugi argument jest opcjonalny - stare wywołania bez niego
+ *  nadal działają, po prostu zawsze dostają maskotkę. */
+function driverAvatar(teamNameOrFull, avatarUrl) {
+  return avatarUrl || getTeamMeta(teamNameOrFull).avatar;
 }
 
 /** Renders a small logo + full team name. `size`: 'sm' (table rows) | 'md' (cards). */
@@ -852,21 +855,26 @@ function computeDriverStandings(races, roster) {
 
 /* Compute constructor standings from races — same points-scoring-sessions filter as drivers. */
 /** Akceptuje stary format sklad.json (drivers: [string]) albo nowy
- *  (drivers: [{name, number, country}]) i zwraca ujednoliconą tablicę
- *  {name, number, country} — number to liczba albo null, country to string
- *  albo '' (pusty = brak flagi, nie błąd — kraj to pole opcjonalne). */
+ *  (drivers: [{name, number, country, avatarUrl, nickDiscord}]) i zwraca ujednoliconą tablicę
+ *  {name, number, country, avatarUrl, nickDiscord} — number to liczba albo null, country/avatarUrl/
+ *  nickDiscord to string albo null (puste = brak, nie błąd — wszystkie trzy są opcjonalne;
+ *  avatarUrl/nickDiscord istnieją tylko w nowym eksporcie bota, stary format ich nie ma). */
 function normalizeSkladDrivers(rawDrivers) {
   if (!Array.isArray(rawDrivers)) return [];
   return rawDrivers.map(d => {
     if (typeof d === 'string') {
       const name = d.trim();
-      return name ? { name, number: null, country: '' } : null;
+      return name ? { name, number: null, country: '', avatarUrl: null, nickDiscord: null } : null;
     }
     if (d && typeof d === 'object' && typeof d.name === 'string') {
       const name = d.name.trim();
       if (!name) return null;
       const n = parseInt(d.number, 10);
-      return { name, number: isNaN(n) ? null : n, country: (d.country || '').trim() };
+      return {
+        name, number: isNaN(n) ? null : n, country: (d.country || '').trim(),
+        avatarUrl: (d.avatarUrl || '').trim() || null,
+        nickDiscord: (d.nickDiscord || '').trim() || null,
+      };
     }
     return null;
   }).filter(Boolean);
@@ -893,7 +901,7 @@ async function loadSklad(tier) {
     const canonical = getTeamMeta(t.team).full;
     const drivers = normalizeSkladDrivers(t.drivers);
     rosterMap[canonical] = drivers.map(d => d.name);
-    drivers.forEach(d => { driverIndex[d.name] = { team: canonical, number: d.number, country: d.country }; });
+    drivers.forEach(d => { driverIndex[d.name] = { team: canonical, number: d.number, country: d.country, avatarUrl: d.avatarUrl, nickDiscord: d.nickDiscord }; });
   });
   return { rosterMap, driverIndex };
 }
@@ -960,12 +968,14 @@ function computeConstructorStandings(races, roster) {
  *  omitted, renders exactly the plain cell (unchanged for any call site that
  *  doesn't opt in). See renderDriverDetailContent(). */
 function renderDriverCell(d, leadingBadges, driverIndex, detail) {
-  const avatar = driverAvatar(d.teamFull || d.team);
-  const num = driverIndex?.[d.driver]?.number ?? null;
-  const country = driverIndex?.[d.driver]?.country || '';
-  const nameDisplay = d.realName
-    ? `<span class="driver-name">${d.driver}</span><span class="driver-realname">${d.realName}</span>`
-    : `<span class="driver-name">${d.driver}</span>`;
+  const info = driverIndex?.[d.driver];
+  const avatar = driverAvatar(d.teamFull || d.team, info?.avatarUrl);
+  const num = info?.number ?? null;
+  const country = info?.country || '';
+  const nickDiscord = info?.nickDiscord || '';
+  const nameDisplay = `<span class="driver-name">${d.driver}</span>`
+    + (d.realName ? `<span class="driver-realname">${d.realName}</span>` : '')
+    + (nickDiscord ? `<span class="driver-discord-nick">@${nickDiscord}</span>` : '');
 
   const badges = [];
   if (d.penaltySeconds > 0) {
@@ -1197,7 +1207,7 @@ function renderLastRaceCard(r, driverIndex) {
           ${top3.map((d,i) => `
             <div class="podium-item">
               <span class="podium-pos ${posClass[i]}">${posEmoji[i]}</span>
-              ${driverAvatar(d.teamFull || d.team) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team)}" alt="" onerror="this.style.display='none'">` : ''}
+              ${driverAvatar(d.teamFull || d.team, driverIndex?.[d.driver]?.avatarUrl) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team, driverIndex?.[d.driver]?.avatarUrl)}" alt="" onerror="this.style.display='none'">` : ''}
               <div>
                 <div class="podium-driver">${driverIndex?.[d.driver]?.number !== null && driverIndex?.[d.driver]?.number !== undefined ? `<span class="driver-number">${driverIndex[d.driver].number}</span>` : ''}${driverIndex?.[d.driver]?.country ? `<span class="driver-flag">${nationalityFlag(driverIndex[d.driver].country)}</span>` : ''}${d.driver}</div>
                 <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
@@ -1230,7 +1240,7 @@ function renderLastRaceCard(r, driverIndex) {
                   <td>${renderDriverCell(d, null, driverIndex, { kind: 'race', data: { ...d, showPoints: true } })}</td>
                   <td>${renderTeamBadge(d.teamFull || d.team)}</td>
                   <td class="right"><span class="gap-text">${d.gap}</span></td>
-                  <td class="right"><span class="status-fin">${displayStatus(d.status)}</span></td>
+                  <td class="right"><span class="status-fin"${d.status === 'DSQ' && d.positionPenaltyReason ? ` title="${escHtml(d.positionPenaltyReason)}"` : ''}>${displayStatus(d.status)}</span></td>
                   <td class="right"><span class="points-val">${d.points}</span></td>
                 </tr>
               `).join('')}
@@ -1468,7 +1478,7 @@ function renderResultsList(raceSessions, driverIndex, linkCtx) {
         const winner = session.raceResults[0];
         const flag = trackFlag(session.country || session.track);
         const href = `wynik-wydarzenia.html?season=${encodeURIComponent(linkCtx.season)}&tier=${encodeURIComponent(linkCtx.tier)}&round=${session.round}`;
-        const winnerAvatar = winner ? driverAvatar(winner.teamFull || winner.team) : null;
+        const winnerAvatar = winner ? driverAvatar(winner.teamFull || winner.team, driverIndex?.[winner.driver]?.avatarUrl) : null;
         const top3 = session.raceResults.slice(0, 3);
         const dotdDriver = session.driverOfTheDay?.driver || null;
         const expandable = top3.length > 0;
@@ -1576,7 +1586,7 @@ async function initWyniki() {
     }
 
     const standings = computeDriverStandings(races, rosterMap);
-    renderStandingsSummary(standings, 'wyniki-summary');
+    renderStandingsSummary(standings, 'wyniki-summary', driverIndex);
     renderLeaderTrend(computeLeaderTrend(races, raceSessions, standings, rosterMap), 'wyniki-leader-trend');
 
     const constructors = computeConstructorStandings(races, rosterMap);
@@ -2104,10 +2114,11 @@ function renderPodiumRow(top3, driverIndex) {
         const isFirst = rank === 1;
         const num = driverIndex?.[d.driver]?.number;
         const country = driverIndex?.[d.driver]?.country;
+        const avatarUrl = driverIndex?.[d.driver]?.avatarUrl;
         return `
         <div class="podium-item ${isFirst ? 'podium-item-first' : ''}">
           <span class="podium-pos ${posClass[rank - 1] || ''}">${rank}</span>
-          ${driverAvatar(d.teamFull || d.team) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team)}" alt="" onerror="this.style.display='none'">` : ''}
+          ${driverAvatar(d.teamFull || d.team, avatarUrl) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team, avatarUrl)}" alt="" onerror="this.style.display='none'">` : ''}
           <div>
             <div class="podium-driver">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${d.driver}</div>
             <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
@@ -2127,9 +2138,9 @@ function renderSessionResults(session, driverIndex) {
   const dotdDriver = session.driverOfTheDay?.driver || null;
   const top3 = showPoints ? session.raceResults.slice(0, 3) : [];
   const fastestLapEntry = session.fastestLap ? session.raceResults.find(d => d.driver === session.fastestLap.driver) : null;
-  const fastestLapAvatar = fastestLapEntry ? driverAvatar(fastestLapEntry.teamFull || fastestLapEntry.team) : null;
+  const fastestLapAvatar = fastestLapEntry ? driverAvatar(fastestLapEntry.teamFull || fastestLapEntry.team, driverIndex?.[fastestLapEntry.driver]?.avatarUrl) : null;
   const dotdEntry = dotdDriver ? session.raceResults.find(d => d.driver === dotdDriver) : null;
-  const dotdAvatar = dotdEntry ? driverAvatar(dotdEntry.teamFull || dotdEntry.team) : null;
+  const dotdAvatar = dotdEntry ? driverAvatar(dotdEntry.teamFull || dotdEntry.team, driverIndex?.[dotdEntry.driver]?.avatarUrl) : null;
   return `
     <div class="race-chips reveal" style="margin:0 0 1.5rem">
       <span class="race-chip">${icon('calendar','icon-lg')}${fmtDate(session.date)}</span>
@@ -2190,7 +2201,7 @@ function renderSessionResults(session, driverIndex) {
   `;
 }
 
-function renderStandingsSummary(standings, containerId) {
+function renderStandingsSummary(standings, containerId, driverIndex) {
   const el = document.getElementById(containerId);
   if (!el) return;
   if (standings.length < 2) { el.innerHTML = ''; return; }
@@ -2199,7 +2210,7 @@ function renderStandingsSummary(standings, containerId) {
   const mostWins = standings.slice().sort((a, b) => b.wins - a.wins)[0];
   const mostPodiums = standings.slice().sort((a, b) => b.podiums - a.podiums)[0];
   const chip = (row) => {
-    const avatar = driverAvatar(row.team);
+    const avatar = driverAvatar(row.team, driverIndex?.[row.driver]?.avatarUrl);
     return avatar ? `<img class="chip-avatar" src="${avatar}" alt="" onerror="this.remove()">` : '';
   };
   el.innerHTML = `
@@ -2232,7 +2243,7 @@ async function initKlasyfikacja() {
     const races = racesForTier(allSeasons, activeSeason, activeTier);
     const standings = computeDriverStandings(races, rosterMap);
     const seasonStats = computeDriverSeasonStats(races);
-    renderStandingsSummary(standings, 'standings-summary');
+    renderStandingsSummary(standings, 'standings-summary', driverIndex);
     renderStandingsTable(standings, 'standings-full', driverIndex, seasonStats);
   };
 
@@ -2257,7 +2268,7 @@ async function initKlasyfikacja() {
 function renderRankingRow(pos, name, value, driverIndex, tag) {
   tag = tag || 'li';
   const entry = driverIndex?.[name];
-  const avatar = entry ? driverAvatar(entry.team) : null;
+  const avatar = entry ? driverAvatar(entry.team, entry.avatarUrl) : null;
   const num = entry?.number;
   const country = entry?.country;
   return `
@@ -2779,7 +2790,7 @@ async function initWDC() {
   let activeTier = DEFAULT_TIER;
 
   const rerender = async () => {
-    const [data, allSeasons, { rosterMap }] = await Promise.all([
+    const [data, allSeasons, { rosterMap, driverIndex }] = await Promise.all([
       tryFetch(`Mistrzowie swiata/${activeTier}/mistrzowie.json`),
       loadAllRaces(),
       loadSklad(activeTier),
@@ -2793,7 +2804,7 @@ async function initWDC() {
     const liveStandings = latestSeason
       ? computeDriverStandings(racesForTier(allSeasons, latestSeason, activeTier), rosterMap)
       : [];
-    const liveHtml = renderCurrentLeaderStatus(liveStandings, latestSeason);
+    const liveHtml = renderCurrentLeaderStatus(liveStandings, latestSeason, driverIndex);
 
     if (!data || !data.champions || !data.champions.length) {
       el.innerHTML = liveHtml || `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
@@ -2808,10 +2819,10 @@ async function initWDC() {
     el.innerHTML = `
       ${liveHtml}
       <div class="wdc-hero-wrap">
-        ${champions.length > 0 ? renderWDCHero(champions[0]) : ''}
+        ${champions.length > 0 ? renderWDCHero(champions[0], driverIndex) : ''}
       </div>
       <div class="wdc-grid">
-        ${champions.map((c, i) => renderWDCCard(c, i)).join('')}
+        ${champions.map((c, i) => renderWDCCard(c, i, driverIndex)).join('')}
       </div>
     `;
     observeReveal();
@@ -2833,11 +2844,11 @@ async function initWDC() {
  *  (czerwony, nie złoty) i wyraźna etykieta "na żywo", żeby nie sugerować, że
  *  sezon jest już rozstrzygnięty. Cicho nic nie renderuje, gdy sezon dopiero
  *  się zaczyna (mniej niż 2 klasyfikowanych kierowców). */
-function renderCurrentLeaderStatus(standings, season) {
+function renderCurrentLeaderStatus(standings, season, driverIndex) {
   if (!standings || standings.length < 2) return '';
   const leader = standings[0], p2 = standings[1];
   const gap = leader.points - p2.points;
-  const avatar = driverAvatar(leader.team);
+  const avatar = driverAvatar(leader.team, driverIndex?.[leader.driver]?.avatarUrl);
   return `
     <div class="wdc-live-wrap">
       <div class="wdc-live reveal">
@@ -2858,8 +2869,8 @@ function renderCurrentLeaderStatus(standings, season) {
     </div>`;
 }
 
-function renderWDCHero(c) {
-  const avatar = driverAvatar(c.team);
+function renderWDCHero(c, driverIndex) {
+  const avatar = driverAvatar(c.team, driverIndex?.[c.driver]?.avatarUrl);
   return `
     <div class="wdc-hero reveal">
       <div class="wdc-hero-avatar-wrap">
@@ -2891,9 +2902,9 @@ function renderWDCHero(c) {
   `;
 }
 
-function renderWDCCard(c, i) {
+function renderWDCCard(c, i, driverIndex) {
   const isLatest = i === 0;
-  const avatar = driverAvatar(c.team);
+  const avatar = driverAvatar(c.team, driverIndex?.[c.driver]?.avatarUrl);
   return `
     <div class="wdc-card reveal ${isLatest ? 'wdc-card-latest' : ''}">
       <div class="wdc-card-top">
@@ -3050,7 +3061,7 @@ function clipHostMetaFor(clip) {
 function clipDriverCredit(driverName, driverIndex) {
   if (!driverName) return '';
   const entry = driverIndex?.[driverName];
-  const avatar = entry ? driverAvatar(entry.team) : null;
+  const avatar = entry ? driverAvatar(entry.team, entry.avatarUrl) : null;
   const img = avatar ? `<img class="chip-avatar" src="${avatar}" alt="" onerror="this.remove()">` : icon('helmet');
   const flag = entry?.country ? `<span class="driver-flag">${nationalityFlag(entry.country)}</span>` : '';
   return `<span class="hof-clip-driver">${img}${flag}${driverName}</span>`;
