@@ -72,6 +72,9 @@ const I18N = {
     'pos': 'Poz.', 'driver': 'Kierowca', 'team': 'Zespół', 'wins': 'Zwycięstwa',
     'podiums': 'Podium', 'points': 'Punkty', 'constructor': 'Konstruktor', 'drivers': 'Kierowcy',
     'gap': 'Strata', 'status': 'Status', 'pts': 'Pkt', 'tyres': 'Opony', 'fastestLapShort': 'Najsz. okr.',
+    'startPos': 'Start', 'posChange': '+/-',
+    'discordStats.members': 'Członków na Discordzie', 'discordStats.drivers': 'Kierowców',
+    'discordStats.newest': 'Najnowszy członek',
     'round': 'Runda', 'laps': 'okrążeń', 'turns': 'zakrętów',
     'empty.generic': 'Brak danych do wyświetlenia.', 'empty.short': 'Brak danych.',
     'finished': 'Ukończony', 'unknownTeam': 'Nieznany zespół', 'unknownTrack': 'Nieznany tor',
@@ -172,6 +175,9 @@ const I18N = {
     'pos': 'Pos.', 'driver': 'Driver', 'team': 'Team', 'wins': 'Wins',
     'podiums': 'Podiums', 'points': 'Points', 'constructor': 'Constructor', 'drivers': 'Drivers',
     'gap': 'Gap', 'status': 'Status', 'pts': 'Pts', 'tyres': 'Tyres', 'fastestLapShort': 'Fastest lap',
+    'startPos': 'Start', 'posChange': '+/-',
+    'discordStats.members': 'Discord members', 'discordStats.drivers': 'Drivers',
+    'discordStats.newest': 'Newest member',
     'round': 'Round', 'laps': 'laps', 'turns': 'turns',
     'empty.generic': 'No data to display.', 'empty.short': 'No data.',
     'finished': 'Finished', 'unknownTeam': 'Unknown team', 'unknownTrack': 'Unknown track',
@@ -1163,8 +1169,38 @@ function renderTierTabs(activeTier, onSelect) {
 }
 
 /* ─── INDEX PAGE ─────────────────────────────────── */
+/** Statystyki serwera Discord (Faza 3) - eksportowane cyklicznie przez bota (patrz
+ *  exportDiscordStats w Bot/index.js), niezależne od danych wyścigowych powyżej - stąd osobny fetch
+ *  i osobna, cicha awaria (brak pliku = sekcja po prostu się nie pokazuje, nie blokuje reszty strony). */
+function renderDiscordStats(stats) {
+  const el = document.getElementById('discord-stats');
+  if (!el) return;
+  if (!stats) { el.innerHTML = ''; return; }
+
+  const newest = stats.newestMember;
+  el.innerHTML = `
+    <div class="stats-strip">
+      <div class="stat-tile">
+        <span class="stat-tile-label">${t('discordStats.members')}</span>
+        <span class="stat-tile-value"><span data-count="${stats.memberCount ?? 0}">0</span></span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-tile-label">${t('discordStats.drivers')}</span>
+        <span class="stat-tile-value"><span data-count="${stats.driverCount ?? 0}">0</span></span>
+      </div>
+      <div class="stat-tile">
+        <span class="stat-tile-label">${t('discordStats.newest')}</span>
+        <span class="stat-tile-value" style="font-size:16px">${newest ? `${newest.avatarUrl ? `<img class="chip-avatar" src="${newest.avatarUrl}" alt="" onerror="this.remove()">` : ''}${escHtml(newest.name)}` : '—'}</span>
+      </div>
+    </div>`;
+  observeCounters();
+}
+
 async function initIndex() {
-  const [allSeasons, allCalendars, { rosterMap: homeRoster, driverIndex }] = await Promise.all([loadAllRaces(), loadAllCalendars(), loadSklad(DEFAULT_TIER)]);
+  const [allSeasons, allCalendars, { rosterMap: homeRoster, driverIndex }, discordStats] = await Promise.all([
+    loadAllRaces(), loadAllCalendars(), loadSklad(DEFAULT_TIER), tryFetch('Discord/stats.json'),
+  ]);
+  renderDiscordStats(discordStats);
   const seasonNames = Object.keys(allSeasons);
 
   // Homepage always shows the default tier (Tier 1)
@@ -1878,7 +1914,7 @@ async function initWynikWydarzenia() {
   let activeType = byType['Race'] ? 'Race' : availableTypes[0];
 
   const rerenderContent = () => {
-    contentEl.innerHTML = renderSessionResults(byType[activeType], driverIndex);
+    contentEl.innerHTML = renderSessionResults(byType[activeType], driverIndex, byType);
     observeReveal();
   };
 
@@ -2240,7 +2276,30 @@ function renderPenaltyNotes(notes) {
       </div>`).join('')}</div>`;
 }
 
-function renderSessionResults(session, driverIndex) {
+/** Sesja kwalifikacyjna, z której bierze się pozycja startowa danego typu sesji — Wyścig startuje z
+ *  Kwalifikacji, Sprint startuje z Kwalifikacji Sprintu. Zwraca null dla samych Kwalifikacji (nie mają
+ *  własnej "pozycji startowej") i gdy odpowiadająca sesja kwalifikacyjna jeszcze nie jest opublikowana. */
+const GRID_SESSION_TYPE = { Race: 'Qualifying', Sprint: 'Qualifying Sprint' };
+function attachStartingPositions(raceResults, sessionType, byType) {
+  const qualiType = GRID_SESSION_TYPE[sessionType];
+  const qualiSession = qualiType && byType ? byType[qualiType] : null;
+  if (!qualiSession) return raceResults.map(d => ({ ...d, startPos: null, posDelta: null }));
+  const startByDriver = {};
+  qualiSession.raceResults.forEach(q => { startByDriver[q.driver] = q.pos; });
+  return raceResults.map(d => {
+    const startPos = startByDriver[d.driver] ?? null;
+    return { ...d, startPos, posDelta: startPos !== null ? startPos - d.pos : null };
+  });
+}
+
+/** ▲/▼ + liczba zdobytych/straconych miejsc względem pozycji startowej (dodatnie = do przodu). */
+function renderPosDelta(delta) {
+  if (delta === null || delta === undefined) return '<span class="gap-text">—</span>';
+  if (delta === 0) return `<span class="pos-delta pos-delta-same">=</span>`;
+  return `<span class="pos-delta ${delta > 0 ? 'pos-delta-up' : 'pos-delta-down'}">${delta > 0 ? '▲' : '▼'}${Math.abs(delta)}</span>`;
+}
+
+function renderSessionResults(session, driverIndex, byType) {
   if (!session) return `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
   const showPoints = session.sessionType === 'Race' || session.sessionType === 'Sprint';
   const showStrategy = session.raceResults.some(d => d.stints && d.stints.length);
@@ -2251,6 +2310,7 @@ function renderSessionResults(session, driverIndex) {
   const fastestLapAvatar = fastestLapEntry ? driverAvatar(fastestLapEntry.teamFull || fastestLapEntry.team, driverIndex?.[fastestLapEntry.driver]?.avatarUrl) : null;
   const dotdEntry = dotdDriver ? session.raceResults.find(d => d.driver === dotdDriver) : null;
   const dotdAvatar = dotdEntry ? driverAvatar(dotdEntry.teamFull || dotdEntry.team, driverIndex?.[dotdEntry.driver]?.avatarUrl) : null;
+  const resultsWithStart = attachStartingPositions(session.raceResults, session.sessionType, byType);
   return `
     <div class="race-chips reveal" style="margin:0 0 1.5rem">
       <span class="race-chip">${icon('calendar','icon-lg')}${fmtDate(session.date)}</span>
@@ -2268,6 +2328,7 @@ function renderSessionResults(session, driverIndex) {
             <th>#</th>
             <th>${t('driver')}</th>
             <th>${t('team')}</th>
+            ${showPoints ? `<th class="right">${t('startPos')}</th><th class="right">${t('posChange')}</th>` : ''}
             <th class="right">${t('gap')}</th>
             <th class="right">${t('status')}</th>
             ${showStrategy ? `<th>${t('tyres')}</th>` : ''}
@@ -2276,7 +2337,7 @@ function renderSessionResults(session, driverIndex) {
           </tr>
         </thead>
         <tbody>
-          ${session.raceResults.map(d => {
+          ${resultsWithStart.map(d => {
             const isDotd = d.driver === dotdDriver;
             const isFastest = !!(session.fastestLap && d.driver === session.fastestLap.driver);
             const leadingBadges = [
@@ -2289,6 +2350,7 @@ function renderSessionResults(session, driverIndex) {
               <td>${posBadge(d.pos)}</td>
               <td>${renderDriverCell(d, leadingBadges, driverIndex, { kind: 'race', data: { ...d, showPoints } })}</td>
               <td>${renderTeamBadge(d.teamFull || d.team)}</td>
+              ${showPoints ? `<td class="right"><span class="gap-text">${d.startPos ?? '—'}</span></td><td class="right">${renderPosDelta(d.posDelta)}</td>` : ''}
               <td class="right"><span class="gap-text">${d.gap}</span></td>
               <td class="right"><span class="status-fin">${displayStatus(d.status)}</span></td>
               ${showStrategy ? `<td>${tyreStrategyCell(d.stints)}</td>` : ''}
@@ -3326,14 +3388,18 @@ function renderPunktyKarneList(entries, driverIndex, driverIndexById) {
     // Zawsze najświeższy zarejestrowany nick EA/Steam z aktualnego składu (po driverId), zamiast
     // zamrożonego stringu z momentu wydania kary - fallback na ten string tylko gdy kierowcy nie ma
     // już w składzie tego tieru (odszedł, albo nigdy nie miał driverId - stare wpisy sprzed tej zmiany).
+    // Dalszy fallback: nick SERWEROWY zamrożony w momencie wydania kary (entry.discordNick) zamiast
+    // surowego driverName (który w najgorszym razie bywał "Discord <id>").
     const byId = list[0].driverId ? driverIndexById?.[list[0].driverId] : null;
-    const driver = byId?.name || list[0].driverName;
+    const driver = byId?.name || list[0].discordNick || list[0].driverName;
     const info = byId || driverIndex[driver];
+    const avatarUrl = info?.avatarUrl || list[0].avatarUrl || null;
     const sorted = [...list].sort((a, b) => (b.issuedAt || 0) - (a.issuedAt || 0));
     return `
     <div class="dd results-item" tabindex="0">
       <div class="dd-trigger pk-row">
         <span class="pk-row-driver">
+          ${avatarUrl ? `<img class="chip-avatar" src="${avatarUrl}" alt="" onerror="this.remove()">` : ''}
           ${info && info.number !== null && info.number !== undefined ? `<span class="driver-number">${info.number}</span>` : ''}
           ${info && info.country ? nationalityFlag(info.country) : ''}
           ${driver}

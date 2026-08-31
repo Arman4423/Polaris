@@ -406,7 +406,7 @@ section { padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 5vw, 2.5rem); max-width: 1
 .podium-team { font-size: 11px; color: var(--gray); }
 .podium-pts { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--red); }
 .podium-avatar {
-  width: 40px; height: 40px; object-fit: contain; object-position: bottom;
+  width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border);
   flex-shrink: 0;
 }
 .podium-row-event {
@@ -576,7 +576,7 @@ table.standings-constructors th:nth-child(3) { min-width: 270px; }
 }
 .driver-cell { display: flex; align-items: center; }
 .driver-cell-avatar {
-  width: 28px; height: 28px; object-fit: contain; object-position: bottom;
+  width: 28px; height: 28px; object-fit: cover; border-radius: 50%; border: 1.5px solid var(--border);
   margin-right: 8px; flex-shrink: 0;
   transition: width .25s ease, height .25s ease;
 }
@@ -645,6 +645,11 @@ table.standings-constructors th:nth-child(3) { min-width: 270px; }
 .team-name { white-space: normal; }
 .gap-text { font-size: 12px; color: var(--gray); font-family: var(--font-mono); }
 .points-val { font-family: var(--font-mono); font-size: 13px; font-weight: 700; color: var(--white); }
+/* Zmiana pozycji względem startu (Faza 1) - zielony/czerwony/szary, ▲/▼/= */
+.pos-delta { font-family: var(--font-mono); font-size: 12px; font-weight: 700; }
+.pos-delta-up { color: var(--success); }
+.pos-delta-down { color: var(--red); }
+.pos-delta-same { color: var(--gray); }
 .status-fin {
   font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
   color: var(--success); background: rgba(74,222,128,0.1);
@@ -926,7 +931,7 @@ footer {
 /* Mały ~18px awatar do kontekstów tekstowych (chipy, stats-strip, HOF) */
 .chip-avatar {
   display: inline-block; width: 18px; height: 18px;
-  object-fit: contain; object-position: bottom;
+  object-fit: cover; border-radius: 50%;
   vertical-align: -4px; margin-right: 4px; flex-shrink: 0;
 }
 .race-chip-fastest {
@@ -1542,7 +1547,7 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .wdc-live-avatar {
   width: 56px; height: 56px;
-  object-fit: contain; object-position: bottom;
+  object-fit: cover; border-radius: 50%; border: 2px solid var(--red);
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
   flex-shrink: 0;
 }
@@ -1607,7 +1612,7 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .wdc-hero-avatar {
   width: 128px; height: 128px;
-  object-fit: contain; object-position: bottom;
+  object-fit: cover; border-radius: 50%; border: 3px solid var(--gold);
   filter: drop-shadow(0 8px 20px rgba(0,0,0,0.5));
 }
 .wdc-hero-avatar-badge {
@@ -1714,7 +1719,7 @@ tr.row-dotd.row-fastest { background: linear-gradient(90deg, rgba(244,196,48,0.0
 }
 .wdc-card-crown { font-size: 28px; flex-shrink: 0; }
 .wdc-card-avatar-wrap { position: relative; flex-shrink: 0; }
-.wdc-card-avatar { width: 46px; height: 46px; object-fit: contain; object-position: bottom; }
+.wdc-card-avatar { width: 46px; height: 46px; object-fit: cover; border-radius: 50%; border: 2px solid var(--border); }
 .wdc-card-avatar-badge {
   position: absolute; top: -4px; right: -6px; font-size: 15px;
   filter: drop-shadow(0 0 6px rgba(255,200,0,0.6));
@@ -1917,7 +1922,7 @@ div.results-row { cursor: default; } /* niekliknięty wiersz-fallback bez wyniku
   font-size: 13px; font-weight: 600; color: var(--gray-light);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.results-row-avatar { width: 26px; height: 26px; object-fit: contain; object-position: bottom; flex-shrink: 0; }
+.results-row-avatar { width: 26px; height: 26px; object-fit: cover; border-radius: 50%; border: 1.5px solid var(--border); flex-shrink: 0; }
 .results-row-fastest {
   flex: 0 0 auto; min-width: 110px;
   display: flex; align-items: center; gap: 4px;
