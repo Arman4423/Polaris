@@ -2321,7 +2321,10 @@ async function initKlasyfikacja() {
 function renderRankingRow(pos, name, value, driverIndex, tag) {
   tag = tag || 'li';
   const entry = driverIndex?.[name];
-  const avatar = entry ? driverAvatar(entry.team, entry.avatarUrl) : null;
+  // Celowo BEZ entry.avatarUrl - Ranking pokazuje maskotkę drużynową (assets/drivers/*.png), nie
+  // prywatny avatar Discorda. Discord zawsze zwraca JAKIŚ avatarUrl (nawet domyślny), więc gdyby go
+  // tu przekazać, maskotka nigdy by się nie pokazała - a to one mają się pokazywać na tej stronie.
+  const avatar = entry ? driverAvatar(entry.team) : null;
   const num = entry?.number;
   const country = entry?.country;
   return `
