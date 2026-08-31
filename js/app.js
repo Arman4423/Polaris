@@ -1298,13 +1298,66 @@ async function renderLeagueStats(containerId) {
   observeCounters();
 }
 
+/** Ogłoszenia z Discord (#ogłoszenia, publikowane przez /panel-admin -> "Publikuj ogłoszenie") -
+ *  osobne źródło od ręcznie pisanych Aktualności z #panel-strony, stąd osobna zakładka zamiast
+ *  scalania w jedną listę. Jednojęzyczne (bot pisze po polsku), bez biText(). */
+function renderOgloszeniaDiscord(list) {
+  const el = document.getElementById('news-grid');
+  if (!el) return;
+  if (!list.length) {
+    el.innerHTML = `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
+    return;
+  }
+  const [first, ...rest] = list;
+  const card = (o, featured) => `
+    <div class="news-card${featured ? ' news-card-featured' : ''}">
+      <div class="news-title">${o.naglowek}</div>
+      <div class="news-body">${o.tresc}</div>
+      ${o.footer ? `<div class="news-body" style="opacity:.7;font-size:.9em">${o.footer}</div>` : ''}
+      <div class="news-date">${fmtDate(new Date(o.timestamp).toISOString().slice(0, 10))} · ${o.authorTag || ''}</div>
+    </div>`;
+  el.innerHTML = `<div class="news-grid">${card(first, true)}${rest.map((o) => card(o, false)).join('')}</div>`;
+}
+
 async function initAktualnosci() {
   initHeroPhotoCarousel(document.getElementById('aktualnosci-hero'));
   renderLeagueStats('league-stats');
-  const data = await tryFetch('Aktualnosci/aktualnosci.json');
-  const articles = (data?.articles || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-  if (articles.length) renderNews(articles);
-  else document.getElementById('news-grid').innerHTML = `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
+
+  const [aktData, oglData] = await Promise.all([
+    tryFetch('Aktualnosci/aktualnosci.json'),
+    tryFetch('Aktualnosci/ogloszenia_discord.json'),
+  ]);
+  const articles = (aktData?.articles || []).slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const ogloszenia = (oglData?.ogloszenia || []).slice().sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+  const tabs = [
+    {
+      key: 'akt',
+      label: t('nav.news'),
+      render: () => {
+        if (articles.length) return renderNews(articles);
+        const el = document.getElementById('news-grid');
+        if (el) el.innerHTML = `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
+      },
+    },
+    { key: 'discord', label: 'Ogłoszenia z Discord', render: () => renderOgloszeniaDiscord(ogloszenia) },
+  ];
+  const tabsEl = document.getElementById('aktualnosci-tabs');
+  let active = 'akt';
+  const renderActive = () => tabs.find((tb) => tb.key === active).render();
+  if (tabsEl) {
+    tabsEl.innerHTML = tabs.map((tb) => `<button class="season-tab ${tb.key === active ? 'active' : ''}" data-tab="${tb.key}">${tb.label}</button>`).join('');
+    tabsEl.querySelectorAll('.season-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        active = btn.dataset.tab;
+        tabsEl.querySelectorAll('.season-tab').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderActive();
+        observeReveal();
+      });
+    });
+  }
+  renderActive();
   observeReveal();
 }
 
