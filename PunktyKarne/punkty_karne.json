@@ -30,6 +30,23 @@
       "numer": 36,
       "issuedAt": 1788171278998,
       "cancelled": false
+    },
+    {
+      "id": 2,
+      "type": "dsq",
+      "season": "1",
+      "tier": 1,
+      "driverName": "Discord 1194645679155458150",
+      "eventIds": [
+        8
+      ],
+      "eventLabels": [
+        "Runda 6/12 — Kanada – Gilles Villeneuve"
+      ],
+      "reason": "uzupelnienie kar",
+      "numer": 37,
+      "issuedAt": 1788171365503,
+      "cancelled": false
     }
   ]
 }
