@@ -1,0 +1,299 @@
+{
+  "metadata": {
+    "formatVersion": 1,
+    "exportType": "Session",
+    "exportedAt": "2026-08-31T10:28:51.231Z",
+    "sourceApplication": "Polaris Panel Strony (bot, z Racing League Tools)",
+    "leagueName": "Polaris Racing League"
+  },
+  "season": {
+    "seasonName": "Season 1",
+    "championshipName": "F1 2026",
+    "isMulticlass": false
+  },
+  "event": {
+    "round": 6,
+    "eventDate": "2026-08-06",
+    "racesCount": 2,
+    "qualificationsCount": 2,
+    "track": {
+      "trackName": "Montreal",
+      "country": "Canada",
+      "turnsCount": 14
+    }
+  },
+  "session": {
+    "sessionInfo": {
+      "sessionType": "Qualifying Sprint",
+      "completedStatus": "Completed",
+      "sessionDate": "2026-08-06T18:00:00Z",
+      "totalLaps": 0,
+      "driversCount": 10
+    },
+    "fastestLap": {
+      "lapTime": "1:10.289",
+      "lapTimeMs": 70289,
+      "driverName": "gf_wiktor",
+      "lapNumber": 3,
+      "tyreCompound": "Soft"
+    },
+    "drivers": [
+      {
+        "driverName": "gf_wiktor",
+        "driverInfo": {},
+        "position": 1,
+        "classificationPosition": 1,
+        "status": "Finished",
+        "lapsCompleted": 3,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "0",
+        "gapMs": 0,
+        "team": {
+          "name": "WIL",
+          "fullName": "Williams Racing",
+          "abbreviation": "WIL",
+          "primaryColor": "#64C4FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:10.289",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "merix",
+        "driverInfo": {},
+        "position": 2,
+        "classificationPosition": 2,
+        "status": "Finished",
+        "lapsCompleted": 5,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+0.447",
+        "gapMs": 447,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:10.736",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "Zabor",
+        "driverInfo": {},
+        "position": 3,
+        "classificationPosition": 3,
+        "status": "Finished",
+        "lapsCompleted": 4,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+1.078",
+        "gapMs": 1078,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:11.367",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "flajekk",
+        "driverInfo": {},
+        "position": 4,
+        "classificationPosition": 4,
+        "status": "Finished",
+        "lapsCompleted": 4,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+1.128",
+        "gapMs": 1128,
+        "team": {
+          "name": "MER",
+          "fullName": "Mercedes-AMG Petronas F1 Team",
+          "abbreviation": "MER",
+          "primaryColor": "#27F4D2"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:11.417",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "quez",
+        "driverInfo": {},
+        "position": 5,
+        "classificationPosition": 5,
+        "status": "Finished",
+        "lapsCompleted": 7,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+1.250",
+        "gapMs": 1250,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:11.539",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "Puchatek94",
+        "driverInfo": {},
+        "position": 6,
+        "classificationPosition": 6,
+        "status": "Finished",
+        "lapsCompleted": 4,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+1.576",
+        "gapMs": 1576,
+        "team": {
+          "name": "MCL",
+          "fullName": "McLaren Formula 1 Team",
+          "abbreviation": "MCL",
+          "primaryColor": "#FF8000"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:11.865",
+        "fastestLapTyreCompound": "Medium"
+      },
+      {
+        "driverName": "Ojaqatek",
+        "driverInfo": {},
+        "position": 7,
+        "classificationPosition": 7,
+        "status": "Finished",
+        "lapsCompleted": 4,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+3.143",
+        "gapMs": 3143,
+        "team": {
+          "name": "AUD",
+          "fullName": "Audi Formula One Team",
+          "abbreviation": "AUD",
+          "primaryColor": "#B4B4B4"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.432",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "pat",
+        "driverInfo": {},
+        "position": 8,
+        "classificationPosition": 8,
+        "status": "Finished",
+        "lapsCompleted": 4,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+3.348",
+        "gapMs": 3348,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.637",
+        "fastestLapTyreCompound": "Soft"
+      },
+      {
+        "driverName": "Danielelex",
+        "driverInfo": {},
+        "position": 9,
+        "classificationPosition": 9,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "akumulator poznan",
+        "driverInfo": {},
+        "position": 10,
+        "classificationPosition": 10,
+        "status": "Finished",
+        "lapsCompleted": 1,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "MER",
+          "fullName": "Mercedes-AMG Petronas F1 Team",
+          "abbreviation": "MER",
+          "primaryColor": "#27F4D2"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      }
+    ]
+  }
+}
