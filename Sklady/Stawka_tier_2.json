@@ -5,6 +5,7 @@
       "drivers": [
         {
           "name": null,
+          "racetoolsNick": null,
           "number": null,
           "country": "",
           "avatarUrl": "https://cdn.discordapp.com/avatars/1500598171146125433/67eaa1475b459cf7b3e20fe1562b3d3b.webp",
@@ -18,6 +19,7 @@
       "drivers": [
         {
           "name": null,
+          "racetoolsNick": null,
           "number": null,
           "country": "",
           "avatarUrl": "https://cdn.discordapp.com/avatars/1190609152276430978/9fa617323de42b03eb5c4ca8b3cb7e90.webp",
@@ -26,6 +28,7 @@
         },
         {
           "name": null,
+          "racetoolsNick": null,
           "number": null,
           "country": "",
           "avatarUrl": "https://cdn.discordapp.com/avatars/1306283017316077659/945b4bbfa6dd9a8da0d771bd22af48ba.webp",
