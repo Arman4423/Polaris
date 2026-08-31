@@ -809,7 +809,7 @@ function racesForTier(allSeasons, seasonName, tier) {
 
 /* Compute driver standings from races — only sessions that actually award
    championship points (Race, Sprint) count; Qualifying/Qualifying Sprint don't. */
-function computeDriverStandings(races, roster) {
+function computeDriverStandings(races, roster, driverIndex) {
   const map = {};
   for (const race of races.filter(r => r.sessionType === 'Race' || r.sessionType === 'Sprint')) {
     for (const d of race.raceResults) {
@@ -847,7 +847,10 @@ function computeDriverStandings(races, roster) {
     // pojawia się w klasyfikacji — kierowca spoza sklad.json nie jest
     // pokazywany, nawet jeśli zdobywał punkty. Tylko brak pliku w ogóle
     // (roster === null) cofa się do „każdy, kto kiedykolwiek zdobył punkty".
-    const known = new Set(Object.values(roster).flat());
+    // UWAGA: d.driver to Nick Racetools (klucz z pliku wyników), NIE nick Steam - `roster` (rosterMap)
+    // zawiera tylko nicki Steam (wyświetlane), więc do samego filtrowania trzeba użyć driverIndex
+    // (kluczowanego zarówno po Nicku Racetools jak i po nicku Steam, patrz loadSklad) zamiast roster.
+    const known = driverIndex ? new Set(Object.keys(driverIndex)) : new Set(Object.values(roster).flat());
     list = list.filter(d => known.has(d.driver));
   }
 
@@ -858,17 +861,18 @@ function computeDriverStandings(races, roster) {
 
 /* Compute constructor standings from races — same points-scoring-sessions filter as drivers. */
 /** Akceptuje stary format sklad.json (drivers: [string]) albo nowy
- *  (drivers: [{name, number, country, avatarUrl, nickDiscord, driverId}]) i zwraca ujednoliconą
- *  tablicę {name, number, country, avatarUrl, nickDiscord, driverId} — number to liczba albo null,
- *  country/avatarUrl/nickDiscord/driverId to string albo null (puste = brak, nie błąd — wszystkie
- *  cztery są opcjonalne; avatarUrl/nickDiscord/driverId istnieją tylko w nowym eksporcie bota, stary
- *  format ich nie ma). */
+ *  (drivers: [{name, racetoolsNick, number, country, avatarUrl, nickDiscord, driverId}]) i zwraca
+ *  ujednoliconą tablicę {name, racetoolsNick, number, country, avatarUrl, nickDiscord, driverId} —
+ *  number to liczba albo null, reszta to string albo null (puste = brak, nie błąd — wszystkie są
+ *  opcjonalne poza name; racetoolsNick/avatarUrl/nickDiscord/driverId istnieją tylko w nowym
+ *  eksporcie bota, stary format ich nie ma). `name` to zawsze nick Steam ("nick w F1", WYŚWIETLANY) —
+ *  `racetoolsNick` to osobny, techniczny klucz łączący z Wyniki/*.json (patrz loadSklad). */
 function normalizeSkladDrivers(rawDrivers) {
   if (!Array.isArray(rawDrivers)) return [];
   return rawDrivers.map(d => {
     if (typeof d === 'string') {
       const name = d.trim();
-      return name ? { name, number: null, country: '', avatarUrl: null, nickDiscord: null, driverId: null } : null;
+      return name ? { name, racetoolsNick: null, number: null, country: '', avatarUrl: null, nickDiscord: null, driverId: null } : null;
     }
     if (d && typeof d === 'object' && typeof d.name === 'string') {
       const name = d.name.trim();
@@ -876,6 +880,7 @@ function normalizeSkladDrivers(rawDrivers) {
       const n = parseInt(d.number, 10);
       return {
         name, number: isNaN(n) ? null : n, country: (d.country || '').trim(),
+        racetoolsNick: (d.racetoolsNick || '').toString().trim() || null,
         avatarUrl: (d.avatarUrl || '').trim() || null,
         nickDiscord: (d.nickDiscord || '').trim() || null,
         driverId: (d.driverId || '').toString().trim() || null,
@@ -912,11 +917,28 @@ async function loadSklad(tier) {
     rosterMap[canonical] = drivers.map(d => d.name);
     drivers.forEach(d => {
       const entry = { team: canonical, number: d.number, country: d.country, avatarUrl: d.avatarUrl, nickDiscord: d.nickDiscord, name: d.name };
+      // Klucz PODWÓJNY: racetoolsNick (główny - tym nickiem identyfikują kierowców NOWE pliki
+      // Wyniki/*.json, eksportowane z Racing League Tools) i name/nick Steam (fallback - kierowcy bez
+      // jeszcze przypisanego Nicku Racetools w #stawka-admin, i wszystkie stare archiwalne pliki,
+      // które dopasowywały się po tym samym nicku zanim istniało rozróżnienie Racetools/Steam).
+      // Oba klucze wskazują na TEN SAM rekord, więc .name (wyświetlany) jest zawsze aktualnym nickiem
+      // Steam niezależnie pod którym kluczem trafił tu wynik.
+      if (d.racetoolsNick) driverIndex[d.racetoolsNick] = entry;
       driverIndex[d.name] = entry;
       if (d.driverId) driverIndexById[d.driverId] = entry;
     });
   });
   return { rosterMap, driverIndex, driverIndexById };
+}
+
+/** Wyniki/*.json identyfikują kierowców po Nicku Racetools (techniczny klucz, nigdy nie ma się
+ *  wyświetlać) — ta funkcja zamienia go na przyjazny, aktualny nick Steam z bieżącego składu (patrz
+ *  driverIndex w loadSklad, kluczowany zarówno po racetoolsNick jak i po nicku Steam). Gdy kierowcy
+ *  nie ma w bieżącym składzie (odszedł, albo archiwalny wynik) — pokazuje surowy string z pliku
+ *  wyników jako fallback, zamiast pustki. Wołać wszędzie tam, gdzie surowy driverName z wyniku trafia
+ *  na ekran jako WIDOCZNY tekst (nie tylko jako klucz do driverIndex[...] po metadane). */
+function resolveDriverName(driverIndex, rawName) {
+  return driverIndex?.[rawName]?.name || rawName;
 }
 
 /** Jak loadSklad(), ale zwraca listę drużyn z pełnymi obiektami kierowców
@@ -986,7 +1008,8 @@ function renderDriverCell(d, leadingBadges, driverIndex, detail) {
   const num = info?.number ?? null;
   const country = info?.country || '';
   const nickDiscord = info?.nickDiscord || '';
-  const nameDisplay = `<span class="driver-name">${d.driver}</span>`
+  // d.driver to Nick Racetools (klucz z pliku wyników) - info.name to zawsze aktualny nick Steam.
+  const nameDisplay = `<span class="driver-name">${info?.name || d.driver}</span>`
     + (d.realName ? `<span class="driver-realname">${d.realName}</span>` : '')
     + (nickDiscord ? `<span class="driver-discord-nick">@${nickDiscord}</span>` : '');
 
@@ -1182,7 +1205,7 @@ async function initIndex() {
   else document.getElementById('last-race').innerHTML = `<p style="color:var(--gray)">${t('empty.generic')}</p>`;
 
   // Mini standings
-  const latestDrivers = computeDriverStandings(latestRaces, homeRoster);
+  const latestDrivers = computeDriverStandings(latestRaces, homeRoster, driverIndex);
   renderStandingsTable(latestDrivers.slice(0, 5), 'standings-mini', driverIndex, seasonStats);
 
   // Mini constructors
@@ -1222,7 +1245,7 @@ function renderLastRaceCard(r, driverIndex) {
               <span class="podium-pos ${posClass[i]}">${posEmoji[i]}</span>
               ${driverAvatar(d.teamFull || d.team, driverIndex?.[d.driver]?.avatarUrl) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team, driverIndex?.[d.driver]?.avatarUrl)}" alt="" onerror="this.style.display='none'">` : ''}
               <div>
-                <div class="podium-driver">${driverIndex?.[d.driver]?.number !== null && driverIndex?.[d.driver]?.number !== undefined ? `<span class="driver-number">${driverIndex[d.driver].number}</span>` : ''}${driverIndex?.[d.driver]?.country ? `<span class="driver-flag">${nationalityFlag(driverIndex[d.driver].country)}</span>` : ''}${d.driver}</div>
+                <div class="podium-driver">${driverIndex?.[d.driver]?.number !== null && driverIndex?.[d.driver]?.number !== undefined ? `<span class="driver-number">${driverIndex[d.driver].number}</span>` : ''}${driverIndex?.[d.driver]?.country ? `<span class="driver-flag">${nationalityFlag(driverIndex[d.driver].country)}</span>` : ''}${resolveDriverName(driverIndex, d.driver)}</div>
                 <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
               </div>
               <span class="podium-pts">${d.points} ${t('ptsSuffix')}</span>
@@ -1463,10 +1486,10 @@ function renderConstructorLeaderChip(constructors, containerId) {
  *  stanu sprzed ostatniej rundy — a jeśli lider się zmienił, to ważniejsza
  *  wiadomość niż sama przewaga. Zwraca null, gdy za mało danych (< 2 rundy)
  *  do sensownego porównania. */
-function computeLeaderTrend(races, raceSessions, standings, rosterMap) {
+function computeLeaderTrend(races, raceSessions, standings, rosterMap, driverIndex) {
   if (raceSessions.length < 2 || standings.length < 2) return null;
   const prevRound = raceSessions[raceSessions.length - 2].round;
-  const prevStandings = computeDriverStandings(races.filter(r => r.round <= prevRound), rosterMap);
+  const prevStandings = computeDriverStandings(races.filter(r => r.round <= prevRound), rosterMap, driverIndex);
   if (prevStandings.length < 2) return null;
   if (standings[0].driver !== prevStandings[0].driver) return { type: 'new' };
   const gapNow = standings[0].points - standings[1].points;
@@ -1555,9 +1578,9 @@ function renderResultsList(raceSessions, driverIndex, linkCtx) {
             <span class="results-row-track"><span class="icon icon-flag">${flag}</span>${session.track}</span>
             <span class="results-row-winner">
               ${winnerAvatar ? `<img class="results-row-avatar" src="${winnerAvatar}" alt="" onerror="this.remove()">` : ''}
-              ${winner ? winner.driver : '—'}
+              ${winner ? resolveDriverName(driverIndex, winner.driver) : '—'}
             </span>
-            <span class="results-row-fastest">${session.fastestLap ? `${icon('bolt','icon-red')}${session.fastestLap.driver}` : ''}</span>
+            <span class="results-row-fastest">${session.fastestLap ? `${icon('bolt','icon-red')}${resolveDriverName(driverIndex, session.fastestLap.driver)}` : ''}</span>
             ${expandable ? `<span class="results-row-chevron">${icon('chevronDown')}</span>` : ''}
           </div>`;
 
@@ -1573,14 +1596,14 @@ function renderResultsList(raceSessions, driverIndex, linkCtx) {
                 ${icon('bolt', 'icon-red')}
                 <div class="dd-fastest-info">
                   <span class="dd-fastest-label">${t('fastestLap')}</span>
-                  <span class="dd-fastest-time">${session.fastestLap.driver} — ${session.fastestLap.time}</span>
+                  <span class="dd-fastest-time">${resolveDriverName(driverIndex, session.fastestLap.driver)} — ${session.fastestLap.time}</span>
                 </div>
                 ${tyrePill(session.fastestLap.tyre)}
               </div>
             ` : ''}
             ${dotdDriver ? `
               <div class="dd-chip-row">
-                <span class="dd-chip">${icon('star', 'icon-gold')}${t('dotdTitle')}: ${dotdDriver}</span>
+                <span class="dd-chip">${icon('star', 'icon-gold')}${t('dotdTitle')}: ${resolveDriverName(driverIndex, dotdDriver)}</span>
               </div>
             ` : ''}
             <a class="btn btn-outline" href="${href}" style="margin-top:12px">${t('cta.fullResults')}</a>
@@ -1651,9 +1674,9 @@ async function initWyniki() {
       return;
     }
 
-    const standings = computeDriverStandings(races, rosterMap);
+    const standings = computeDriverStandings(races, rosterMap, driverIndex);
     renderStandingsSummary(standings, 'wyniki-summary', driverIndex);
-    renderLeaderTrend(computeLeaderTrend(races, raceSessions, standings, rosterMap), 'wyniki-leader-trend');
+    renderLeaderTrend(computeLeaderTrend(races, raceSessions, standings, rosterMap, driverIndex), 'wyniki-leader-trend');
 
     const constructors = computeConstructorStandings(races, rosterMap);
     renderConstructorLeaderChip(constructors, 'wyniki-constructors');
@@ -2064,7 +2087,7 @@ function renderDriverPill(name, driverIndex, seasonStats) {
   const country = driverIndex?.[name]?.country || '';
   const stats = seasonStats?.[name] || emptySeasonStats();
   return `<div class="dd driver-pill" tabindex="0">
-    <div class="dd-trigger driver-pill-trigger">${num !== null ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${name}</div>
+    <div class="dd-trigger driver-pill-trigger">${num !== null ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${resolveDriverName(driverIndex, name)}</div>
     <div class="dd-panel"><div class="dd-panel-inner"><div class="dd-panel-content">${renderDriverDetailContent('season', stats)}</div></div></div>
   </div>`;
 }
@@ -2186,7 +2209,7 @@ function renderPodiumRow(top3, driverIndex) {
           <span class="podium-pos ${posClass[rank - 1] || ''}">${rank}</span>
           ${driverAvatar(d.teamFull || d.team, avatarUrl) ? `<img class="podium-avatar" src="${driverAvatar(d.teamFull || d.team, avatarUrl)}" alt="" onerror="this.style.display='none'">` : ''}
           <div>
-            <div class="podium-driver">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${d.driver}</div>
+            <div class="podium-driver">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${resolveDriverName(driverIndex, d.driver)}</div>
             <div class="podium-team">${renderTeamBadge(d.teamFull || d.team)}</div>
           </div>
           <span class="podium-pts">${d.points} ${t('ptsSuffix')}</span>
@@ -2234,8 +2257,8 @@ function renderSessionResults(session, driverIndex) {
       <span class="race-chip">${icon('laps','icon-lg')}${session.totalLaps || 0} ${t('laps')}</span>
       <span class="race-chip"><span class="icon icon-flag">${session.flag}</span>${session.track}</span>
       ${session.turns ? `<span class="race-chip">${icon('turns','icon-lg')}${session.turns} ${t('turns')}</span>` : ''}
-      ${session.fastestLap ? `<span class="race-chip race-chip-fastest">${icon('bolt','icon-red icon-lg')}${t('fastestLapPrefix')}${fastestLapAvatar ? `<img class="chip-avatar" src="${fastestLapAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${session.fastestLap.driver}</strong> — ${session.fastestLap.time} ${tyrePill(session.fastestLap.tyre)}</span>` : ''}
-      ${dotdDriver ? `<span class="race-chip race-chip-dotd" title="${escHtml(biText(session.driverOfTheDay, 'reason'))}">${icon('star','icon-gold icon-lg')}${t('dotdPrefix')}${dotdAvatar ? `<img class="chip-avatar" src="${dotdAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${dotdDriver}</strong></span>` : ''}
+      ${session.fastestLap ? `<span class="race-chip race-chip-fastest">${icon('bolt','icon-red icon-lg')}${t('fastestLapPrefix')}${fastestLapAvatar ? `<img class="chip-avatar" src="${fastestLapAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${resolveDriverName(driverIndex, session.fastestLap.driver)}</strong> — ${session.fastestLap.time} ${tyrePill(session.fastestLap.tyre)}</span>` : ''}
+      ${dotdDriver ? `<span class="race-chip race-chip-dotd" title="${escHtml(biText(session.driverOfTheDay, 'reason'))}">${icon('star','icon-gold icon-lg')}${t('dotdPrefix')}${dotdAvatar ? `<img class="chip-avatar" src="${dotdAvatar}" alt="" onerror="this.remove()">` : ''}<strong>${resolveDriverName(driverIndex, dotdDriver)}</strong></span>` : ''}
     </div>
     ${renderPodiumRow(top3, driverIndex)}
     <div class="table-wrap reveal">
@@ -2303,10 +2326,10 @@ function renderStandingsSummary(standings, containerId, driverIndex) {
   };
   el.innerHTML = `
     <div class="stats-strip reveal">
-      <div class="stat-tile"><span class="stat-tile-label">${t('leader')}</span><span class="stat-tile-value"><span data-count="${leader.points}">0</span><small> ${t('ptsSuffix')}</small></span><span class="stat-tile-sub">${chip(leader)}${leader.driver}</span></div>
-      <div class="stat-tile"><span class="stat-tile-label">${t('gapToP2')}</span><span class="stat-tile-value accent">+<span data-count="${gap}">0</span><small> ${t('ptsSuffix')}</small></span><span class="stat-tile-sub">${t('over')} ${chip(standings[1])}${standings[1].driver}</span></div>
-      <div class="stat-tile"><span class="stat-tile-label">${t('mostWins')}</span><span class="stat-tile-value"><span data-count="${mostWins.wins}">0</span><small> ${t('winsSuffix')}</small></span><span class="stat-tile-sub">${chip(mostWins)}${mostWins.driver}</span></div>
-      <div class="stat-tile"><span class="stat-tile-label">${t('mostPodiums')}</span><span class="stat-tile-value"><span data-count="${mostPodiums.podiums}">0</span><small> ${t('podiumsSuffix')}</small></span><span class="stat-tile-sub">${chip(mostPodiums)}${mostPodiums.driver}</span></div>
+      <div class="stat-tile"><span class="stat-tile-label">${t('leader')}</span><span class="stat-tile-value"><span data-count="${leader.points}">0</span><small> ${t('ptsSuffix')}</small></span><span class="stat-tile-sub">${chip(leader)}${resolveDriverName(driverIndex, leader.driver)}</span></div>
+      <div class="stat-tile"><span class="stat-tile-label">${t('gapToP2')}</span><span class="stat-tile-value accent">+<span data-count="${gap}">0</span><small> ${t('ptsSuffix')}</small></span><span class="stat-tile-sub">${t('over')} ${chip(standings[1])}${resolveDriverName(driverIndex, standings[1].driver)}</span></div>
+      <div class="stat-tile"><span class="stat-tile-label">${t('mostWins')}</span><span class="stat-tile-value"><span data-count="${mostWins.wins}">0</span><small> ${t('winsSuffix')}</small></span><span class="stat-tile-sub">${chip(mostWins)}${resolveDriverName(driverIndex, mostWins.driver)}</span></div>
+      <div class="stat-tile"><span class="stat-tile-label">${t('mostPodiums')}</span><span class="stat-tile-value"><span data-count="${mostPodiums.podiums}">0</span><small> ${t('podiumsSuffix')}</small></span><span class="stat-tile-sub">${chip(mostPodiums)}${resolveDriverName(driverIndex, mostPodiums.driver)}</span></div>
     </div>`;
   observeCounters();
 }
@@ -2329,7 +2352,7 @@ async function initKlasyfikacja() {
   const rerender = async () => {
     const { rosterMap, driverIndex } = await loadSklad(activeTier);
     const races = racesForTier(allSeasons, activeSeason, activeTier);
-    const standings = computeDriverStandings(races, rosterMap);
+    const standings = computeDriverStandings(races, rosterMap, driverIndex);
     const seasonStats = computeDriverSeasonStats(races);
     renderStandingsSummary(standings, 'standings-summary', driverIndex);
     renderStandingsTable(standings, 'standings-full', driverIndex, seasonStats);
@@ -2360,11 +2383,13 @@ function renderRankingRow(pos, name, value, driverIndex, tag) {
   const ringColor = entry ? getTeamMeta(entry.team).color : null;
   const num = entry?.number;
   const country = entry?.country;
+  // `name` przychodzi jako surowy Nick Racetools z wyników - entry.name to zawsze aktualny nick Steam.
+  const displayName = entry?.name || name;
   return `
     <${tag} class="ranking-row">
       <span class="ranking-row-pos">${pos}</span>
       ${avatar ? `<img class="ranking-row-avatar" src="${avatar}" alt="" onerror="this.remove()"${ringColor ? ` style="--ring:${ringColor}"` : ''}>` : ''}
-      <span class="ranking-row-name">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${name}</span>
+      <span class="ranking-row-name">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${displayName}</span>
       <span class="ranking-row-value">${value}</span>
     </${tag}>`;
 }
@@ -2891,7 +2916,7 @@ async function initWDC() {
     const seasonNames = Object.keys(allSeasons);
     const latestSeason = seasonNames[seasonNames.length - 1];
     const liveStandings = latestSeason
-      ? computeDriverStandings(racesForTier(allSeasons, latestSeason, activeTier), rosterMap)
+      ? computeDriverStandings(racesForTier(allSeasons, latestSeason, activeTier), rosterMap, driverIndex)
       : [];
     const liveHtml = renderCurrentLeaderStatus(liveStandings, latestSeason, driverIndex);
 
@@ -2945,7 +2970,7 @@ function renderCurrentLeaderStatus(standings, season, driverIndex) {
         <div class="wdc-live-body">
           ${avatar ? `<img class="wdc-live-avatar" src="${avatar}" alt="" onerror="this.remove()">` : ''}
           <div class="wdc-live-info">
-            <div class="wdc-live-driver">${leader.driver}</div>
+            <div class="wdc-live-driver">${resolveDriverName(driverIndex, leader.driver)}</div>
             <div class="wdc-live-team">${renderTeamBadge(leader.team)}</div>
           </div>
           <div class="wdc-live-stats">
@@ -2953,7 +2978,7 @@ function renderCurrentLeaderStatus(standings, season, driverIndex) {
             <div class="wdc-live-stat"><span class="wdc-live-stat-num accent" data-count="${gap}">0</span><span class="wdc-live-stat-label">${t('gapToP2')}</span></div>
           </div>
         </div>
-        <div class="wdc-live-note">${t('wdc.gapNotePrefix')} <strong>${p2.driver}</strong> (${p2.team})</div>
+        <div class="wdc-live-note">${t('wdc.gapNotePrefix')} <strong>${resolveDriverName(driverIndex, p2.driver)}</strong> (${p2.team})</div>
       </div>
     </div>`;
 }
@@ -2967,7 +2992,7 @@ function renderWDCHero(c, driverIndex) {
         <span class="wdc-hero-avatar-badge">${icon('crown','icon-lg icon-gold')}</span>
       </div>
       <div class="wdc-hero-label">${t('wdc.currentChampion')}</div>
-      <div class="wdc-hero-driver">${c.driver}</div>
+      <div class="wdc-hero-driver">${resolveDriverName(driverIndex, c.driver)}</div>
       <div class="wdc-hero-season">${seasonLabel(c.season)} · ${renderTeamBadge(c.team)}</div>
       <div class="wdc-hero-stats">
         <div class="wdc-hero-stat">
@@ -3003,7 +3028,7 @@ function renderWDCCard(c, i, driverIndex) {
         </div>
         <div>
           <div class="wdc-card-season">${seasonLabel(c.season)}</div>
-          <div class="wdc-card-driver">${c.driver}</div>
+          <div class="wdc-card-driver">${resolveDriverName(driverIndex, c.driver)}</div>
           <div class="wdc-card-team">${renderTeamBadge(c.team)}</div>
         </div>
         <div class="wdc-card-pts">${c.points}<span>${t('ptsSuffix')}</span></div>
