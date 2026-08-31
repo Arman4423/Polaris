@@ -1866,7 +1866,11 @@ div.ranking-item-trigger { cursor: default; } /* niekliknięte wiersze (bez .dd-
    liście miejsc 2+. */
 .ranking-item-trigger .ranking-row { flex: 1; min-width: 0; padding: 0; }
 .ranking-item-trigger .ranking-row-pos { color: var(--gold); }
-.ranking-row-avatar { width: 24px; height: 24px; object-fit: contain; object-position: bottom; flex-shrink: 0; }
+.ranking-row-avatar {
+  width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  border: 2px solid var(--ring, var(--border));
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.25), 0 0 8px 0 color-mix(in srgb, var(--ring, transparent) 55%, transparent);
+}
 .ranking-row-name {
   flex: 1; min-width: 0;
   font-size: 12.5px; font-weight: 600; color: var(--white);
@@ -1952,19 +1956,23 @@ div.results-row { cursor: default; } /* niekliknięty wiersz-fallback bez wyniku
 .pk-entry-points { font-family: var(--font-mono); font-weight: 700; color: var(--red); flex-shrink: 0; }
 .pk-entry.cancelled { opacity: 0.5; text-decoration: line-through; }
 .pk-section-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); margin: 2.4rem 0 0.8rem; }
-.pk-restrictions { display: flex; flex-direction: column; gap: 0.6rem; }
-.pk-restriction-item {
+
+/* "Kary i odwołania" — sekcja na stronie wyniku sesji (race incident/DSQ/quali-ban dotyczące TEJ
+   sesji, patrz renderSessionResults). Ten sam wizualny wzorzec co dawne .pk-restriction-item. */
+.penalty-notes { display: flex; flex-direction: column; gap: 0.6rem; }
+.penalty-note-item {
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
 }
-.pk-restriction-badge {
+.penalty-note-badge {
   flex: 0 0 auto; padding: 3px 10px; border-radius: 20px; font-size: 10.5px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.5px;
   background: rgba(225,6,0,0.15); color: var(--red); border: 1px solid rgba(225,6,0,0.35);
 }
-.pk-restriction-driver { font-family: var(--font-display); font-weight: 700; color: var(--white); }
-.pk-restriction-rounds { font-size: 12px; color: var(--gray-light); flex: 1; min-width: 200px; }
-.pk-restriction-reason { font-size: 11.5px; color: var(--gray); width: 100%; }
+.penalty-note-driver { font-family: var(--font-display); font-weight: 700; color: var(--white); }
+.penalty-note-reason { font-size: 11.5px; color: var(--gray); width: 100%; }
+.penalty-note-item.revoked { opacity: 0.5; }
+.penalty-note-revoked-tag { font-size: 10.5px; color: var(--gray); font-style: italic; }
 
 /* Lider Pucharu Konstruktorów — jeden slim pasek, świadomie mniejszy niż
    pełny .stats-strip (ten sam co dla kierowców obok), żeby nie dublować

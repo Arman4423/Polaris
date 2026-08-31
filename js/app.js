@@ -142,9 +142,9 @@ const I18N = {
     'hero.punktyKarne.title': 'PUNKTY KARNE',
     'pk.totalPoints': 'Punkty karne', 'pk.noEntries': 'Brak punktów karnych w tym sezonie/tierze.',
     'pk.history': 'Historia wpisów', 'pk.cancelled': 'Anulowane',
-    'pk.activeRestrictions': 'Aktywne ograniczenia', 'pk.noRestrictions': 'Brak aktywnych ograniczeń.',
-    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali-ban', 'pk.affectedRounds': 'Dotyczy',
+    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali-ban', 'pk.raceIncident': 'Race incident',
     'pk.case': 'Sprawa', 'pk.reason': 'Powód', 'pk.driver': 'Kierowca',
+    'penaltyNotes.title': 'Kary i odwołania', 'penaltyNotes.revoked': 'cofnięte w odwołaniu',
   },
   en: {
     'nav.home': 'Home', 'nav.results': 'Results',
@@ -242,9 +242,9 @@ const I18N = {
     'hero.punktyKarne.title': 'PENALTY POINTS',
     'pk.totalPoints': 'Penalty points', 'pk.noEntries': 'No penalty points this season/tier.',
     'pk.history': 'Entry history', 'pk.cancelled': 'Cancelled',
-    'pk.activeRestrictions': 'Active restrictions', 'pk.noRestrictions': 'No active restrictions.',
-    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali ban', 'pk.affectedRounds': 'Affects',
+    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali ban', 'pk.raceIncident': 'Race incident',
     'pk.case': 'Case', 'pk.reason': 'Reason', 'pk.driver': 'Driver',
+    'penaltyNotes.title': 'Penalties & appeals', 'penaltyNotes.revoked': 'overturned on appeal',
   },
 };
 function getLang() {
@@ -752,6 +752,9 @@ function parseRLT(json, seasonName) {
       type: /^https?:\/\//i.test(sess.bestManeuver.url) ? undefined : 'file',
       thumbnailUrl: sess.bestManeuver.thumbnailUrl || null,
     } : null,
+    // Race incident/DSQ/quali-ban dotyczące TEJ sesji (patrz addPenaltyNoteToResultsFile/
+    // applyPendingPenaltyNotes w bocie) - renderowane pod tabelą wyników, patrz renderSessionResults.
+    penaltyNotes: Array.isArray(sess.penaltyNotes) ? sess.penaltyNotes : [],
     _raw: json,
   };
 }
@@ -855,16 +858,17 @@ function computeDriverStandings(races, roster) {
 
 /* Compute constructor standings from races — same points-scoring-sessions filter as drivers. */
 /** Akceptuje stary format sklad.json (drivers: [string]) albo nowy
- *  (drivers: [{name, number, country, avatarUrl, nickDiscord}]) i zwraca ujednoliconą tablicę
- *  {name, number, country, avatarUrl, nickDiscord} — number to liczba albo null, country/avatarUrl/
- *  nickDiscord to string albo null (puste = brak, nie błąd — wszystkie trzy są opcjonalne;
- *  avatarUrl/nickDiscord istnieją tylko w nowym eksporcie bota, stary format ich nie ma). */
+ *  (drivers: [{name, number, country, avatarUrl, nickDiscord, driverId}]) i zwraca ujednoliconą
+ *  tablicę {name, number, country, avatarUrl, nickDiscord, driverId} — number to liczba albo null,
+ *  country/avatarUrl/nickDiscord/driverId to string albo null (puste = brak, nie błąd — wszystkie
+ *  cztery są opcjonalne; avatarUrl/nickDiscord/driverId istnieją tylko w nowym eksporcie bota, stary
+ *  format ich nie ma). */
 function normalizeSkladDrivers(rawDrivers) {
   if (!Array.isArray(rawDrivers)) return [];
   return rawDrivers.map(d => {
     if (typeof d === 'string') {
       const name = d.trim();
-      return name ? { name, number: null, country: '', avatarUrl: null, nickDiscord: null } : null;
+      return name ? { name, number: null, country: '', avatarUrl: null, nickDiscord: null, driverId: null } : null;
     }
     if (d && typeof d === 'object' && typeof d.name === 'string') {
       const name = d.name.trim();
@@ -874,6 +878,7 @@ function normalizeSkladDrivers(rawDrivers) {
         name, number: isNaN(n) ? null : n, country: (d.country || '').trim(),
         avatarUrl: (d.avatarUrl || '').trim() || null,
         nickDiscord: (d.nickDiscord || '').trim() || null,
+        driverId: (d.driverId || '').toString().trim() || null,
       };
     }
     return null;
@@ -894,16 +899,24 @@ async function loadSklad(tier) {
   // zrobi pierwszego realnego eksportu na ten Tier.
   const tierNum = (tier.match(/\d+/) || [''])[0];
   const data = (await tryFetch(`Sklady/Stawka_tier_${tierNum}.json`)) || (await tryFetch(`Sklady/${tier}/sklad.json`));
-  if (!data || !Array.isArray(data.teams)) return { rosterMap: null, driverIndex: {} };
+  if (!data || !Array.isArray(data.teams)) return { rosterMap: null, driverIndex: {}, driverIndexById: {} };
   const rosterMap = {};
   const driverIndex = {};
+  // driverIndexById (Discord ID -> ten sam rekord co driverIndex) - pozwala np. Punktom karnym
+  // pokazywać zawsze najświeższy zarejestrowany nick EA/Steam, zamiast zamrożonego stringu z
+  // momentu wydania kary (patrz renderPunktyKarneList).
+  const driverIndexById = {};
   data.teams.forEach(t => {
     const canonical = getTeamMeta(t.team).full;
     const drivers = normalizeSkladDrivers(t.drivers);
     rosterMap[canonical] = drivers.map(d => d.name);
-    drivers.forEach(d => { driverIndex[d.name] = { team: canonical, number: d.number, country: d.country, avatarUrl: d.avatarUrl, nickDiscord: d.nickDiscord }; });
+    drivers.forEach(d => {
+      const entry = { team: canonical, number: d.number, country: d.country, avatarUrl: d.avatarUrl, nickDiscord: d.nickDiscord, name: d.name };
+      driverIndex[d.name] = entry;
+      if (d.driverId) driverIndexById[d.driverId] = entry;
+    });
   });
-  return { rosterMap, driverIndex };
+  return { rosterMap, driverIndex, driverIndexById };
 }
 
 /** Jak loadSklad(), ale zwraca listę drużyn z pełnymi obiektami kierowców
@@ -2183,6 +2196,27 @@ function renderPodiumRow(top3, driverIndex) {
     </div>`;
 }
 
+/** Race incident/DSQ/quali-ban dotyczące TEJ sesji (patrz session.penaltyNotes, dopisywane przez bota
+ *  do pliku wyników - addPenaltyNoteToResultsFile/applyPendingPenaltyNotes). Wpisy `revoked:true`
+ *  (kara cofnięta w odwołaniu) pokazane przygaszone z etykietą, zamiast po prostu znikać — ślad
+ *  procesu odwoławczego zostaje widoczny. */
+function renderPenaltyNotes(notes) {
+  if (!notes || !notes.length) return '';
+  const badgeLabel = { race_incident: t('pk.raceIncident'), dsq: t('pk.dsq'), quali_ban: t('pk.qualiBan') };
+  return `
+    <div class="section-header reveal" style="margin-top:2.5rem">
+      <h2 class="section-title">${t('penaltyNotes.title')}</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="penalty-notes reveal">${notes.map((n) => `
+      <div class="penalty-note-item${n.revoked ? ' revoked' : ''}">
+        <span class="penalty-note-badge">${badgeLabel[n.type] || n.type}</span>
+        <span class="penalty-note-driver">${escHtml(n.driverName || '')}</span>
+        ${n.reason ? `<span class="penalty-note-reason">${t('pk.reason')}: ${escHtml(n.reason)}</span>` : ''}
+        ${n.revoked ? `<span class="penalty-note-revoked-tag">${t('penaltyNotes.revoked')}${n.revokedReason ? ` — ${escHtml(n.revokedReason)}` : ''}</span>` : ''}
+      </div>`).join('')}</div>`;
+}
+
 function renderSessionResults(session, driverIndex) {
   if (!session) return `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
   const showPoints = session.sessionType === 'Race' || session.sessionType === 'Sprint';
@@ -2243,6 +2277,7 @@ function renderSessionResults(session, driverIndex) {
         </tbody>
       </table>
     </div>
+    ${renderPenaltyNotes(session.penaltyNotes)}
     ${session.bestManeuver ? `
       <div class="section-header reveal" style="margin-top:2.5rem">
         <span class="section-label">${t('raceHighlight')}</span>
@@ -2321,16 +2356,14 @@ async function initKlasyfikacja() {
 function renderRankingRow(pos, name, value, driverIndex, tag) {
   tag = tag || 'li';
   const entry = driverIndex?.[name];
-  // Celowo BEZ entry.avatarUrl - Ranking pokazuje maskotkę drużynową (assets/drivers/*.png), nie
-  // prywatny avatar Discorda. Discord zawsze zwraca JAKIŚ avatarUrl (nawet domyślny), więc gdyby go
-  // tu przekazać, maskotka nigdy by się nie pokazała - a to one mają się pokazywać na tej stronie.
-  const avatar = entry ? driverAvatar(entry.team) : null;
+  const avatar = entry ? driverAvatar(entry.team, entry.avatarUrl) : null;
+  const ringColor = entry ? getTeamMeta(entry.team).color : null;
   const num = entry?.number;
   const country = entry?.country;
   return `
     <${tag} class="ranking-row">
       <span class="ranking-row-pos">${pos}</span>
-      ${avatar ? `<img class="ranking-row-avatar" src="${avatar}" alt="" onerror="this.remove()">` : ''}
+      ${avatar ? `<img class="ranking-row-avatar" src="${avatar}" alt="" onerror="this.remove()"${ringColor ? ` style="--ring:${ringColor}"` : ''}>` : ''}
       <span class="ranking-row-name">${num !== null && num !== undefined ? `<span class="driver-number">${num}</span>` : ''}${country ? `<span class="driver-flag">${nationalityFlag(country)}</span>` : ''}${name}</span>
       <span class="ranking-row-value">${value}</span>
     </${tag}>`;
@@ -3230,12 +3263,12 @@ async function initClipy() {
   observeReveal();
 }
 
-/* ─── PUNKTY KARNE PAGE ──────────────────────────── (dodano 2026-08-30)
-   Dane pushowane z bota (PunktyKarne/punkty_karne.json - patrz addPunktyKarneEntry/
-   addPunktyKarneRestriction w index.js) przy nałożeniu kary typu "punkty karne" (entries)
-   albo "DSQ"/"quali-ban" (activeRestrictions). driverName to ten sam nick co w Wyniki/*.json
-   (nickSteam z profilu kierowcy w bocie), więc łączy się z driverIndex z loadSklad() dokładnie
-   tak samo jak wszędzie indziej na stronie. */
+/* ─── PUNKTY KARNE PAGE ──────────────────────────── (dodano 2026-08-30, zawężono 2026-08-31)
+   Strona pokazuje WYŁĄCZNIE kary typu "Punkty Karne" (entries, patrz addPunktyKarneEntry w
+   index.js) - reszta (kara czasowa, race incident, DSQ, quali-ban) jest widoczna w wynikach
+   wyścigu/sesji, którego dotyczy (patrz renderPenaltyNotes na stronie wyniku, session.penaltyNotes).
+   driverName to zamrożony nick z momentu wydania kary; driverId (gdy znany) pozwala rozwiązać
+   zawsze najświeższy nick EA/Steam z aktualnego składu, patrz renderPunktyKarneList. */
 function renderPunktyKarneEntry(entry) {
   const dateStr = entry.issuedAt ? new Date(entry.issuedAt).toLocaleDateString(getLang() === 'en' ? 'en-GB' : 'pl-PL') : '';
   return `
@@ -3248,20 +3281,29 @@ function renderPunktyKarneEntry(entry) {
     </div>`;
 }
 
-function renderPunktyKarneList(entries, driverIndex) {
+function renderPunktyKarneList(entries, driverIndex, driverIndexById) {
   if (!entries.length) return `<p style="color:var(--gray)">${t('pk.noEntries')}</p>`;
 
+  // Grupowanie po stabilnym kluczu (driverId, gdy jest znany - inaczej zamrożony driverName) - żeby
+  // historia jednego kierowcy się nie rozjeżdżała na dwa wiersze, gdyby jego wyświetlana nazwa
+  // zmieniła się w międzyczasie (patrz resolveName niżej).
   const byDriver = {};
   for (const e of entries) {
-    if (!byDriver[e.driverName]) byDriver[e.driverName] = [];
-    byDriver[e.driverName].push(e);
+    const key = e.driverId || e.driverName;
+    if (!byDriver[key]) byDriver[key] = [];
+    byDriver[key].push(e);
   }
   const totals = Object.entries(byDriver)
-    .map(([driver, list]) => ({ driver, list, total: list.filter((e) => !e.cancelled).reduce((s, e) => s + (e.points || 0), 0) }))
+    .map(([key, list]) => ({ key, list, total: list.filter((e) => !e.cancelled).reduce((s, e) => s + (e.points || 0), 0) }))
     .sort((a, b) => b.total - a.total);
 
-  return `<div class="results-list">${totals.map(({ driver, list, total }) => {
-    const info = driverIndex[driver];
+  return `<div class="results-list">${totals.map(({ key, list, total }) => {
+    // Zawsze najświeższy zarejestrowany nick EA/Steam z aktualnego składu (po driverId), zamiast
+    // zamrożonego stringu z momentu wydania kary - fallback na ten string tylko gdy kierowcy nie ma
+    // już w składzie tego tieru (odszedł, albo nigdy nie miał driverId - stare wpisy sprzed tej zmiany).
+    const byId = list[0].driverId ? driverIndexById?.[list[0].driverId] : null;
+    const driver = byId?.name || list[0].driverName;
+    const info = byId || driverIndex[driver];
     const sorted = [...list].sort((a, b) => (b.issuedAt || 0) - (a.issuedAt || 0));
     return `
     <div class="dd results-item" tabindex="0">
@@ -3281,39 +3323,26 @@ function renderPunktyKarneList(entries, driverIndex) {
   }).join('')}</div>`;
 }
 
-function renderPunktyKarneRestrictions(restrictions) {
-  const active = restrictions.filter((r) => !r.cancelled);
-  if (!active.length) return `<p style="color:var(--gray)">${t('pk.noRestrictions')}</p>`;
-  return `<div class="pk-restrictions">${active.map((r) => `
-    <div class="pk-restriction-item reveal">
-      <span class="pk-restriction-badge">${r.type === 'dsq' ? t('pk.dsq') : t('pk.qualiBan')}</span>
-      <span class="pk-restriction-driver">${r.driverName}</span>
-      <span class="pk-restriction-rounds">${t('pk.affectedRounds')}: ${(r.eventLabels || []).join(', ')}</span>
-      ${r.reason ? `<span class="pk-restriction-reason">${t('pk.reason')}: ${r.reason}</span>` : ''}
-    </div>`).join('')}</div>`;
-}
-
 async function initPunktyKarne() {
   initHeroPhotoCarousel(document.getElementById('punkty-karne-hero'));
   const el = document.getElementById('pk-list');
-  const restrictionsEl = document.getElementById('pk-restrictions');
   if (!el) return;
 
+  // Punkty karne pokazują WYŁĄCZNIE kary typu "Punkty Karne" (entries) - reszta (kara czasowa, race
+  // incident, DSQ, quali-ban) jest widoczna w wynikach wyścigu/sesji, którego dotyczy (patrz
+  // renderSessionResults, sekcja "Kary i odwołania").
   const [allSeasons, data] = await Promise.all([loadAllRaces(), tryFetch('PunktyKarne/punkty_karne.json')]);
   const seasonNames = Object.keys(allSeasons);
   const entries = data && Array.isArray(data.entries) ? data.entries : [];
-  const restrictions = data && Array.isArray(data.activeRestrictions) ? data.activeRestrictions : [];
 
   let activeSeason = seasonNames.length ? seasonNames[seasonNames.length - 1] : '1';
   let activeTier = DEFAULT_TIER;
 
   const rerender = async () => {
-    const { driverIndex } = await loadSklad(activeTier);
+    const { driverIndex, driverIndexById } = await loadSklad(activeTier);
     const tierNum = Number(activeTier.replace('Tier ', ''));
     const filteredEntries = entries.filter((e) => String(e.season) === String(activeSeason) && Number(e.tier) === tierNum);
-    const filteredRestrictions = restrictions.filter((r) => String(r.season) === String(activeSeason) && Number(r.tier) === tierNum);
-    el.innerHTML = renderPunktyKarneList(filteredEntries, driverIndex);
-    if (restrictionsEl) restrictionsEl.innerHTML = renderPunktyKarneRestrictions(filteredRestrictions);
+    el.innerHTML = renderPunktyKarneList(filteredEntries, driverIndex, driverIndexById);
     observeReveal();
   };
 
