@@ -179,15 +179,6 @@
       "team": "Alpine",
       "drivers": [
         {
-          "name": null,
-          "racetoolsNick": null,
-          "number": null,
-          "country": "",
-          "avatarUrl": "https://cdn.discordapp.com/avatars/748512069543788654/16f8b6d42facb25bdd620bef8d874776.webp",
-          "nickDiscord": "szarik8291",
-          "driverId": "748512069543788654"
-        },
-        {
           "name": "wladziupro",
           "racetoolsNick": "WLADZIUPORO",
           "number": 15,
