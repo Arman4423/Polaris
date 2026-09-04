@@ -64,6 +64,15 @@
       "team": "Ferrari",
       "drivers": [
         {
+          "name": null,
+          "racetoolsNick": null,
+          "number": null,
+          "country": "",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1194645679155458150/6e3852c1002652bb5cd6289fc1cd5ac5.webp",
+          "nickDiscord": "katakumbo",
+          "driverId": "1194645679155458150"
+        },
+        {
           "name": "FatekTOP1",
           "racetoolsNick": "FatekTOP1",
           "number": 44,
