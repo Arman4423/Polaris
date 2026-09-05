@@ -124,7 +124,7 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": "uzupełnienie kar nadanych przez fia w bocie",
+        "positionPenaltyReason": "Kierowca prowadząc restart nagle zmniejszył prędkość oraz miał nieregularne tępo cała ta sytuacja doprowadziła że wiele zawodników uszkodziło bolidy oraz dostali nie słuszne kary.",
         "fastestLapTime": "1:12.224",
         "fastestLapTyreCompound": "Hard",
         "stints": [
@@ -392,6 +392,16 @@
         "issuedAt": 1788610738909,
         "revoked": false,
         "prevStatus": "Finished"
+      },
+      {
+        "numer": 42,
+        "type": "dsq",
+        "driverName": "Nicholas Goatifi",
+        "driverId": "1194645679155458150",
+        "reason": "Kierowca prowadząc restart nagle zmniejszył prędkość oraz miał nieregularne tępo cała ta sytuacja doprowadziła że wiele zawodników uszkodziło bolidy oraz dostali nie słuszne kary.",
+        "issuedAt": 1788610745445,
+        "revoked": false,
+        "prevStatus": "DSQ"
       }
     ]
   }
