@@ -107,7 +107,7 @@
         "driverInfo": {},
         "position": 3,
         "classificationPosition": 3,
-        "status": "Finished",
+        "status": "DSQ",
         "lapsCompleted": 25,
         "driverPoints": "15",
         "teamPoints": "15",
@@ -124,7 +124,7 @@
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
-        "positionPenaltyReason": null,
+        "positionPenaltyReason": "uzupełnienie kar nadanych przez fia w bocie",
         "fastestLapTime": "1:12.224",
         "fastestLapTyreCompound": "Hard",
         "stints": [
@@ -136,7 +136,8 @@
             "tyreCompound": "Hard",
             "lapsCount": 16
           }
-        ]
+        ],
+        "rawStatus": "DSQ"
       },
       {
         "driverName": "Zabor",
@@ -379,6 +380,18 @@
             "lapsCount": 1
           }
         ]
+      }
+    ],
+    "penaltyNotes": [
+      {
+        "numer": 40,
+        "type": "dsq",
+        "driverName": "Nicholas Goatifi",
+        "driverId": "1194645679155458150",
+        "reason": "uzupełnienie kar nadanych przez fia w bocie",
+        "issuedAt": 1788610738909,
+        "revoked": false,
+        "prevStatus": "Finished"
       }
     ]
   }
