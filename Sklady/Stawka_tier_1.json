@@ -162,7 +162,7 @@
       "drivers": [
         {
           "name": "[HMP] Nitrovsky",
-          "racetoolsNick": null,
+          "racetoolsNick": "Nitrovsky",
           "number": 96,
           "country": "Poland",
           "avatarUrl": "https://cdn.discordapp.com/avatars/1038805061045866566/55a182dc0b993089afdbee304254fc4e.webp",
