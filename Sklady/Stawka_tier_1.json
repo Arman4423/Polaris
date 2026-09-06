@@ -41,15 +41,6 @@
       "team": "Red Bull",
       "drivers": [
         {
-          "name": "qez",
-          "racetoolsNick": "quez",
-          "number": 89,
-          "country": "Poland",
-          "avatarUrl": "https://cdn.discordapp.com/avatars/1476272205141643514/a_56999cad9787e3a20391e10b93716ee3.gif",
-          "nickDiscord": "quezuu_",
-          "driverId": "1476272205141643514"
-        },
-        {
           "name": "creatine sniffer",
           "racetoolsNick": "Danielelex",
           "number": 26,
@@ -57,21 +48,21 @@
           "avatarUrl": "https://cdn.discordapp.com/avatars/1254430336381751306/1e2fe6096b84d3892e47593f19e504e2.webp",
           "nickDiscord": "dandiel0",
           "driverId": "1254430336381751306"
+        },
+        {
+          "name": "qez",
+          "racetoolsNick": "quez",
+          "number": 89,
+          "country": "Poland",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1476272205141643514/a_56999cad9787e3a20391e10b93716ee3.gif",
+          "nickDiscord": "quezuu_",
+          "driverId": "1476272205141643514"
         }
       ]
     },
     {
       "team": "Ferrari",
       "drivers": [
-        {
-          "name": "Nejfi",
-          "racetoolsNick": "Nejfi",
-          "number": 11,
-          "country": "United Kingdom",
-          "avatarUrl": "https://cdn.discordapp.com/avatars/665091352593301526/14054f8a93acea5999d665c74b44fe94.webp",
-          "nickDiscord": "nejfi",
-          "driverId": "665091352593301526"
-        },
         {
           "name": "Nicholas Goatifi",
           "racetoolsNick": "pat",
@@ -80,6 +71,15 @@
           "avatarUrl": "https://cdn.discordapp.com/avatars/1194645679155458150/6e3852c1002652bb5cd6289fc1cd5ac5.webp",
           "nickDiscord": "katakumbo",
           "driverId": "1194645679155458150"
+        },
+        {
+          "name": "Nejfi",
+          "racetoolsNick": "Nejfi",
+          "number": 11,
+          "country": "United Kingdom",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/665091352593301526/14054f8a93acea5999d665c74b44fe94.webp",
+          "nickDiscord": "nejfi",
+          "driverId": "665091352593301526"
         }
       ]
     },
