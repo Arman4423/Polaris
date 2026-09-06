@@ -65,7 +65,7 @@
       "drivers": [
         {
           "name": "Nejfi",
-          "racetoolsNick": null,
+          "racetoolsNick": "Nejfi",
           "number": 11,
           "country": "United Kingdom",
           "avatarUrl": "https://cdn.discordapp.com/avatars/665091352593301526/14054f8a93acea5999d665c74b44fe94.webp",
