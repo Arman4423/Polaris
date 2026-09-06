@@ -145,7 +145,7 @@ const I18N = {
     'hero.punktyKarne.title': 'PUNKTY KARNE',
     'pk.totalPoints': 'Punkty karne', 'pk.noEntries': 'Brak punktów karnych w tym sezonie/tierze.',
     'pk.history': 'Historia wpisów', 'pk.cancelled': 'Anulowane',
-    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali-ban', 'pk.raceIncident': 'Race incident',
+    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali-ban', 'pk.raceIncident': 'Race incident', 'pk.points': 'Punkty karne',
     'pk.case': 'Sprawa', 'pk.reason': 'Powód', 'pk.driver': 'Kierowca',
     'penaltyNotes.title': 'Kary i odwołania', 'penaltyNotes.revoked': 'cofnięte w odwołaniu',
   },
@@ -248,7 +248,7 @@ const I18N = {
     'hero.punktyKarne.title': 'PENALTY POINTS',
     'pk.totalPoints': 'Penalty points', 'pk.noEntries': 'No penalty points this season/tier.',
     'pk.history': 'Entry history', 'pk.cancelled': 'Cancelled',
-    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali ban', 'pk.raceIncident': 'Race incident',
+    'pk.dsq': 'DSQ', 'pk.qualiBan': 'Quali ban', 'pk.raceIncident': 'Race incident', 'pk.points': 'Penalty points',
     'pk.case': 'Case', 'pk.reason': 'Reason', 'pk.driver': 'Driver',
     'penaltyNotes.title': 'Penalties & appeals', 'penaltyNotes.revoked': 'overturned on appeal',
   },
@@ -1882,10 +1882,21 @@ async function initWynikWydarzenia() {
     return;
   }
 
-  const [allCalendars, allSeasons, { driverIndex }] = await Promise.all([loadAllCalendars(), loadAllRaces(), loadSklad(tier)]);
+  const [allCalendars, allSeasons, { driverIndex }, pkData] = await Promise.all([
+    loadAllCalendars(), loadAllRaces(), loadSklad(tier), tryFetch('PunktyKarne/punkty_karne.json'),
+  ]);
   const rounds = calendarForTier(allCalendars, season, tier);
   const roundInfo = rounds.find(r => r.round === round);
   const sessions = racesForTier(allSeasons, season, tier).filter(r => r.round === round);
+
+  // Punkty Karne wystawione akurat na TĘ rundę (season+tier+round) - pokazywane w sekcji "Kary i
+  // odwołania" obok race incident/DSQ/quali-ban z samego pliku wyników (patrz renderPenaltyNotes).
+  // Tier w URL to "Tier 1"/"Tier 2"/"Tier 3", a w punkty_karne.json - liczba (event.tier przy
+  // wystawianiu kary) - stąd wyciągnięcie cyfry tym samym wzorem co loadSklad.
+  const tierNum = Number((tier.match(/\d+/) || [''])[0]);
+  const pkEntries = (pkData?.entries || []).filter(
+    (e) => String(e.season) === String(season) && Number(e.tier) === tierNum && Number(e.round) === round
+  );
 
   const flag = roundInfo ? trackFlag(roundInfo.country || roundInfo.track) : (sessions[0]?.flag || '');
   const trackName = roundInfo?.track || sessions[0]?.track || t('unknownTrack');
@@ -1914,7 +1925,7 @@ async function initWynikWydarzenia() {
   let activeType = byType['Race'] ? 'Race' : availableTypes[0];
 
   const rerenderContent = () => {
-    contentEl.innerHTML = renderSessionResults(byType[activeType], driverIndex, byType);
+    contentEl.innerHTML = renderSessionResults(byType[activeType], driverIndex, byType, pkEntries);
     observeReveal();
   };
 
@@ -2259,18 +2270,28 @@ function renderPodiumRow(top3, driverIndex) {
  *  do pliku wyników - addPenaltyNoteToResultsFile/applyPendingPenaltyNotes). Wpisy `revoked:true`
  *  (kara cofnięta w odwołaniu) pokazane przygaszone z etykietą, zamiast po prostu znikać — ślad
  *  procesu odwoławczego zostaje widoczny. */
-function renderPenaltyNotes(notes) {
-  if (!notes || !notes.length) return '';
-  const badgeLabel = { race_incident: t('pk.raceIncident'), dsq: t('pk.dsq'), quali_ban: t('pk.qualiBan') };
+// pkEntries — wpisy Punkty Karne (z PunktyKarne/punkty_karne.json) wystawione akurat na TĘ rundę
+// (dopasowane przez initWynikWydarzenia po season+tier+round), zmieszane w JEDNĄ listę z notatkami
+// race incident/DSQ/quali-ban z samego pliku wyników sesji — z perspektywy odwiedzającego to wszystko
+// jedna sekcja "Kary i odwołania" dla tego wyścigu, niezależnie skąd bot to zapisał.
+function renderPenaltyNotes(notes, pkEntries) {
+  const pkAsNotes = (pkEntries || []).map((e) => ({
+    type: 'points', driverName: e.driverName, reason: e.reason, points: e.points,
+    revoked: e.cancelled, revokedReason: null,
+  }));
+  const all = [...(notes || []), ...pkAsNotes];
+  if (!all.length) return '';
+  const badgeLabel = { race_incident: t('pk.raceIncident'), dsq: t('pk.dsq'), quali_ban: t('pk.qualiBan'), points: t('pk.points') };
   return `
     <div class="section-header reveal" style="margin-top:2.5rem">
       <h2 class="section-title">${t('penaltyNotes.title')}</h2>
       <div class="section-divider"></div>
     </div>
-    <div class="penalty-notes reveal">${notes.map((n) => `
+    <div class="penalty-notes reveal">${all.map((n) => `
       <div class="penalty-note-item${n.revoked ? ' revoked' : ''}">
         <span class="penalty-note-badge">${badgeLabel[n.type] || n.type}</span>
         <span class="penalty-note-driver">${escHtml(n.driverName || '')}</span>
+        ${n.points ? `<span class="pk-entry-points">+${n.points} pkt</span>` : ''}
         ${n.reason ? `<span class="penalty-note-reason">${t('pk.reason')}: ${escHtml(n.reason)}</span>` : ''}
         ${n.revoked ? `<span class="penalty-note-revoked-tag">${t('penaltyNotes.revoked')}${n.revokedReason ? ` — ${escHtml(n.revokedReason)}` : ''}</span>` : ''}
       </div>`).join('')}</div>`;
@@ -2299,7 +2320,7 @@ function renderPosDelta(delta) {
   return `<span class="pos-delta ${delta > 0 ? 'pos-delta-up' : 'pos-delta-down'}">${delta > 0 ? '▲' : '▼'}${Math.abs(delta)}</span>`;
 }
 
-function renderSessionResults(session, driverIndex, byType) {
+function renderSessionResults(session, driverIndex, byType, pkEntries) {
   if (!session) return `<p style="color:var(--gray);padding:2rem 0">${t('empty.generic')}</p>`;
   const showPoints = session.sessionType === 'Race' || session.sessionType === 'Sprint';
   const showStrategy = session.raceResults.some(d => d.stints && d.stints.length);
@@ -2362,7 +2383,7 @@ function renderSessionResults(session, driverIndex, byType) {
         </tbody>
       </table>
     </div>
-    ${renderPenaltyNotes(session.penaltyNotes)}
+    ${renderPenaltyNotes(session.penaltyNotes, pkEntries)}
     ${session.bestManeuver ? `
       <div class="section-header reveal" style="margin-top:2.5rem">
         <span class="section-label">${t('raceHighlight')}</span>
