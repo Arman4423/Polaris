@@ -2,7 +2,7 @@
   "metadata": {
     "formatVersion": 1,
     "exportType": "Session",
-    "exportedAt": "2026-09-08T15:32:26.804Z",
+    "exportedAt": "2026-09-08T19:47:22.657Z",
     "sourceApplication": "Polaris Panel Strony (bot, z Racing League Tools)",
     "leagueName": "Polaris Racing League"
   },
@@ -517,17 +517,6 @@
             "lapsCount": 9
           }
         ]
-      }
-    ],
-    "penaltyNotes": [
-      {
-        "numer": 44,
-        "type": "race_incident",
-        "driverName": "zabor95",
-        "driverId": "790647942078791700",
-        "reason": "werdykt racing incident gdyż kierowca jadący przed zaborem niespodziewanie zmienił tor jazdy przez co nie dał czasu na reakcje zgłaszanemu kierowcy. (okrążenie 1, clip: https://www.mediafire.com/file/3f1a9jtaezw7sra/elvis+odbija+w+prawo.mp4/file)",
-        "issuedAt": 1788881613102,
-        "revoked": false
       }
     ]
   }
