@@ -1,0 +1,523 @@
+{
+  "metadata": {
+    "formatVersion": 1,
+    "exportType": "Session",
+    "exportedAt": "2026-09-08T15:32:26.804Z",
+    "sourceApplication": "Polaris Panel Strony (bot, z Racing League Tools)",
+    "leagueName": "Polaris Racing League"
+  },
+  "season": {
+    "seasonName": "Season 1",
+    "championshipName": "F1 2026",
+    "isMulticlass": false
+  },
+  "event": {
+    "round": 7,
+    "eventDate": "2026-08-07",
+    "racesCount": 1,
+    "qualificationsCount": 1,
+    "track": {
+      "trackName": "Zandvoort",
+      "country": "Netherlands",
+      "turnsCount": 14
+    }
+  },
+  "session": {
+    "sessionInfo": {
+      "sessionType": "Race",
+      "completedStatus": "Completed",
+      "sessionDate": "2026-08-07T18:00:00Z",
+      "totalLaps": 36,
+      "driversCount": 12
+    },
+    "fastestLap": {
+      "lapTime": "1:12.510",
+      "lapTimeMs": 72510,
+      "driverName": "Elvis.37",
+      "lapNumber": 27,
+      "tyreCompound": "Medium"
+    },
+    "drivers": [
+      {
+        "driverName": "merix",
+        "driverInfo": {},
+        "position": 1,
+        "classificationPosition": 1,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "25",
+        "teamPoints": "25",
+        "gap": "0",
+        "gapMs": 0,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.021",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 8
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 16
+          }
+        ]
+      },
+      {
+        "driverName": "Nitrovsky",
+        "driverInfo": {},
+        "position": 8,
+        "classificationPosition": 2,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "18",
+        "teamPoints": "18",
+        "gap": "+11.408",
+        "gapMs": 11408,
+        "team": {
+          "name": "ALP",
+          "fullName": "BWT Alpine F1 Team",
+          "abbreviation": "ALP",
+          "primaryColor": "#0093CC"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.857",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 8
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 15
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 13
+          }
+        ]
+      },
+      {
+        "driverName": "Elvis.37",
+        "driverInfo": {},
+        "position": 2,
+        "classificationPosition": 3,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "15",
+        "teamPoints": "15",
+        "gap": "+13.859",
+        "gapMs": 13859,
+        "team": {
+          "name": "VRB",
+          "fullName": "Visa Cash App Racing Bulls F1 Team",
+          "abbreviation": "VRB",
+          "primaryColor": "#6692FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:12.510",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 13
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          }
+        ]
+      },
+      {
+        "driverName": "Nejfi",
+        "driverInfo": {},
+        "position": 3,
+        "classificationPosition": 4,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "12",
+        "teamPoints": "12",
+        "gap": "+42.735",
+        "gapMs": 42735,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.160",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 1
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 18
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 17
+          }
+        ]
+      },
+      {
+        "driverName": "Zabor",
+        "driverInfo": {},
+        "position": 4,
+        "classificationPosition": 5,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "10",
+        "teamPoints": "10",
+        "gap": "+53.209",
+        "gapMs": 53209,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.486",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 9
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 16
+          }
+        ]
+      },
+      {
+        "driverName": "Puchatek94",
+        "driverInfo": {},
+        "position": 5,
+        "classificationPosition": 6,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "8",
+        "teamPoints": "8",
+        "gap": "+1:03.111",
+        "gapMs": 63111,
+        "team": {
+          "name": "MCL",
+          "fullName": "McLaren Formula 1 Team",
+          "abbreviation": "MCL",
+          "primaryColor": "#FF8000"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.620",
+        "fastestLapTyreCompound": "Soft",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 14
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 10
+          }
+        ]
+      },
+      {
+        "driverName": "Ojaqatek",
+        "driverInfo": {},
+        "position": 6,
+        "classificationPosition": 7,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "6",
+        "teamPoints": "6",
+        "gap": "+1:05.311",
+        "gapMs": 65311,
+        "team": {
+          "name": "AUD",
+          "fullName": "Audi Formula One Team",
+          "abbreviation": "AUD",
+          "primaryColor": "#B4B4B4"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:14.722",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 13
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 13
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 10
+          }
+        ]
+      },
+      {
+        "driverName": "kal1o161",
+        "driverInfo": {},
+        "position": 7,
+        "classificationPosition": 8,
+        "status": "Finished",
+        "lapsCompleted": 36,
+        "driverPoints": "4",
+        "teamPoints": "4",
+        "gap": "+1:08.629",
+        "gapMs": 68629,
+        "team": {
+          "name": "VRB",
+          "fullName": "Visa Cash App Racing Bulls F1 Team",
+          "abbreviation": "VRB",
+          "primaryColor": "#6692FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:14.135",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 12
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 13
+          }
+        ]
+      },
+      {
+        "driverName": "zibi69",
+        "driverInfo": {},
+        "position": 9,
+        "classificationPosition": 9,
+        "status": "Finished",
+        "lapsCompleted": 35,
+        "driverPoints": "2",
+        "teamPoints": "2",
+        "gap": "+1 Lap",
+        "gapMs": 1000000000,
+        "team": {
+          "name": "ALP",
+          "fullName": "BWT Alpine F1 Team",
+          "abbreviation": "ALP",
+          "primaryColor": "#0093CC"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.704",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 1
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 14
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 9
+          }
+        ]
+      },
+      {
+        "driverName": "Farti",
+        "driverInfo": {},
+        "position": 10,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 19,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+17 Laps",
+        "gapMs": 17000000000,
+        "team": {
+          "name": "WIL",
+          "fullName": "Williams Racing",
+          "abbreviation": "WIL",
+          "primaryColor": "#64C4FF"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:13.483",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 11
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 7
+          },
+          {
+            "tyreCompound": "Soft",
+            "lapsCount": 1
+          }
+        ]
+      },
+      {
+        "driverName": "Danielelex",
+        "driverInfo": {},
+        "position": 11,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 16,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+20 Laps",
+        "gapMs": 20000000000,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:14.163",
+        "fastestLapTyreCompound": "Hard",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 1
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 6
+          },
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 9
+          }
+        ]
+      },
+      {
+        "driverName": "quez",
+        "driverInfo": {},
+        "position": 12,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 10,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "+26 Laps",
+        "gapMs": 26000000000,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null,
+        "fastestLapTime": "1:15.877",
+        "fastestLapTyreCompound": "Medium",
+        "stints": [
+          {
+            "tyreCompound": "Hard",
+            "lapsCount": 1
+          },
+          {
+            "tyreCompound": "Medium",
+            "lapsCount": 9
+          }
+        ]
+      }
+    ]
+  }
+}
