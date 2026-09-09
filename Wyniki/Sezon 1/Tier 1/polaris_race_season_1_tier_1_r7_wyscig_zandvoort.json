@@ -215,8 +215,8 @@
           "abbreviation": "AMR",
           "primaryColor": "#229971"
         },
-        "penaltySeconds": 0,
-        "penaltyReason": null,
+        "penaltySeconds": 25,
+        "penaltyReason": "Nie pozostawienie miejsca dla Ferrari skutkujące wypchaniem ferrari z toru i uszkodzeniem skrzydła poprzez uderzenie w bandę (okrążenie 1, clip: .)",
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
