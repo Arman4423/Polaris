@@ -295,8 +295,8 @@
           "abbreviation": "AUD",
           "primaryColor": "#B4B4B4"
         },
-        "penaltySeconds": 0,
-        "penaltyReason": null,
+        "penaltySeconds": 5,
+        "penaltyReason": "Audi nie zostawiło miejsca dla astona Martina (okrążenie 27, clip: .)",
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
