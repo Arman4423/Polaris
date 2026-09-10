@@ -135,8 +135,8 @@
           "abbreviation": "FER",
           "primaryColor": "#E80020"
         },
-        "penaltySeconds": 0,
-        "penaltyReason": null,
+        "penaltySeconds": 25,
+        "penaltyReason": "nejfi otrzymuje kare w wysokosci 25s i 4pk za caloksztalt m.in za brake testy wypchniecia z toru i illegal overtake'y (okrążenie caly wyscig, clip: za duzo aby wpisywac)",
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
@@ -156,6 +156,9 @@
             "tyreCompound": "Medium",
             "lapsCount": 17
           }
+        ],
+        "appliedTimePenaltyCases": [
+          49
         ]
       },
       {
