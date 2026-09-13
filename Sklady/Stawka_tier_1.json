@@ -64,15 +64,6 @@
       "team": "Ferrari",
       "drivers": [
         {
-          "name": "Nejfi",
-          "racetoolsNick": "Nejfi",
-          "number": 11,
-          "country": "United Kingdom",
-          "avatarUrl": "https://cdn.discordapp.com/avatars/665091352593301526/14054f8a93acea5999d665c74b44fe94.webp",
-          "nickDiscord": "nejfi",
-          "driverId": "665091352593301526"
-        },
-        {
           "name": "Nicholas Goatifi",
           "racetoolsNick": "pat",
           "number": 43,
@@ -80,6 +71,15 @@
           "avatarUrl": "https://cdn.discordapp.com/avatars/1194645679155458150/6e3852c1002652bb5cd6289fc1cd5ac5.webp",
           "nickDiscord": "katakumbo",
           "driverId": "1194645679155458150"
+        },
+        {
+          "name": "SzybkiJacek",
+          "racetoolsNick": null,
+          "number": 99,
+          "country": "United Kingdom",
+          "avatarUrl": "https://cdn.discordapp.com/avatars/1445511851663167579/03c3cea4b3d4b016bf06dac8f3f3d1b6.webp",
+          "nickDiscord": "w1sl4sh4rxm4xy",
+          "driverId": "1445511851663167579"
         }
       ]
     },
