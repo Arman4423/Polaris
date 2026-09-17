@@ -289,14 +289,17 @@
           "abbreviation": "MCL",
           "primaryColor": "#FF8000"
         },
-        "penaltySeconds": 0,
-        "penaltyReason": null,
+        "penaltySeconds": 10,
+        "penaltyReason": "puchatek rozpierdala oponenta w sciane (okrążenie 20, clip: https://medal.tv/games/f1-25/clips/nwh2AShUotkMZ1UMO?invite=cr-MSxOVXAsNDc4MjMyMzcz)",
         "penaltyRemovedSeconds": 0,
         "penaltyRemovedReason": null,
         "positionPenalty": 0,
         "positionPenaltyReason": null,
         "fastestLapTime": "1:42.975",
-        "fastestLapTyreCompound": "Soft"
+        "fastestLapTyreCompound": "Soft",
+        "appliedTimePenaltyCases": [
+          52
+        ]
       },
       {
         "driverName": "Szybki Jacek",
