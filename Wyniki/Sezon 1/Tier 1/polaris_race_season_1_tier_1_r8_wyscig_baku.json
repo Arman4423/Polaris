@@ -1,0 +1,324 @@
+{
+  "metadata": {
+    "formatVersion": 1,
+    "exportType": "Session",
+    "exportedAt": "2026-09-25T17:43:03.065Z",
+    "sourceApplication": "Polaris Panel Strony (bot, z Racing League Tools)",
+    "leagueName": "Polaris Racing League"
+  },
+  "season": {
+    "seasonName": "Season 1",
+    "championshipName": "F1 2026",
+    "isMulticlass": false
+  },
+  "event": {
+    "round": 8,
+    "eventDate": "2026-09-13",
+    "racesCount": 1,
+    "qualificationsCount": 1,
+    "track": {
+      "trackName": "Baku",
+      "country": "Azerbaijan",
+      "turnsCount": 20
+    }
+  },
+  "session": {
+    "sessionInfo": {
+      "sessionType": "Race",
+      "completedStatus": "Completed",
+      "sessionDate": "2026-09-13T18:00:00Z",
+      "totalLaps": 0,
+      "driversCount": 12
+    },
+    "drivers": [
+      {
+        "driverName": "zabor95",
+        "driverInfo": {},
+        "position": 1,
+        "classificationPosition": 1,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "25",
+        "teamPoints": "25",
+        "gap": "0",
+        "gapMs": 0,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Merixon",
+        "driverInfo": {},
+        "position": 2,
+        "classificationPosition": 2,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "18",
+        "teamPoints": "18",
+        "gap": "+0.229",
+        "gapMs": 229,
+        "team": {
+          "name": "AMR",
+          "fullName": "Aston Martin Aramco F1 Team",
+          "abbreviation": "AMR",
+          "primaryColor": "#229971"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "wladziupro",
+        "driverInfo": {},
+        "position": 3,
+        "classificationPosition": 3,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "15",
+        "teamPoints": "15",
+        "gap": "+23.425",
+        "gapMs": 23425,
+        "team": {
+          "name": "AUD",
+          "fullName": "Audi Formula One Team",
+          "abbreviation": "AUD",
+          "primaryColor": "#B4B4B4"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "LordAxel",
+        "driverInfo": {},
+        "position": 4,
+        "classificationPosition": 4,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "12",
+        "teamPoints": "12",
+        "gap": "+26.499",
+        "gapMs": 26499,
+        "team": {
+          "name": "AUD",
+          "fullName": "Audi Formula One Team",
+          "abbreviation": "AUD",
+          "primaryColor": "#B4B4B4"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Puchatek94",
+        "driverInfo": {},
+        "position": 5,
+        "classificationPosition": 5,
+        "status": "Finished",
+        "lapsCompleted": 0,
+        "driverPoints": "10",
+        "teamPoints": "10",
+        "gap": "+30.645",
+        "gapMs": 30645,
+        "team": {
+          "name": "MCL",
+          "fullName": "McLaren Formula 1 Team",
+          "abbreviation": "MCL",
+          "primaryColor": "#FF8000"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "qez",
+        "driverInfo": {},
+        "position": 6,
+        "classificationPosition": 6,
+        "status": "Finished",
+        "lapsCompleted": -1,
+        "driverPoints": "8",
+        "teamPoints": "8",
+        "gap": "+1 Lap",
+        "gapMs": 1000000000,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "[HMP] Nitrovsky",
+        "driverInfo": {},
+        "position": 7,
+        "classificationPosition": 7,
+        "status": "Finished",
+        "lapsCompleted": -3,
+        "driverPoints": "6",
+        "teamPoints": "6",
+        "gap": "+3 Laps",
+        "gapMs": 3000000000,
+        "team": {
+          "name": "ALP",
+          "fullName": "BWT Alpine F1 Team",
+          "abbreviation": "ALP",
+          "primaryColor": "#0093CC"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Nicholas Goatifi",
+        "driverInfo": {},
+        "position": 8,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "FatekTOP1",
+        "driverInfo": {},
+        "position": 9,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "ALP",
+          "fullName": "BWT Alpine F1 Team",
+          "abbreviation": "ALP",
+          "primaryColor": "#0093CC"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "SzybkiJacek",
+        "driverInfo": {},
+        "position": 10,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "FER",
+          "fullName": "Scuderia Ferrari",
+          "abbreviation": "FER",
+          "primaryColor": "#E80020"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "creatine sniffer",
+        "driverInfo": {},
+        "position": 11,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "RB",
+          "fullName": "Oracle Red Bull Racing",
+          "abbreviation": "RB",
+          "primaryColor": "#3671C6"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      },
+      {
+        "driverName": "Ol3XoooHescik_YT",
+        "driverInfo": {},
+        "position": 12,
+        "classificationPosition": -1,
+        "status": "DNF",
+        "lapsCompleted": 0,
+        "driverPoints": "0",
+        "teamPoints": "0",
+        "gap": "—",
+        "gapMs": 0,
+        "team": {
+          "name": "MCL",
+          "fullName": "McLaren Formula 1 Team",
+          "abbreviation": "MCL",
+          "primaryColor": "#FF8000"
+        },
+        "penaltySeconds": 0,
+        "penaltyReason": null,
+        "penaltyRemovedSeconds": 0,
+        "penaltyRemovedReason": null,
+        "positionPenalty": 0,
+        "positionPenaltyReason": null
+      }
+    ]
+  }
+}
