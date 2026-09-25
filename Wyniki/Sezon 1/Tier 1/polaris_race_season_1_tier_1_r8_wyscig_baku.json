@@ -50,10 +50,13 @@
         },
         "penaltySeconds": 0,
         "penaltyReason": null,
-        "penaltyRemovedSeconds": 0,
-        "penaltyRemovedReason": null,
+        "penaltyRemovedSeconds": 10,
+        "penaltyRemovedReason": "kara z dupy wzieta (okrążenie przed redflagiem, clip: https://streamable.com/sgjnqa)",
         "positionPenalty": 0,
-        "positionPenaltyReason": null
+        "positionPenaltyReason": null,
+        "appliedTimePenaltyCases": [
+          54
+        ]
       },
       {
         "driverName": "Merixon",
